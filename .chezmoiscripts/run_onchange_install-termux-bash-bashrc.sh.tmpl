@@ -1,0 +1,12 @@
+{{- if .isTermux -}}
+#!/data/data/com.termux/files/usr/bin/bash
+
+set -e
+
+# bash.bashrc hash: {{ include ".chezmoitemplates/bash.bashrc_termux" | sha256sum }}
+
+source_file="{{ joinPath .chezmoi.sourceDir ".chezmoitemplates/bash.bashrc_termux" }}"
+target="${PREFIX}/etc/bash.bashrc"
+
+cp "$source_file" "$target"
+{{- end }}
