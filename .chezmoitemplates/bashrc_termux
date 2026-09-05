@@ -25,7 +25,7 @@ alias ls='ls --color=auto'
 alias ll='ls -alF'
 alias l='ls -CF'
 alias rm='rm -i'
-alias cp='cp -i'
+alias cpi='cp -i'
 alias mv='mv -i'
 alias df='df -h'
 alias du='du -h'
@@ -536,32 +536,38 @@ crb() {
 }
 
 # --- termux-modo-tablet ---
-# Faz backup do modo celular atual e ativa o perfil de tablet.
+# Ativa o perfil de interface para tablet.
 # uso: termux-modo-tablet
 function termux-modo-tablet() {
-    if [ ! -f ~/.termux/termux.properties.tablet ]; then
-        echo "⚠️ Arquivo termux.properties.tablet não encontrado em ~/.termux/"
+    local perfil="$HOME/.termux/termux.properties.tablet"
+    local ativo="$HOME/.termux/termux.properties"
+
+    if [ ! -f "$perfil" ]; then
+        echo "⚠️ Perfil de tablet não encontrado: $perfil"
         return 1
     fi
-    cp ~/.termux/termux.properties ~/.termux/termux.properties.cell.bak
-    cp ~/.termux/termux.properties.tablet ~/.termux/termux.properties
+
+    cp "$perfil" "$ativo" || return 1
     termux-reload-settings
-    echo "📐 Perfil de tablet ativado! (backup do celular salvo)"
+    echo "📐 Perfil de tablet ativado!"
 }
 
 # --- termux-modo-celular ---
-# Restaura o modo celular a partir do backup, desfazendo o modo tablet.
+# Ativa o perfil de interface para celular.
 # uso: termux-modo-celular
 function termux-modo-celular() {
-    if [ -f ~/.termux/termux.properties.cell.bak ]; then
-        cp ~/.termux/termux.properties.cell.bak ~/.termux/termux.properties
-        termux-reload-settings
-        echo "📱 Perfil de celular restaurado!"
-    else
-        echo "⚠️ Nenhum backup encontrado. O arquivo atual pode já ser o celular."
-    fi
-}
+    local perfil="$HOME/.termux/termux.properties.cell"
+    local ativo="$HOME/.termux/termux.properties"
 
+    if [ ! -f "$perfil" ]; then
+        echo "⚠️ Perfil de celular não encontrado: $perfil"
+        return 1
+    fi
+
+    cp "$perfil" "$ativo" || return 1
+    termux-reload-settings
+    echo "📱 Perfil de celular ativado!"
+}
 
 # ===============================================
 # CONFIGURAÇÕES DO SISTEMA (PATHs, etc)
