@@ -1,0 +1,98 @@
+# Colors
+if [ -t 1 ] && [ "$TERM" != "dumb" ]; then
+    rst='\e[0m'
+    red='\e[0;31m'
+    bred='\e[1;31m'
+    green='\e[0;32m'
+    yellow='\e[0;33m'
+    byellow='\e[1;33m'
+    blue='\e[0;34m'
+    purple='\e[0;35m'
+    cyan='\e[0;36m'
+    bcyan='\e[1;36m'
+    icyan='\e[3;36m'
+    white='\e[1;37m'
+else
+    rst=''; red=''; bred=''; green=''; yellow=''; byellow=''
+    blue=''; purple=''; cyan=''; bcyan=''; icyan=''; white=''
+fi
+
+# Função para centralizar mensagem de forma automática
+center_message() {
+    local message="$1"
+    local termwidth="${COLUMNS:-$(stty size < /dev/tty 2>/dev/null | cut -d' ' -f2)}"
+    : "${termwidth:=80}"
+    local padlen=$(( (termwidth - ${#message}) / 2 ))
+    (( padlen < 0 )) && padlen=0
+    local padding
+    printf -v padding '%*s' "$padlen" ''
+    echo -e "$padding$message"
+}
+
+# Função para imprimir texto com margens laterais fixas
+# uso: space <largura_margem> <texto>
+space() {
+    local margin="${1:-2}"
+    local text="$2"
+    local pad
+    printf -v pad '%*s' "$margin" ''
+    printf '%s%s%s\n' "$pad" "$text" "$pad"
+}
+
+# Cache se lolcat está disponível (evita checar toda vez que print_logo roda)
+_HAS_LOLCAT=$(command -v lolcat)
+
+# Função para exibir o logotipo
+print_logo() {
+    local logo="
+..............
+            ..,;:ccc,.
+          ......''';lxO.
+.....''''..........,:ld;
+           .';;;:::;,,.x,
+      ..'''.            0Xxoc:,.  ...
+  ....                ,ONkc;,;cokOdc',.
+.                   OMo           ':ddo.
+                    dMc               :OO;
+                    0M.                 .:o.
+                    ;Wd
+                     ;XO,
+                       ,d0Odlc;,..
+                           ..',;:cdOOd::,.
+                                    .:d;.':;.
+                                       'd,  .'
+                                         ;l   ..
+                                          .o
+                                            c
+                                            .'
+                                             .
+"
+
+if [ -n "$_HAS_LOLCAT" ]; then
+        echo "$logo" | lolcat
+    else
+        echo -e "${blue}$logo"
+    fi
+}
+
+print_logo
+
+# Função para exibir o cabeçalho
+print_header() {
+    echo -e "            ${green}⧏${red}=================${yellow}=================${red}=================${green}⧐"
+    space 67
+    center_message "${red}------------------------------${blue}{${bred}Obscure Society${blue}}${red}-----------------------------"
+    space 67
+    echo -e "            ${green}⧏${red}=================${yellow}======${yellow}===========${red}=================${green}⧐"
+}
+
+print_header
+space 78
+
+if [[ ${EUID} == 0 ]] ; then
+PS1='\[\033[01;31m\]┌─\[\033[01;34m\][\[\e[1;34m\]\[\033[01;31m\]OS\033[01;34m\]@\033[01;31m\]\u\e[0m\]\[\033[01;34m\]]\[\033[01;31m\]┉\e[0m\]\[\033[01;34m\][\[\e[01;33m\]\t\e[0m\]\[\033[01;34m\]]\[\033[01;31m\]
+┃\n\[\033[01;31m\]└─\[\033[01;34m\][\[\033[01;32m\]${PWD/*\//}\[\033[01;34m\]]\[\033[01;31m\]-\[\033[01;31m\]}\[\033[01;36m\] '
+else
+PS1='\[\033[01;31m\]┌─\[\033[01;34m\][\[\e[1;34m\]\[\033[01;32m\]OS\033[01;34m\]@\033[01;32m\]${USER:=$(id \-un)}\e[0m\]\[\033[01;34m\]]\[\033[01;31m\]┉\e[0m\]\[\033[01;34m\][\[\e[01;33m\]\t\e[0m\]\[\033[01;34m\]]\[\033[01;31m\]
+┃\n\[\033[01;31m\]└─\[\033[01;34m\][\[\033[01;32m\]${PWD/*\//}\[\033[01;34m\]]\[\033[01;31m\]-\[\033[01;34m\]}\[\033[01;36m\] '
+fi
