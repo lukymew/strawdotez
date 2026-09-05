@@ -1,0 +1,3 @@
+{{- $isTermux := (env "TERMUX_VERSION") -}}
+[data]
+    isTermux = {{ $isTermux | not | not }}

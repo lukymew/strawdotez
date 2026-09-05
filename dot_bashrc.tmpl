@@ -1,0 +1,5 @@
+{{- if .isTermux }}
+{{ template "bashrc_termux" . }}
+{{- else }}
+# ainda não configurado pro Linux
+{{- end }}
