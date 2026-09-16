@@ -1,0 +1,10 @@
+{{- if .isTermux -}}
+#!/data/data/com.termux/files/usr/bin/bash
+
+set -e
+
+# packages: git,neovim,tmux,fzf,ripgrep,fd,bat,lazygit,nodejs,python,openssh
+
+pkg update -y
+pkg install -y git neovim tmux fzf ripgrep fd bat lazygit nodejs python openssh
+{{- end }}
