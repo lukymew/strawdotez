@@ -20,9 +20,11 @@ fi
 # Função para centralizar mensagem de forma automática
 center_message() {
     local message="$1"
+    local clean_message
+    clean_message=$(echo -e "$message" | sed -r 's/\x1b\[[0-9;]*m//g')
     local termwidth="${COLUMNS:-$(stty size < /dev/tty 2>/dev/null | cut -d' ' -f2)}"
     : "${termwidth:=80}"
-    local padlen=$(( (termwidth - ${#message}) / 2 ))
+    local padlen=$(( (termwidth - ${#clean_message}) / 2 ))
     (( padlen < 0 )) && padlen=0
     local padding
     printf -v padding '%*s' "$padlen" ''
