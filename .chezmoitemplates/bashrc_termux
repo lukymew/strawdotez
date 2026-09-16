@@ -61,7 +61,7 @@ alias bashrc='nano ~/.bashrc'
 # =====================================================
 # 4. SISTEMA / PACOTES
 # =====================================================
-alias update='apt update && sudo apt upgrade'
+alias update='apt update && apt upgrade'
 alias uppkg='pkg update && pkg upgrade'
 alias uppzsh='source ~/.zshrc'
 alias tt='clear; termux-reload-settings && source "$PREFIX/etc/bash.bashrc"'
@@ -125,7 +125,7 @@ alias gita='git add .'
 alias gitc='git commit -m'
 alias gitp='git push'
 alias gitlog='git log'
-alias gitconf='git config --global user.name "Seu Nome" && git config --global user.email "seuemail@exemplo.com"'
+alias gitconfr='git config --global user.name "Seu Nome" && git config --global user.email "seuemail@exemplo.com"'
 
 # =====================================================
 # 11. MODELOS LOCAIS (llama.cpp) — lazy load
