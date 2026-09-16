@@ -100,6 +100,8 @@ alias timestamp='date +%s'
 alias qr='qrcode-terminal'
 alias tb="nc termbin.com 9999 2>/dev/null || echo 'Falha ao conectar com termbin'"
 
+alias qr='qrencode -t ansiutf8'
+
 # =====================================================
 # 8. CRIPTOGRAFIA E SEGURANÇA
 # =====================================================
