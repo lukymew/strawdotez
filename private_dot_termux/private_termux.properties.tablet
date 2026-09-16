@@ -10,33 +10,32 @@
 # 1. GERAL (General)
 # =====================================================
 
+### Allow external applications to execute arbitrary commands within Termux.
 allow-external-apps = true
 
-### Tablet costuma ser usado com projeto fixo — descomente e ajuste
-### se você sempre abre trabalhando na mesma pasta
+### Default working directory that will be used when launching the app.
 # default-working-directory = /data/data/com.termux/files/home/Workspace
 
+### Uncomment to disable toasts shown on terminal session change.
 disable-terminal-session-change-toast = true
 
-### Tablet geralmente usa teclado físico bluetooth com mais frequência —
-### não esconder o teclado touch por padrão evita ficar chamando ele à toa
+### Tablet: teclado bluetooth é mais comum, evita esconder o teclado touch à toa
 hide-soft-keyboard-on-startup = false
 
+### enable/disable: toggle liga/desliga o teclado, em vez de só mostrar/esconder
 soft-keyboard-toggle-behaviour = enable/disable
 
-### Buffer maior — tela grande mostra mais linhas de uma vez,
-### então vale guardar mais histórico de saída
+### Tela grande mostra mais linhas de uma vez — buffer maior
 terminal-transcript-rows = 10000
 
-### Libera teclas de volume pra função normal, já que a extra-keys
-### row tem espaço de sobra na tela grande
+### Extra-keys row tem espaço de sobra na tela grande, libera volume normal
 volume-keys = volume
 
 # =====================================================
 # 2. TELA CHEIA (Fullscreen mode)
 # =====================================================
 
-### Tablet aproveita bem o modo imersivo — mais espaço útil de terminal
+### Tablet aproveita bem o modo imersivo
 fullscreen = true
 
 use-fullscreen-workaround = true
@@ -45,16 +44,18 @@ use-fullscreen-workaround = true
 # 3. CURSOR
 # =====================================================
 
+### Cursor blink rate. Values 0, 100 - 2000.
 terminal-cursor-blink-rate = 500
 
-### Estilo "bar" (tipo cursor de editor de texto) é mais discreto
-### e combina bem com uso prolongado em tela grande
+### Estilo "bar" combina melhor com uso prolongado em tela grande
 terminal-cursor-style = bar
 
 # =====================================================
 # 4. EXTRA KEYS (teclas extras)
 # =====================================================
 
+### Settings for choosing which set of symbols to use for illustrating keys.
+### Choose between default, arrows-only, arrows-all, all and none
 extra-keys-style = all
 
 extra-keys-text-all-caps = true
@@ -70,53 +71,56 @@ extra-keys = [ \
 # 5. CORES / TEMA (Colors/themes)
 # =====================================================
 
+### Force black colors for drawer and dialogs
 use-black-ui = true
 
 # =====================================================
 # 6. ATALHOS DE TECLADO FÍSICO (HW keyboard shortcuts)
 # =====================================================
 
-### Tablet costuma usar teclado bluetooth físico — atalhos ativos
-### fazem muito mais sentido aqui do que no celular
+### Tablet: teclado bluetooth físico é mais comum, atalhos fazem sentido
 disable-hardware-keyboard-shortcuts = false
 
+### Open a new terminal with ctrl + t
 shortcut.create-session = ctrl + t
 
+### Go one session down/up
 shortcut.next-session = ctrl + 2
-
 shortcut.previous-session = ctrl + 1
 
+### Rename a session
 shortcut.rename-session = ctrl + n
 
 # =====================================================
 # 7. TECLA BELL (Bell key)
 # =====================================================
 
-### Tablet fica mais em mesa/suporte — som é aceitável e mais perceptível
+### Tablet fica mais em mesa/suporte — som é aceitável e perceptível
 bell-character = beep
 
 # =====================================================
 # 8. TECLA VOLTAR (Back key)
 # =====================================================
 
+### Hide keyboard or leave app (default).
 back-key=back
 
 # =====================================================
 # 9. WORKAROUNDS DE TECLADO (Keyboard issue workarounds)
 # =====================================================
 
+### Letters might not appear until enter is pressed on Samsung devices
 # enforce-char-based-input = true
 
-### Se usar teclado físico bluetooth e mexer com emacs/vim,
-### esse workaround evita bug do ctrl+space em alguns aparelhos
+### Evita bug do ctrl+space com teclado bluetooth (útil em vim/emacs)
 ctrl-space-workaround = true
 
 # =====================================================
 # 10. MARGENS DO TERMINAL (Terminal Margin adjustments)
 # =====================================================
 
-### Margem lateral maior — tela larga sem margem cansa a vista
+### Horizontal (left/right) Margin — tela larga sem margem cansa a vista
 terminal-margin-horizontal=8
 
-### Margem vertical levemente maior para conforto visual
+### Vertical (top/bottom) Margin
 terminal-margin-vertical=4
