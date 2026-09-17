@@ -1,5 +1,7 @@
 {{- if .isTermux }}
 {{ template "bashrc_termux" . }}
 {{- else }}
-# ainda não configurado pro Linux
+{{ template "env_common" . }}
+{{ template "aliases_common" . }}
+{{ template "bash_linux" . }}
 {{- end }}

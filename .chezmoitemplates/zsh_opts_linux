@@ -1,0 +1,10 @@
+# Opções mínimas — sem correção automática, sem menu de seleção
+setopt AUTO_CD
+HISTSIZE=2000
+SAVEHIST=2000
+HISTFILE="$HOME/.zsh_history"
+
+autoload -Uz compinit
+compinit -u
+
+bindkey -e

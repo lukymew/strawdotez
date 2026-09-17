@@ -1,0 +1,8 @@
+# Aliases universais, leves, sem dependência externa
+alias ll="ls -lah"
+alias ..="cd .."
+alias ...="cd ../.."
+alias grep="grep --color=auto"
+alias gs="git status"
+alias gc="git commit -m"
+alias ga="git add"

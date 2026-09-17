@@ -8,3 +8,9 @@ Numa máquina/dispositivo novo, com o chezmoi instalado:
 
 ```bash
 chezmoi init --apply lukymew/strawdotez
+
+```
+
+## TODO futuro
+- [ ] Migrar zsh_functions_common pra lazy loading (fpath + autoload) quando passar de ~10 funções
+
