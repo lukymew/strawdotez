@@ -25,10 +25,10 @@ Legenda: `[x]` feito, `[ ]` planejado. As fases estão em ordem de prioridade, e
 
 ## Fase 2: qualidade e automação
 - [x] CI no GitHub: renderizar todos os templates em cada push
-- [ ] CI: `bash -n`, `zsh -n` e `shellcheck` nos scripts e nas peças
+- [x] CI: `bash -n`, `zsh -n` e `shellcheck` nos scripts e nas peças
 - [ ] CI: teste de instalação em um contêiner do Termux
-- [ ] Script de medição de abertura no repo (`scripts/bench.sh`) com orçamento de tempo
-- [ ] Verificação de segredos antes de cada commit (gitleaks ou semelhante)
+- [x] Script de medição de abertura no repo (`scripts/bench.sh`) com orçamento de tempo
+- [x] Verificação de segredos antes de cada commit (gitleaks ou semelhante)
 - [ ] Testes para as funções utilitárias mais usadas
 
 ## Fase 3: personalização

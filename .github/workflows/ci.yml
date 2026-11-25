@@ -22,6 +22,10 @@ jobs:
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
       - name: Rodar as checagens
         run: bash scripts/ci-check.sh
+      - name: shellcheck nos scripts do repositório
+        run: |
+          sudo apt-get install -y -qq shellcheck
+          shellcheck -S warning install.sh scripts/*.sh .githooks/pre-commit
 
   secrets:
     name: Verificação de segredos

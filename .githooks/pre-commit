@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# strawdotez: bloqueia commit com segredo. Ativar uma vez: git config core.hooksPath .githooks
+if command -v gitleaks >/dev/null 2>&1; then
+    gitleaks protect --staged --redact -v && exit 0
+    echo "strawdotez: o gitleaks encontrou possível segredo. Commit bloqueado."; exit 1
+fi
+
+padroes='ghp_[A-Za-z0-9]{36}|github_pat_[A-Za-z0-9_]{50,}|gho_[A-Za-z0-9]{36}|AKIA[0-9A-Z]{16}|AIza[0-9A-Za-z_-]{35}|xox[baprs]-[A-Za-z0-9-]{10,}|sk-[A-Za-z0-9]{32,}|-----BEGIN ([A-Z]+ )?PRIVATE KEY-----'
+achou="$(git diff --cached --no-color -U0 | grep -E '^\+[^+]' | grep -E "$padroes" || true)"
+if [ -n "$achou" ]; then
+    echo "strawdotez: possível segredo no commit (token, chave ou senha). Commit bloqueado:"
+    echo "$achou" | cut -c1-80 | sed 's/^+/  /'
+    echo "Tire o segredo do arquivo. Para ignorar de propósito: git commit --no-verify"
+    exit 1
+fi
