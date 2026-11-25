@@ -83,7 +83,7 @@ alias diskusage='ncdu'
 alias movieinfo='mediainfo'
 alias cal='cal -3'
 alias timestamp='date +%s'
-alias tb="nc termbin.com 9999 2>/dev/null || echo '{{ index .i18n .lang "tb_fail" }}'"
+alias tb="nc termbin.com 9999 2>/dev/null || echo '{{ template "t" (list . "tb_fail") }}'"
 
 alias qr='qrencode -t ansiutf8'
 
@@ -101,9 +101,9 @@ alias cve='searchsploit'
 # =====================================================
 alias stopwatch='date && time read -s && echo && date'
 timer() {
-    printf "{{ index .i18n .lang "timer_ask" }}"; read secs
-    echo "{{ index .i18n .lang "timer_started" }}"
-    sleep "$secs" && termux-notification --title "Timer" --content "{{ index .i18n .lang "timer_done" }}"
+    printf "{{ template "t" (list . "timer_ask") }}"; read secs
+    echo "{{ template "t" (list . "timer_started") }}"
+    sleep "$secs" && termux-notification --title "Timer" --content "{{ template "t" (list . "timer_done") }}"
 }
 
 # =====================================================

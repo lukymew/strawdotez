@@ -29,12 +29,12 @@ function xtop() {
 
 # --- jsv ---
 # Valida a sintaxe de um ou mais arquivos JSON.
-# {{ index .i18n .lang "u_jsv" }}
+# {{ template "t" (list . "u_jsv") }}
 function jsv() {
-    local USAGE="{{ index .i18n .lang "u_jsv" }}"
+    local USAGE="{{ template "t" (list . "u_jsv") }}"
     [ -z "$1" ] && { echo "$USAGE" >&2; return; }
     [ "$1" == "-h" ] && { echo "$USAGE" >&2; return; }
-    command -v python3 >/dev/null 2>&1 || { echo "{{ index .i18n .lang "e_python3" }}" >&2; return; }
+    command -v python3 >/dev/null 2>&1 || { echo "{{ template "t" (list . "e_python3") }}" >&2; return; }
     while [ "$1" != "" ]; do
         echo -n "$1: "
         python3 -m json.tool "$1" >/dev/null && echo "OK"
@@ -44,18 +44,18 @@ function jsv() {
 
 # --- lcfile ---
 # Renomeia arquivo(s) convertendo o nome para minúsculas.
-# {{ index .i18n .lang "u_lcfile" }}
+# {{ template "t" (list . "u_lcfile") }}
 function lcfile() {
-    local USAGE="{{ index .i18n .lang "u_lcfile" }}"
+    local USAGE="{{ template "t" (list . "u_lcfile") }}"
     [ "$1" = "" ] && { echo "$USAGE" >&2; return; }
     [ "$1" = "-h" ] || [ "$1" = "--help" ] && { echo "$USAGE" >&2; return; }
     while [ "$1" != "" ]; do
         if [ -e "$1" ]; then
             local DST
             DST="$(dirname "$1")/$(basename "$1" | tr '[:upper:]' '[:lower:]')"
-            [ ! -e "$DST" ] && mv -T "$1" "$DST" || echo "{{ index .i18n .lang "e_rename" }}" >&2
+            [ ! -e "$DST" ] && mv -T "$1" "$DST" || echo "{{ template "t" (list . "e_rename") }}" >&2
         else
-            echo "{{ index .i18n .lang "e_invalid" }}" >&2
+            echo "{{ template "t" (list . "e_invalid") }}" >&2
         fi
         shift
     done
@@ -63,9 +63,9 @@ function lcfile() {
 
 # --- rsfile ---
 # Substitui uma substring pelo nome de um ou mais arquivos.
-# {{ index .i18n .lang "u_rsfile" }}
+# {{ template "t" (list . "u_rsfile") }}
 function rsfile() {
-    local USAGE="{{ index .i18n .lang "u_rsfile" }}"
+    local USAGE="{{ template "t" (list . "u_rsfile") }}"
     local sstr=""
     local rstr=""
     while [ "$rstr" == "" ]; do
@@ -83,9 +83,9 @@ function rsfile() {
             local FNAME DST
             FNAME="$(basename "$1")"
             DST="$(dirname "$1")/${FNAME/${sstr}/${rstr}}"
-            [ ! -e "$DST" ] && mv -T "$1" "$DST" || echo "{{ index .i18n .lang "e_rename" }}" >&2
+            [ ! -e "$DST" ] && mv -T "$1" "$DST" || echo "{{ template "t" (list . "e_rename") }}" >&2
         else
-            echo "{{ index .i18n .lang "e_invalid" }}" >&2
+            echo "{{ template "t" (list . "e_invalid") }}" >&2
         fi
         shift
     done
@@ -93,9 +93,9 @@ function rsfile() {
 
 # --- ascify ---
 # Remove caracteres não-ASCII do conteúdo de um ou mais arquivos (saída no stdout).
-# {{ index .i18n .lang "u_ascify" }}
+# {{ template "t" (list . "u_ascify") }}
 function ascify() {
-    local USAGE="{{ index .i18n .lang "u_ascify" }}"
+    local USAGE="{{ template "t" (list . "u_ascify") }}"
     [ -z "$1" ] && { echo "$USAGE" >&2; return; }
     [ "$1" == "-h" ] && { echo "$USAGE" >&2; return; }
     while [ "$1" != "" ]; do
@@ -106,9 +106,9 @@ function ascify() {
 
 # --- trim-ws ---
 # Remove espaços em branco no final das linhas de um ou mais arquivos.
-# {{ index .i18n .lang "u_trimws" }}
+# {{ template "t" (list . "u_trimws") }}
 function trim-ws() {
-    local USAGE="{{ index .i18n .lang "u_trimws" }}"
+    local USAGE="{{ template "t" (list . "u_trimws") }}"
     [ -z "$1" ] && { echo "$USAGE" >&2; return; }
     [ "$1" == "-h" ] && { echo "$USAGE" >&2; return; }
     sed -i 's/[ \t]*$//' "$@"
@@ -116,12 +116,12 @@ function trim-ws() {
 
 # --- trim-tab ---
 # Converte tabs em espaços (4 colunas) em um ou mais arquivos. Requer moreutils (sponge).
-# {{ index .i18n .lang "u_trimtab" }}
+# {{ template "t" (list . "u_trimtab") }}
 function trim-tab() {
-    local USAGE="{{ index .i18n .lang "u_trimtab" }}"
+    local USAGE="{{ template "t" (list . "u_trimtab") }}"
     [ -z "$1" ] && { echo "$USAGE" >&2; return; }
     [ "$1" == "-h" ] && { echo "$USAGE" >&2; return; }
-    command -v sponge >/dev/null 2>&1 || { echo "{{ index .i18n .lang "e_sponge" }}" >&2; return; }
+    command -v sponge >/dev/null 2>&1 || { echo "{{ template "t" (list . "e_sponge") }}" >&2; return; }
     while [ "$1" != "" ]; do
         expand -t 4 "$1" | sponge "$1"
         shift
@@ -143,25 +143,25 @@ function code-analysis() {
 # Listam arquivos-fonte por linguagem em um diretório.
 # uso: c-src|py-src|r-src|json-src [diretório]
 function c-src() {
-    [ "$1" == "-h" ] && { echo "{{ index .i18n .lang "u_csrc" }}" >&2; return; }
+    [ "$1" == "-h" ] && { echo "{{ template "t" (list . "u_csrc") }}" >&2; return; }
     local SRC="${1:-.}"
     find "$SRC" -regextype posix-extended -regex "^.*\.(cpp|hpp|c|h)$" | grep -ve "^\./debian"
 }
 
 function py-src() {
-    [ "$1" == "-h" ] && { echo "{{ index .i18n .lang "u_pysrc" }}" >&2; return; }
+    [ "$1" == "-h" ] && { echo "{{ template "t" (list . "u_pysrc") }}" >&2; return; }
     local SRC="${1:-.}"
     find "$SRC" -name "*.py"
 }
 
 function r-src() {
-    [ "$1" == "-h" ] && { echo "{{ index .i18n .lang "u_rsrc" }}" >&2; return; }
+    [ "$1" == "-h" ] && { echo "{{ template "t" (list . "u_rsrc") }}" >&2; return; }
     local SRC="${1:-.}"
     find "$SRC" -regex ".*\.[rR]"
 }
 
 function json-src() {
-    [ "$1" == "-h" ] && { echo "{{ index .i18n .lang "u_jsonsrc" }}" >&2; return; }
+    [ "$1" == "-h" ] && { echo "{{ template "t" (list . "u_jsonsrc") }}" >&2; return; }
     local SRC="${1:-.}"
     find "$SRC" -iname "*.json"
 }
@@ -186,10 +186,10 @@ function extract() {
         *.7z) 7z x "$1" ;;
         *.xz) unxz "$1" ;;
         *.zst) unzstd "$1" ;;
-        *) echo "{{ index .i18n .lang "e_extract" }}" ;;
+        *) echo "{{ template "t" (list . "e_extract") }}" ;;
         esac
     else
-        echo "{{ index .i18n .lang "e_notfile" }}"
+        echo "{{ template "t" (list . "e_notfile") }}"
     fi
 }
 
@@ -232,12 +232,12 @@ function rot13() {
 
 # --- atop ---
 # Mostra as threads de um processo em tempo real via top -H.
-# {{ index .i18n .lang "u_atop" }}
+# {{ template "t" (list . "u_atop") }}
 function atop() {
-    [ -z "$1" ] && { echo "{{ index .i18n .lang "u_atop" }}" >&2; return; }
+    [ -z "$1" ] && { echo "{{ template "t" (list . "u_atop") }}" >&2; return; }
     local pids
     pids=$(pgrep -d, "$1")
-    [ -z "$pids" ] && { echo "{{ index .i18n .lang "e_noproc" }}" >&2; return; }
+    [ -z "$pids" ] && { echo "{{ template "t" (list . "e_noproc") }}" >&2; return; }
     top -H -p "$pids"
 }
 
@@ -250,7 +250,7 @@ function atop() {
 # uso: clone <url_repositório>
 function clone() {
     if [ $# -lt 1 ]; then
-        echo "{{ index .i18n .lang "u_clone" }}"
+        echo "{{ template "t" (list . "u_clone") }}"
         return 1
     fi
 
@@ -262,10 +262,10 @@ function clone() {
     local destination="$default_destination/clone-$counter"
 
     if ! git clone -q "$1" "$destination"; then
-        echo "{{ index .i18n .lang "e_clone" }}"
+        echo "{{ template "t" (list . "e_clone") }}"
         return 1
     fi
-    echo "{{ index .i18n .lang "ok_clone" }}"
+    echo "{{ template "t" (list . "ok_clone") }}"
 }
 
 mkcd() { mkdir -p "$1" && cd "$1"; }

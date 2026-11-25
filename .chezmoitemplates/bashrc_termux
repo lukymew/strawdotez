@@ -28,23 +28,23 @@ HISTCONTROL=ignoredups
 command_not_found_handle() {
     local cmd="$1"
 
-    printf "%b{{ index .i18n .lang "cnf" }}%b %s%b\n" "$blue" "$red" "$cmd" "$rst"
+    printf "%b{{ template "t" (list . "cnf") }}%b %s%b\n" "$blue" "$red" "$cmd" "$rst"
 
     case "$cmd" in
         adb|fastboot)
-            printf "%b{{ index .i18n .lang "pkg_avail" }}%b\n" "$green" "$rst"
+            printf "%b{{ template "t" (list . "pkg_avail") }}%b\n" "$green" "$rst"
             printf "  • pkg install android-tools\n"
             ;;
         git|curl|wget|python|node|npm|php|java|gcc|g++)
-            printf "%b{{ index .i18n .lang "pkg_avail" }}%b\n" "$green" "$rst"
+            printf "%b{{ template "t" (list . "pkg_avail") }}%b\n" "$green" "$rst"
             printf "  • pkg install %s\n" "$cmd"
             ;;
         docker|kubectl|terraform)
-            printf "%b{{ index .i18n .lang "pkg_unavail" }}%b\n" "$yellow" "$rst"
-            printf "  • {{ index .i18n .lang "use_proot" }}\n"
+            printf "%b{{ template "t" (list . "pkg_unavail") }}%b\n" "$yellow" "$rst"
+            printf "  • {{ template "t" (list . "use_proot") }}\n"
             ;;
         *)
-            printf "%b{{ index .i18n .lang "check_pkgs" }}%b\n" "$yellow" "$rst"
+            printf "%b{{ template "t" (list . "check_pkgs") }}%b\n" "$yellow" "$rst"
             printf "  • pkg search %s\n" "$cmd"
             ;;
     esac
@@ -69,7 +69,7 @@ cd() {
 # uso: backup-bashrc
 function backup-bashrc() {
     cp ~/.bashrc ~/.bashrc.backup."$(date +%Y%m%d-%H%M%S)"
-    echo "{{ index .i18n .lang "bk_created" }}"
+    echo "{{ template "t" (list . "bk_created") }}"
     ls -t ~/.bashrc.backup.* 2>/dev/null | tail -n +6 | xargs -r rm --
 }
 
@@ -82,9 +82,9 @@ function restore-bashrc() {
     if [ -n "$latest_backup" ]; then
         cp "$latest_backup" ~/.bashrc
         source ~/.bashrc
-        echo "{{ index .i18n .lang "rs_from" }}"
+        echo "{{ template "t" (list . "rs_from") }}"
     else
-        echo "{{ index .i18n .lang "rs_none" }}"
+        echo "{{ template "t" (list . "rs_none") }}"
     fi
 }
 

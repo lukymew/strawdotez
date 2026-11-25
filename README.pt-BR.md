@@ -39,6 +39,14 @@ pkg install -y chezmoi git
 chezmoi init --apply lukymew/strawdotez
 ```
 
+Ou em uma linha:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/lukymew/strawdotez/main/install.sh | bash
+```
+
+Coloque `-s -- --defaults` depois de `bash` para pular as perguntas e usar os padrões.
+
 Ele faz algumas perguntas (Enter aceita o padrão de cada uma):
 
 | Pergunta | Para que serve |

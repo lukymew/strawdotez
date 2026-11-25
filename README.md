@@ -39,6 +39,14 @@ pkg install -y chezmoi git
 chezmoi init --apply lukymew/strawdotez
 ```
 
+Or in one line:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/lukymew/strawdotez/main/install.sh | bash
+```
+
+Add `-s -- --defaults` after `bash` to skip the questions and use the defaults.
+
 It asks a few questions (Enter accepts each default):
 
 | Question | What it does |

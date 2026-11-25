@@ -1,0 +1,1 @@
+{{- $d := index . 0 -}}{{- $k := index . 1 -}}{{- index $d.i18n $d.lang $k | default (index $d.i18n "en" $k) | default (index $d.i18n "pt" $k) | default $k -}}

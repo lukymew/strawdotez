@@ -18,12 +18,12 @@
         "banner" "Show the logo and header when the terminal opens? (Y/n)"
         "hush" "Turn off the Termux welcome message? (Y/n)") -}}
 {{- $m := index $t $lang -}}
-{{- writeToStdout (index $m "intro") -}}
-{{- $name := promptStringOnce . "name" (index $m "name") "" -}}
-{{- $email := promptStringOnce . "email" (index $m "email") "" -}}
-{{- $device := promptChoiceOnce . "device" (index $m "device") (list "cell" "tablet") "cell" -}}
-{{- $banner := promptBoolOnce . "banner" (index $m "banner") true -}}
-{{- $hush := promptBoolOnce . "hushlogin" (index $m "hush") true -}}
+{{- writeToStdout (index $m "intro" | default (index $t "en" "intro")) -}}
+{{- $name := promptStringOnce . "name" (index $m "name" | default (index $t "en" "name")) "" -}}
+{{- $email := promptStringOnce . "email" (index $m "email" | default (index $t "en" "email")) "" -}}
+{{- $device := promptChoiceOnce . "device" (index $m "device" | default (index $t "en" "device")) (list "cell" "tablet") "cell" -}}
+{{- $banner := promptBoolOnce . "banner" (index $m "banner" | default (index $t "en" "banner")) true -}}
+{{- $hush := promptBoolOnce . "hushlogin" (index $m "hush" | default (index $t "en" "hush")) true -}}
 
 [data]
     lang = {{ $lang | quote }}

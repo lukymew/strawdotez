@@ -77,7 +77,7 @@ Ver a seção "Inspirações" do README.
 
 ## Idiomas (pt e en)
 
-- O idioma vem da chave `lang` (pergunta no `chezmoi init`). Mensagens de execução ficam em `.chezmoidata/i18n.yaml`, sempre nos dois idiomas, e entram nos templates com `{{ index .i18n .lang "chave" }}`.
+- O idioma vem da chave `lang` (pergunta no `chezmoi init`). Mensagens de execução ficam em `.chezmoidata/i18n.yaml`, sempre nos dois idiomas, e entram nos templates com `{{ template "t" (list . "chave") }}`. Se faltar a chave no idioma escolhido, a peça `.chezmoitemplates/t` usa o inglês, depois o português, e por fim mostra o nome da chave (nada quebra). Rode `python scripts/check-i18n.py` para ver o que falta.
 - As perguntas da instalação ficam dentro de `.chezmoi.toml.tmpl` (o init não enxerga `.chezmoidata`).
 - Texto de pergunta não pode ter vírgula nem `=` (as flags `--promptString` usam o texto como chave).
 - README.md é em inglês e README.pt-BR.md em português: ao mudar um, mude o outro.

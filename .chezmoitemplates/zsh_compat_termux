@@ -4,7 +4,7 @@ unsetopt EQUALS
 chpwd() { ls }
 
 command_not_found_handler() {
-    printf '\e[34m{{ index .i18n .lang "cnf" }}\e[31m %s\e[0m\n' "$1"
+    printf '\e[34m{{ template "t" (list . "cnf") }}\e[31m %s\e[0m\n' "$1"
     printf '\e[33m  • pkg search %s\e[0m\n' "$1"
     return 127
 }

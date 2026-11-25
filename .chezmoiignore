@@ -8,3 +8,4 @@ docs/
 .hushlogin
 {{- end }}
 install.sh
+scripts/

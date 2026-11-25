@@ -10,10 +10,10 @@ crb() {
     if [ ! -f "$b" ] || [ "$size" -lt 100 ]; then
         if [ -f "${b}.bkp" ]; then
             cat "${b}.bkp" > "$b"
-            echo "✅ {{ index .i18n .lang "crb_restored" }}"
-            [[ $- == *i* ]] && source "$b" && echo "✅ {{ index .i18n .lang "crb_reloaded" }}"
+            echo "✅ {{ template "t" (list . "crb_restored") }}"
+            [[ $- == *i* ]] && source "$b" && echo "✅ {{ template "t" (list . "crb_reloaded") }}"
         else
-            echo "⚠️ {{ index .i18n .lang "crb_nobkp" }}"
+            echo "⚠️ {{ template "t" (list . "crb_nobkp") }}"
         fi
     else
         echo "✅ bash.bashrc OK"
@@ -28,13 +28,13 @@ function termux-modo-tablet() {
     local ativo="$HOME/.termux/termux.properties"
 
     if [ ! -f "$perfil" ]; then
-        echo "⚠️ {{ index .i18n .lang "tab_missing" }}"
+        echo "⚠️ {{ template "t" (list . "tab_missing") }}"
         return 1
     fi
 
     cp "$perfil" "$ativo" || return 1
     termux-reload-settings
-    echo "📐 {{ index .i18n .lang "tab_on" }}"
+    echo "📐 {{ template "t" (list . "tab_on") }}"
 }
 
 # --- termux-modo-celular ---
@@ -45,11 +45,11 @@ function termux-modo-celular() {
     local ativo="$HOME/.termux/termux.properties"
 
     if [ ! -f "$perfil" ]; then
-        echo "⚠️ {{ index .i18n .lang "cell_missing" }}"
+        echo "⚠️ {{ template "t" (list . "cell_missing") }}"
         return 1
     fi
 
     cp "$perfil" "$ativo" || return 1
     termux-reload-settings
-    echo "📱 {{ index .i18n .lang "cell_on" }}"
+    echo "📱 {{ template "t" (list . "cell_on") }}"
 }

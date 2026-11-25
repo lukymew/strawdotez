@@ -2,7 +2,7 @@
 # strawdotez: instala os pacotes do Termux (lista em .chezmoidata/packages.yaml)
 pkgs=({{ join " " .packages.termux }})
 
-printf '{{ index .i18n .lang "pkg_checking" }}\n' "${#pkgs[@]}"
+printf '{{ template "t" (list . "pkg_checking") }}\n' "${#pkgs[@]}"
 faltando=()
 for p in "${pkgs[@]}"; do
     dpkg -s "$p" >/dev/null 2>&1 || faltando+=("$p")
@@ -10,7 +10,7 @@ done
 
 falhou=()
 if [ "${#faltando[@]}" -gt 0 ]; then
-    printf '{{ index .i18n .lang "pkg_installing" }}\n' "${#faltando[@]}"
+    printf '{{ template "t" (list . "pkg_installing") }}\n' "${#faltando[@]}"
     if ! pkg install -y "${faltando[@]}"; then
         for p in "${faltando[@]}"; do
             dpkg -s "$p" >/dev/null 2>&1 && continue
@@ -20,8 +20,8 @@ if [ "${#faltando[@]}" -gt 0 ]; then
 fi
 
 if [ "${#falhou[@]}" -gt 0 ]; then
-    printf '\n\033[33m{{ index .i18n .lang "pkg_failed" }}\033[0m\n' "${#falhou[@]}"
+    printf '\n\033[33m{{ template "t" (list . "pkg_failed") }}\033[0m\n' "${#falhou[@]}"
     printf '  - %s\n' "${falhou[@]}"
-    printf '{{ index .i18n .lang "pkg_hint" }}\n\n'
+    printf '{{ template "t" (list . "pkg_hint") }}\n\n'
 fi
 exit 0
