@@ -92,32 +92,39 @@ straw:
       termux: [llama-cpp]
   profiles:
     minimal:
+      icon: "🪶"
       pt: "Mínimo: só o essencial, nada a mais"
       en: "Minimal: just the essentials, nothing extra"
       modules: []
     standard:
+      icon: "📦"
       pt: "Padrão: essencial mais utilitários"
       en: "Standard: essentials plus utilities"
       modules: [utils]
     developer:
+      icon: "💻"
       pt: "Desenvolvedor: utilitários, C/C++, Go, Rust, web e editores"
       en: "Developer: utilities, C/C++, Go, Rust, web and editors"
       modules: [utils, dev, golang, rust, web, editors]
     network:
+      icon: "📡"
       pt: "Redes: utilitários e ferramentas de rede"
       en: "Networking: utilities and network tools"
       modules: [utils, network]
     pentest:
+      icon: "🕵️"
       pt: "Pentest: rede, ferramentas de teste e criptografia (uso autorizado)"
       en: "Pentest: network, testing tools and encryption (authorized use only)"
       modules: [utils, network, pentest, privacy]
       only: [termux, apt]
     creator:
+      icon: "🎬"
       pt: "Criador: utilitários, mídia e editores"
       en: "Creator: utilities, media and editors"
       modules: [utils, media, editors]
       only: [termux, apt, apk]
     full:
+      icon: "🚀"
       pt: "Completo: tudo, menos pentest e IA"
       en: "Full: everything except pentest and AI"
       modules: [utils, dev, golang, rust, web, network, privacy, media, editors]

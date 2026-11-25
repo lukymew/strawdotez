@@ -101,6 +101,8 @@ pause() {
     return 0
 }
 
+ic() { [ "${STRAW_PLAIN:-0}" = 1 ] || printf '%s ' "$1"; }
+
 pick() { # cabeçalho  (linhas "id<TAB>texto" no stdin; PICK_MULTI=1 liga a seleção múltipla)
     local opts=(--delimiter=$'\t' --with-nth=2 --header="$1" --prompt="straw> ")
     [ "${PICK_MULTI:-0}" = 1 ] && opts+=(--multi)
@@ -108,7 +110,8 @@ pick() { # cabeçalho  (linhas "id<TAB>texto" no stdin; PICK_MULTI=1 liga a sele
 }
 
 menu_tools() {
-    local lines="back"$'\t'"$M_back"$'\n' id desc pk mark sel pkgs=() m
+    local lines id desc pk mark sel pkgs=() m
+    lines="back"$'\t'"$(ic ⬅️)$M_back"$'\n'
     local icon group order
     for group in cli dev net; do
         while IFS=$'\t' read -r id desc _ _ _ icon order; do
@@ -133,11 +136,12 @@ menu_tools() {
 }
 
 menu_profiles() {
-    local lines="back"$'\t'"$M_back"$'\n' id desc only sel m pkgs=() mp
-    while IFS=$'\t' read -r id desc _ only; do
+    local lines id desc only sel m pkgs=() mp icon
+    lines="back"$'\t'"$(ic ⬅️)$M_back"$'\n'
+    while IFS=$'\t' read -r id desc _ only icon; do
         [ -z "$id" ] && continue
         if [ "$only" != "-" ] && [[ ",$only," != *",$KEY,"* ]]; then continue; fi
-        lines+="$id"$'\t'"$desc"$'\n'
+        lines+="$id"$'\t'"$(ic "${icon:-📦}")$desc"$'\n'
     done < "$DATA/profiles.tsv"
     sel="$(printf '%s' "$lines" | pick "$M_profiles_header")"
     if [ -z "$sel" ] || [ "$sel" = back ]; then return 0; fi
@@ -167,11 +171,13 @@ cmd_menu() {
     local sel head
     head="${M_menu_header//%s/$ENVNAME}"
     while :; do
-        sel="$(printf 'tools\t%s\nprofiles\t%s\none\t%s\nsoon\t%s\nquit\t%s\n' \
-            "$M_menu_tools" "$M_menu_profiles" "$M_menu_one" "$M_menu_soon" "$M_quit" | pick "$head")"
+        sel="$(printf 'tools\t%s%s\nprofiles\t%s%s\nbrowse\t%s%s\none\t%s%s\nsoon\t%s%s\nquit\t%s%s\n' \
+            "$(ic 🧰)" "$M_menu_tools" "$(ic 🎭)" "$M_menu_profiles" "$(ic 🔎)" "$M_menu_browse" \
+            "$(ic 📦)" "$M_menu_one" "$(ic 🎨)" "$M_menu_soon" "$(ic 👋)" "$M_quit" | pick "$head")"
         case "$sel" in
             tools)    menu_tools ;;
             profiles) menu_profiles ;;
+            browse)   cmd_tools; pause ;;
             one)      menu_one ;;
             soon)     say "$M_soon"; pause ;;
             *)        return 0 ;;

@@ -1,3 +1,3 @@
 {{- range $id, $p := .straw.profiles -}}
-{{ $id }}	{{ index $p $.lang | default $p.en }}	{{ join " " (index $p "modules" | default (list)) | default "-" }}	{{ join "," (index $p "only" | default (list)) | default "-" }}
+{{ $id }}	{{ index $p $.lang | default $p.en }}	{{ join " " (index $p "modules" | default (list)) | default "-" }}	{{ join "," (index $p "only" | default (list)) | default "-" }}	{{ index $p "icon" | default "📦" }}
 {{ end -}}
