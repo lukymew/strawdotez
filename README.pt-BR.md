@@ -47,6 +47,8 @@ curl -fsSL https://raw.githubusercontent.com/lukymew/strawdotez/main/install.sh 
 
 Coloque `-s -- --defaults` depois de `bash` para pular as perguntas e usar os padrões.
 
+Quer ler o instalador antes de rodar? Veja o [SECURITY.md](SECURITY.md#conferir-o-instalador-antes-de-rodar-opcional).
+
 Ele faz algumas perguntas (Enter aceita o padrão de cada uma):
 
 | Pergunta | Para que serve |

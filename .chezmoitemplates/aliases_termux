@@ -22,7 +22,6 @@ alias e='exit'
 alias vi='nvim'
 alias n='nano'
 alias mkdir='mkdir -p'
-alias rmrf='rm -rf'          # cuidado: ignora confirmação
 alias reloa='source ~/.bashrc'
 
 # =====================================================
@@ -70,7 +69,6 @@ alias myip='ip addr show wlan0 | awk "/inet /{print \$2}"'
 alias whatismyip='curl ifconfig.me'
 alias ports='netstat -tuln'
 alias listen='nc -lvp'
-alias iptablesflush='iptables -F'
 alias shareterm='sshd'
 
 # =====================================================

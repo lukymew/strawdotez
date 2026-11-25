@@ -57,11 +57,11 @@ Legenda: `[x]` feito, `[ ]` planejado. As fases estão em ordem de prioridade, e
 - [ ] Meta fixa: bash abaixo de 30ms e zsh abaixo de 50ms, verificada no CI
 
 ## Fase 6: segurança e privacidade
-- [ ] Política escrita de segredos (nunca no repo)
+- [x] Política escrita de segredos (nunca no repo): `SECURITY.md`
 - [ ] Criptografia de arquivos sensíveis com `age`, se algum dia houver
-- [ ] Revisar aliases perigosos (`rmrf`, `iptablesflush`) e documentar
-- [ ] Revisar o `allow-external-apps` do `termux.properties` e documentar o risco
-- [ ] Verificação de integridade do script de instalação em uma linha
+- [x] Revisar aliases perigosos (`rmrf` e `iptablesflush` removidos; os demais documentados)
+- [x] Revisar o `allow-external-apps` do `termux.properties` e documentar o risco
+- [x] Verificação de integridade do script de instalação em uma linha (`install.sh` e sha256 na release)
 
 ## Fase 7: experiência de uso
 - [ ] Comando `strawdotez` com subcomandos: `update`, `doctor`, `perfil`, `bench`
@@ -84,7 +84,6 @@ Legenda: `[x]` feito, `[ ]` planejado. As fases estão em ordem de prioridade, e
 - [ ] Agradecimentos e links atualizados para as fontes de cada trecho
 
 ## Fase 9: menu interativo e addons
-Inspiração: Dev Core Termux (adicionar o link do repositório aqui e estudar como ele organiza os menus).
 - [ ] Menu interativo no terminal (`strawdotez menu`), com fzf ou gum
 - [ ] Catálogo de ferramentas por categoria (dev, rede, mídia, IA local, segurança), com instalação em um toque
 - [ ] Mostrar o que já está instalado e permitir remover

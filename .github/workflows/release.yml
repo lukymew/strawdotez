@@ -27,7 +27,8 @@ jobs:
               go build -trimpath -ldflags "-s -w -X main.version=${GITHUB_REF_NAME}" \
               -o "dist/straw-ui-linux-$arch" ./cmd/straw-ui
           done
-          (cd dist && sha256sum straw-ui-linux-* > SHA256SUMS)
+          cp install.sh dist/install.sh
+          (cd dist && sha256sum straw-ui-linux-* install.sh > SHA256SUMS)
       - name: Anexar à release
         env:
           GH_TOKEN: ${{ github.token }}

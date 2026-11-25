@@ -2,6 +2,7 @@ README.md
 README.pt-BR.md
 LICENSE
 CLAUDE.md
+SECURITY.md
 ROADMAP.md
 docs/
 {{- if not .hushlogin }}

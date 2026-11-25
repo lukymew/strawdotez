@@ -30,7 +30,7 @@ Antes de dar `git push`, confira o que a mudança toca.
 ## Mexeu no `straw` ou em módulos e perfis
 - [ ] `.chezmoidata/straw.yaml` (pt e en na descrição, `icon` e `group`)
 - [ ] Mudou colunas de `modules.tsv` ou `profiles.tsv`? Atualizar `scripts/ci-check.sh` e o bash
-- [ ] Rodar `~/bats-core/bin/bats tests/` (sem pacote no Termux: `git clone --depth 1 https://github.com/bats-core/bats-core ~/bats-core`)
+- [ ] Rodar `bats tests/` (precisa do `bats`: `pkg install bats`)
 - [ ] Rodar `bash scripts/ci-check.sh` e `shellcheck -S warning dot_local/bin/executable_straw`
 - [ ] README (en e pt-BR): tabela de comandos
 
@@ -38,6 +38,9 @@ Antes de dar `git push`, confira o que a mudança toca.
 - [ ] `gofmt -l .` vazio, `go vet ./...` e `go test ./...` passando
 - [ ] Recompilar no celular: `go build -o ~/.local/bin/straw-ui ./cmd/straw-ui`
 - [ ] Mensagem nova: chave `straw_*` nos dois idiomas
+
+## Adicionou alias ou função que apaga, envia dados ou abre porta
+- [ ] Documentar em `SECURITY.md` (en e pt) e pensar duas vezes antes de incluir
 
 ## Mudou o visual (logo, prompt, cores)
 - [ ] Refazer os prints em `docs/bash.jpg` e `docs/zsh.jpg`

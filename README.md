@@ -47,6 +47,8 @@ curl -fsSL https://raw.githubusercontent.com/lukymew/strawdotez/main/install.sh 
 
 Add `-s -- --defaults` after `bash` to skip the questions and use the defaults.
 
+Want to read the installer before running it? See [SECURITY.md](SECURITY.md#checking-the-installer-before-running-it-optional).
+
 It asks a few questions (Enter accepts each default):
 
 | Question | What it does |

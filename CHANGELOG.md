@@ -5,6 +5,9 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Security
+- `SECURITY.md`: secrets policy, installer check, how to report. Removed aliases `rmrf` and `iptablesflush`. Release publishes `install.sh` and its sha256. More secret patterns in `.gitignore`.
+
 ## [1.2.0] - 2026-11-25
 
 ### Added
