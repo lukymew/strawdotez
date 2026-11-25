@@ -32,6 +32,7 @@ Legenda: `[x]` feito, `[ ]` planejado. As fases estão em ordem de prioridade, e
 - [ ] Testes para as funções utilitárias mais usadas
 
 ## Fase 3: personalização
+- [x] Comando `straw` com `straw menu`: ferramentas por módulo e perfis (mínimo, padrão e completo)
 - [ ] Módulos opcionais por pergunta: IA local (llama.cpp), rede e segurança, criptografia
 - [ ] Perfis de instalação: mínimo, padrão e completo
 - [ ] Escolha de tema de cores (temas do Gogh) e de fonte na instalação

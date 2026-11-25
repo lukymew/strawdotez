@@ -1,0 +1,5 @@
+{{- range $k, $_ := .i18n.pt -}}
+{{- if hasPrefix "straw_" $k -}}
+M_{{ trimPrefix "straw_" $k }}={{ includeTemplate "t" (list $ $k) | quote }}
+{{ end -}}
+{{- end -}}

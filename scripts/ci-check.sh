@@ -30,6 +30,12 @@ for lang in pt en; do
     done
     bash -n "$H/.bashrc.out" 2>"$H/err" && ok "bash -n .bashrc" || { bad "bash -n .bashrc"; cat "$H/err"; }
     zsh -n "$H/.zshrc.out" 2>"$H/err" && ok "zsh -n .zshrc" || { bad "zsh -n .zshrc"; cat "$H/err"; }
+    D=".local/share/strawdotez"
+    for f in messages.sh modules.tsv profiles.tsv; do
+        HOME="$H" "$CZ" -S "$REPO" cat "$H/$D/$f" >"$H/$f" 2>"$H/err" && [ -s "$H/$f" ] && ok "straw: $f" || { bad "straw: $f"; cat "$H/err"; }
+    done
+    bash -n "$H/messages.sh" 2>"$H/err" && ok "bash -n messages.sh" || { bad "bash -n messages.sh"; cat "$H/err"; }
+    awk -F'\t' 'NF != 3 { exit 1 }' "$H/modules.tsv" "$H/profiles.tsv" && ok "straw: colunas" || bad "straw: colunas"
     for s in "$REPO"/.chezmoiscripts/*.tmpl; do
         n="$(basename "$s")"
         if HOME="$H" "$CZ" -S "$REPO" execute-template <"$s" >"$H/s.sh" 2>"$H/err"; then

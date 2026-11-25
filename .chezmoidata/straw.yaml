@@ -1,0 +1,41 @@
+# Módulos e perfis do comando `straw menu`.
+# Para adicionar um módulo: crie a chave com pt, en e packages (nomes de pacote do Termux).
+straw:
+  modules:
+    utils:
+      pt: "Utilitários do dia a dia (jq, tree, htop, rsync)"
+      en: "Everyday utilities (jq, tree, htop, rsync)"
+      packages: [jq, tree, htop, rsync, termux-api]
+    dev:
+      pt: "Desenvolvimento (clang, make, cmake, golang, rust)"
+      en: "Development (clang, make, cmake, golang, rust)"
+      packages: [clang, make, cmake, golang, rust]
+    network:
+      pt: "Rede e segurança (nmap, traceroute, whois, netcat, openssl)"
+      en: "Network and security (nmap, traceroute, whois, netcat, openssl)"
+      packages: [nmap, traceroute, whois, netcat-openbsd, openssl-tool]
+    media:
+      pt: "Mídia (ffmpeg, imagemagick, yt-dlp)"
+      en: "Media (ffmpeg, imagemagick, yt-dlp)"
+      packages: [ffmpeg, imagemagick, yt-dlp]
+    editors:
+      pt: "Editores extras (vim, helix)"
+      en: "Extra editors (vim, helix)"
+      packages: [vim, helix]
+    ai:
+      pt: "IA local (llama.cpp, experimental)"
+      en: "Local AI (llama.cpp, experimental)"
+      packages: [llama-cpp]
+  profiles:
+    minimal:
+      pt: "Mínimo: só o essencial, nada a mais"
+      en: "Minimal: just the essentials, nothing extra"
+      modules: []
+    standard:
+      pt: "Padrão: essencial mais utilitários"
+      en: "Standard: essentials plus utilities"
+      modules: [utils]
+    full:
+      pt: "Completo: utilitários, desenvolvimento, rede, mídia e editores"
+      en: "Full: utilities, development, network, media and editors"
+      modules: [utils, dev, network, media, editors]

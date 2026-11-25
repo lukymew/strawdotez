@@ -25,7 +25,7 @@ jobs:
       - name: shellcheck nos scripts do repositório
         run: |
           sudo apt-get install -y -qq shellcheck
-          shellcheck -S warning install.sh scripts/*.sh .githooks/pre-commit
+          shellcheck -S warning install.sh scripts/*.sh .githooks/pre-commit dot_local/bin/executable_straw
 
   secrets:
     name: Verificação de segredos

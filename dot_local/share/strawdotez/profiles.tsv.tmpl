@@ -1,0 +1,3 @@
+{{- range $id, $p := .straw.profiles -}}
+{{ $id }}	{{ index $p $.lang | default $p.en }}	{{ join " " $p.modules }}
+{{ end -}}

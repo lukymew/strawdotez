@@ -78,12 +78,15 @@ Depois ele instala os pacotes, baixa os plugins do zsh e aplica as configuraçõ
 | `termux-modo-tablet` | ativa o perfil de tablet |
 | `termux-modo-celular` | ativa o perfil de celular |
 | `crb` | restaura o `bash.bashrc` do Termux se ele for corrompido |
+| `straw menu` | abre o menu: ferramentas (módulos de pacotes) e perfis |
+| `straw update` | baixa e aplica as novidades |
 
 ## Estrutura
 
 ```text
 .chezmoi.toml.tmpl          perguntas da instalação
 .chezmoidata/packages.yaml  lista de pacotes
+.chezmoidata/straw.yaml     módulos e perfis do `straw menu`
 .chezmoiexternal.toml       plugins do zsh baixados do GitHub
 .chezmoiscripts/            instala pacotes, bash.bashrc e recarrega o Termux
 .chezmoitemplates/          peças reutilizáveis (aliases, funções, opções)

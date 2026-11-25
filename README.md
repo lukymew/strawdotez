@@ -78,6 +78,8 @@ Then it installs the packages, downloads the zsh plugins and applies the setting
 | `termux-modo-tablet` | enables the tablet profile |
 | `termux-modo-celular` | enables the phone profile |
 | `crb` | restores Termux's `bash.bashrc` if it gets corrupted |
+| `straw menu` | opens the menu: tools (package modules) and profiles |
+| `straw update` | pulls and applies the latest changes |
 
 ## Layout
 
@@ -85,6 +87,7 @@ Then it installs the packages, downloads the zsh plugins and applies the setting
 .chezmoi.toml.tmpl          install questions
 .chezmoidata/packages.yaml  package list
 .chezmoidata/i18n.yaml      messages in Portuguese and English
+.chezmoidata/straw.yaml     modules and profiles for `straw menu`
 .chezmoiexternal.toml       zsh plugins downloaded from GitHub
 .chezmoiscripts/            installs packages, bash.bashrc and reloads Termux
 .chezmoitemplates/          reusable pieces (aliases, functions, options)

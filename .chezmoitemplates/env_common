@@ -6,3 +6,4 @@ export FZF_DEFAULT_OPTS="--height 40% --border --inline-info"
 # zsh: PATH sem entradas duplicadas
 [ -n "$ZSH_VERSION" ] && typeset -U path PATH
 [ -d "$HOME/.cargo/bin" ] && export PATH="$HOME/.cargo/bin:$PATH"
+[ -d "$HOME/.local/bin" ] && export PATH="$HOME/.local/bin:$PATH"

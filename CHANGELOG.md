@@ -3,6 +3,12 @@
 All notable changes to this project are documented here.
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [Unreleased]
+
+### Added
+- `straw` command: `straw menu` (tools by module and tool profiles, with fzf), `straw update`, `straw version`, `straw help`.
+- Modules and profiles in `.chezmoidata/straw.yaml`.
+
 ## [1.1.0] - 2026-11-25
 
 ### Added

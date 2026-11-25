@@ -1,0 +1,116 @@
+#!/data/data/com.termux/files/usr/bin/bash
+# straw: comando do strawdotez. Uso: straw menu | straw update | straw version | straw help
+# shellcheck disable=SC2154  # as variáveis M_* vêm do messages.sh gerado pelo chezmoi
+set -u
+DATA="${STRAW_DIR:-$HOME/.local/share/strawdotez}"
+
+if [ ! -r "$DATA/messages.sh" ]; then
+    echo "straw: menu data not found / dados do menu não encontrados. Run: chezmoi apply" >&2
+    exit 1
+fi
+# shellcheck source=/dev/null
+. "$DATA/messages.sh"
+
+say()  { printf '%s\n' "$1"; }
+fmt()  { printf '%s\n' "${1//%s/$2}"; }
+
+installed() {
+    local p
+    for p in "$@"; do dpkg -s "$p" >/dev/null 2>&1 || return 1; done
+    return 0
+}
+
+install_pkgs() {
+    local falta=() falhou=() p
+    for p in "$@"; do dpkg -s "$p" >/dev/null 2>&1 || falta+=("$p"); done
+    if [ "${#falta[@]}" -eq 0 ]; then say "$M_nothing_to_install"; return 0; fi
+    fmt "$M_installing" "${falta[*]}"
+    if ! pkg install -y "${falta[@]}"; then
+        for p in "${falta[@]}"; do
+            dpkg -s "$p" >/dev/null 2>&1 && continue
+            pkg install -y "$p" || falhou+=("$p")
+        done
+    fi
+    if [ "${#falhou[@]}" -gt 0 ]; then
+        printf '\n\033[33m%s\033[0m\n' "$M_failed"
+        printf '  - %s\n' "${falhou[@]}"
+    else
+        say "$M_done"
+    fi
+}
+
+col() { # arquivo id coluna
+    awk -F'\t' -v id="$2" -v c="$3" '$1 == id { print $c }' "$1"
+}
+
+pick() { # cabeçalho  (linhas "id<TAB>texto" no stdin; multi com PICK_MULTI=1)
+    local opts=(--delimiter=$'\t' --with-nth=2 --header="$1" --prompt="straw> ")
+    [ "${PICK_MULTI:-0}" = 1 ] && opts+=(--multi)
+    fzf "${opts[@]}" | cut -f1
+}
+
+menu_tools() {
+    local lines="" id desc pk mark sel pkgs=()
+    while IFS=$'\t' read -r id desc pk; do
+        [ -z "$id" ] && continue
+        # shellcheck disable=SC2086
+        if installed $pk; then mark="[x]"; else mark="[ ]"; fi
+        lines+="$id"$'\t'"$mark $desc"$'\n'
+    done < "$DATA/modules.tsv"
+    sel="$(printf '%s' "$lines" | PICK_MULTI=1 pick "$M_tools_header")" || return 0
+    if [ -z "$sel" ]; then say "$M_nothing"; return 0; fi
+    while IFS= read -r id; do
+        # shellcheck disable=SC2207
+        pkgs+=($(col "$DATA/modules.tsv" "$id" 3))
+    done <<< "$sel"
+    install_pkgs "${pkgs[@]}"
+}
+
+menu_profiles() {
+    local lines="" id desc sel m pkgs=()
+    while IFS=$'\t' read -r id desc _; do
+        [ -z "$id" ] && continue
+        lines+="$id"$'\t'"$desc"$'\n'
+    done < "$DATA/profiles.tsv"
+    sel="$(printf '%s' "$lines" | pick "$M_profiles_header")" || return 0
+    if [ -z "$sel" ]; then say "$M_nothing"; return 0; fi
+    for m in $(col "$DATA/profiles.tsv" "$sel" 3); do
+        # shellcheck disable=SC2207
+        pkgs+=($(col "$DATA/modules.tsv" "$m" 3))
+    done
+    install_pkgs "${pkgs[@]}"
+}
+
+cmd_menu() {
+    command -v fzf >/dev/null 2>&1 || { say "$M_need_fzf" >&2; return 1; }
+    local sel
+    sel="$(printf 'tools\t%s\nprofiles\t%s\nsoon\t%s\n' "$M_menu_tools" "$M_menu_profiles" "$M_menu_soon" | pick "$M_menu_header")" || return 0
+    case "$sel" in
+        tools)    menu_tools ;;
+        profiles) menu_profiles ;;
+        soon)     say "$M_soon" ;;
+    esac
+}
+
+cmd_help() {
+    say "$M_help_title"
+    say "$M_help_menu"
+    say "$M_help_update"
+    say "$M_help_version"
+    say "$M_help_help"
+}
+
+cmd_version() {
+    local v
+    v="$(git -C "$(chezmoi source-path 2>/dev/null)" describe --tags 2>/dev/null)"
+    say "strawdotez ${v:-?}"
+}
+
+case "${1:-}" in
+    menu)               cmd_menu ;;
+    update)             chezmoi update ;;
+    version|-v|--version) cmd_version ;;
+    help|-h|--help)     cmd_help ;;
+    "")                 if [ -t 0 ] && [ -t 1 ] && command -v fzf >/dev/null 2>&1; then cmd_menu; else cmd_help; fi ;;
+    *)                  fmt "$M_unknown" "$1" >&2; cmd_help >&2; exit 2 ;;
+esac

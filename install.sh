@@ -44,3 +44,4 @@ else
 fi
 
 m "strawdotez: pronto. Abra uma sessão nova do Termux para ver o resultado." "strawdotez: done. Open a new Termux session to see the result."
+m "Dica: rode 'straw menu' para escolher ferramentas e perfis." "Tip: run 'straw menu' to pick tools and profiles."

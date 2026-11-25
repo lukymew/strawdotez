@@ -1,0 +1,3 @@
+{{- range $id, $m := .straw.modules -}}
+{{ $id }}	{{ index $m $.lang | default $m.en }}	{{ join " " $m.packages }}
+{{ end -}}
