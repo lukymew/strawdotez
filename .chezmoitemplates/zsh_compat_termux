@@ -1,0 +1,10 @@
+# Ajustes para o zsh carregar o codigo comum (escrito para bash)
+unsetopt EQUALS
+
+chpwd() { ls }
+
+command_not_found_handler() {
+    printf '\e[34mComando nao encontrado:\e[31m %s\e[0m\n' "$1"
+    printf '\e[33m  • pkg search %s\e[0m\n' "$1"
+    return 127
+}
