@@ -1,7 +1,0 @@
-# Bash mínimo pro Linux — sem plugins, sem frescura
-export HISTSIZE=2000
-export HISTFILESIZE=2000
-shopt -s checkwinsize
-shopt -s autocd
-
-PS1='\u@\h:\w\$ '

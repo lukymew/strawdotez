@@ -1,17 +1,2 @@
-{{- if not .isTermux }}
-.termux/
-{{- end }}
-
-# Segurança - nunca versionar
-.ssh/id_*
-.ssh/*.pem
-.ssh/known_hosts
-.gnupg/
-*.key
-*.pem
-.netrc
-.npmrc
-.env
-*_history
-.bash_history
-.python_history
+README.md
+LICENSE

@@ -1,4 +1,0 @@
-[user]
-    name = lukymew
-[include]
-    path = ~/.gitconfig-local

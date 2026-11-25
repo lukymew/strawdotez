@@ -1,6 +1,10 @@
-# Plugins reais — ajuste o caminho conforme onde você instalar
-source "$PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh" 2>/dev/null
-source "$PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" 2>/dev/null
-
+# Plugins do zsh (instalados via pkg)
 ZSH_AUTOSUGGEST_STRATEGY=(history)
 ZSH_AUTOSUGGEST_USE_ASYNC=1
+
+[ -r "$PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ] && \
+    source "$PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+
+# syntax-highlighting precisa ser o ÚLTIMO plugin carregado
+[ -r "$PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ] && \
+    source "$PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"

@@ -1,3 +1,11 @@
-{{- $isTermux := (env "TERMUX_VERSION") -}}
+{{- if not (hasPrefix "/data/data/com.termux" (env "PREFIX")) -}}
+{{-   fail "Este repositório é só para o Termux. Instale o Termux pelo F-Droid." -}}
+{{- end -}}
+{{- $name := promptStringOnce . "name" "Seu nome (para o git)" -}}
+{{- $email := promptStringOnce . "email" "Seu e-mail (para o git)" -}}
+{{- $device := promptChoiceOnce . "device" "Perfil do Termux" (list "cell" "tablet") "cell" -}}
+
 [data]
-    isTermux = {{ $isTermux | not | not }}
+    name = {{ $name | quote }}
+    email = {{ $email | quote }}
+    device = {{ $device | quote }}

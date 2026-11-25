@@ -1,0 +1,12 @@
+#!/data/data/com.termux/files/usr/bin/bash
+set -uo pipefail
+
+pkgs=({{ join " " .packages.termux }})
+
+pkg update -y
+if ! pkg install -y "${pkgs[@]}"; then
+    echo "⚠️  Instalação em lote falhou, tentando um por um..."
+    for p in "${pkgs[@]}"; do
+        pkg install -y "$p" || echo "⚠️  falhou: $p"
+    done
+fi

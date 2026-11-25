@@ -1,0 +1,26 @@
+packages:
+  termux:
+    - zsh
+    - zsh-autosuggestions
+    - zsh-syntax-highlighting
+    - git
+    - neovim
+    - micro
+    - tmux
+    - fzf
+    - ripgrep
+    - fd
+    - bat
+    - lazygit
+    - nodejs
+    - python
+    - openssh
+    - eza
+    - ncdu
+    - mediainfo
+    - moreutils
+    - dnsutils
+    - unrar
+    - p7zip
+    - zstd
+    - libqrencode

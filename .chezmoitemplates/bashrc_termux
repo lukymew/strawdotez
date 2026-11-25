@@ -33,7 +33,7 @@ alias top='top -o %CPU'
 alias h='history'
 alias c='clear'
 alias e='exit'
-alias vi='vim'
+alias vi='nvim'
 alias n='nano'
 alias mkdir='mkdir -p'
 alias rmrf='rm -rf'          # cuidado: ignora confirmação
@@ -53,7 +53,7 @@ alias cdt='cd ~/Termux'
 alias cds='cd ~/Scripts'
 alias cdocs='cd ~/Documents'
 
-alias lists='nano /etc/apt/sources.list'
+alias lists='nano $PREFIX/etc/apt/sources.list'
 # Bash TermuxConfigs
 alias babashrc='nano $PREFIX/etc/bash.bashrc'
 alias bashrc='nano ~/.bashrc'
@@ -97,7 +97,6 @@ alias diskusage='ncdu'
 alias movieinfo='mediainfo'
 alias cal='cal -3'
 alias timestamp='date +%s'
-alias qr='qrcode-terminal'
 alias tb="nc termbin.com 9999 2>/dev/null || echo 'Falha ao conectar com termbin'"
 
 alias qr='qrencode -t ansiutf8'
@@ -125,7 +124,6 @@ alias gita='git add .'
 alias gitc='git commit -m'
 alias gitp='git push'
 alias gitlog='git log'
-alias gitconfr='git config --global user.name "Seu Nome" && git config --global user.email "seuemail@exemplo.com"'
 
 # =====================================================
 # 11. MODELOS LOCAIS (llama.cpp) — lazy load
@@ -574,7 +572,6 @@ function termux-modo-celular() {
 # ===============================================
 # CONFIGURAÇÕES DO SISTEMA (PATHs, etc)
 # ===============================================
-export PATH=$PATH:/data/data/com.termux/files/usr/bin
 export PATH="$HOME/.cargo/bin:$PATH"
 
 # ===============================================

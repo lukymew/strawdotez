@@ -1,11 +1,5 @@
 {{ template "env_common" . }}
 {{ template "aliases_common" . }}
-
-{{- if .isTermux }}
+{{ template "zsh_functions_common" . }}
 {{ template "zsh_opts_termux" . }}
-{{ template "zsh_functions_common" . }}
 {{ template "zsh_plugins_termux" . }}
-{{- else }}
-{{ template "zsh_opts_linux" . }}
-{{ template "zsh_functions_common" . }}
-{{- end }}

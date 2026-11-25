@@ -1,0 +1,15 @@
+#!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
+
+# profile: {{ include (printf "private_dot_termux/private_termux.properties.%s" .device) | sha256sum }}
+# colors:  {{ include "private_dot_termux/private_colors.properties" | sha256sum }}
+# font:    {{ include "private_dot_termux/private_font.ttf" | sha256sum }}
+
+profile="$HOME/.termux/termux.properties.{{ .device }}"
+if [ -f "$profile" ]; then
+    cp "$profile" "$HOME/.termux/termux.properties"
+fi
+
+if command -v termux-reload-settings >/dev/null 2>&1; then
+    termux-reload-settings || true
+fi

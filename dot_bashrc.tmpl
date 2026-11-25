@@ -1,7 +1,1 @@
-{{- if .isTermux }}
 {{ template "bashrc_termux" . }}
-{{- else }}
-{{ template "env_common" . }}
-{{ template "aliases_common" . }}
-{{ template "bash_linux" . }}
-{{- end }}

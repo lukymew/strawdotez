@@ -1,0 +1,8 @@
+# Segredos: nunca versionar
+.env
+*.key
+*.pem
+id_*
+.netrc
+.npmrc
+*_history
