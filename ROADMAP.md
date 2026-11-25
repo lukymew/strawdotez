@@ -20,7 +20,7 @@ Legenda: `[x]` feito, `[ ]` planejado. As fases estão em ordem de prioridade, e
 - [x] Prints no README (bash e zsh)
 - [ ] Primeira versão marcada (`v1.0.0`) e `CHANGELOG.md`
 - [ ] Script de instalação em uma linha (instala `chezmoi` e `git` e já roda o `init`)
-- [ ] Aviso de pacotes que falharam no final da instalação
+- [x] Aviso de pacotes que falharam no final da instalação
 
 ## Fase 2: qualidade e automação
 - [ ] CI no GitHub: renderizar todos os templates em cada push

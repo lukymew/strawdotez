@@ -1,12 +1,27 @@
-#!/data/data/com.termux/files/usr/bin/bash
-set -uo pipefail
-
+#!/usr/bin/env bash
+# strawdotez: instala os pacotes do Termux (lista em .chezmoidata/packages.yaml)
 pkgs=({{ join " " .packages.termux }})
 
-pkg update -y
-if ! pkg install -y "${pkgs[@]}"; then
-    echo "⚠️  Instalação em lote falhou, tentando um por um..."
-    for p in "${pkgs[@]}"; do
-        pkg install -y "$p" || echo "⚠️  falhou: $p"
-    done
+printf 'strawdotez: conferindo %d pacotes...\n' "${#pkgs[@]}"
+faltando=()
+for p in "${pkgs[@]}"; do
+    dpkg -s "$p" >/dev/null 2>&1 || faltando+=("$p")
+done
+
+falhou=()
+if [ "${#faltando[@]}" -gt 0 ]; then
+    printf 'strawdotez: instalando %d pacotes...\n' "${#faltando[@]}"
+    if ! pkg install -y "${faltando[@]}"; then
+        for p in "${faltando[@]}"; do
+            dpkg -s "$p" >/dev/null 2>&1 && continue
+            pkg install -y "$p" || falhou+=("$p")
+        done
+    fi
 fi
+
+if [ "${#falhou[@]}" -gt 0 ]; then
+    printf '\n\033[33mstrawdotez: %d pacote(s) não instalaram:\033[0m\n' "${#falhou[@]}"
+    printf '  - %s\n' "${falhou[@]}"
+    printf 'Tente depois: pkg install NOME  (ou pkg search NOME)\n\n'
+fi
+exit 0
