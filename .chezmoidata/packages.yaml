@@ -1,8 +1,6 @@
 packages:
   termux:
     - zsh
-    - zsh-autosuggestions
-    - zsh-syntax-highlighting
     - git
     - neovim
     - micro
@@ -21,6 +19,7 @@ packages:
     - moreutils
     - dnsutils
     - unrar
-    - p7zip
+    - 7zip
     - zstd
     - libqrencode
+    - gh
