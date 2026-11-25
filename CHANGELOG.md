@@ -5,6 +5,8 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-11-25
+
 ### Added
 - `straw` command: `straw menu` (tools by module and tool profiles, with fzf), `straw update`, `straw version`, `straw help`.
 - Modules and profiles in `.chezmoidata/straw.yaml`, with package lists per environment (Termux, Debian/Ubuntu/Kali, Alpine).
