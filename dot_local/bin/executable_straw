@@ -104,7 +104,7 @@ pause() {
 ic() { [ "${STRAW_PLAIN:-0}" = 1 ] || printf '%s ' "$1"; }
 
 pick() { # cabeçalho  (linhas "id<TAB>texto" no stdin; PICK_MULTI=1 liga a seleção múltipla)
-    local opts=(--delimiter=$'\t' --with-nth=2 --header="$1" --prompt="straw> " --layout=reverse)
+    local opts=(--delimiter=$'\t' --with-nth=2 --header="$1" --prompt="straw> " --layout=reverse --height=~50%)
     [ "${PICK_MULTI:-0}" = 1 ] && opts+=(--multi)
     fzf "${opts[@]}" | cut -f1
 }
