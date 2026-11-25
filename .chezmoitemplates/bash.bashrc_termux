@@ -17,6 +17,7 @@ else
     blue=''; purple=''; cyan=''; bcyan=''; icyan=''; white=''
 fi
 
+{{- if .banner }}
 # Função para centralizar mensagem de forma automática
 center_message() {
     local message="$1"
@@ -24,8 +25,7 @@ center_message() {
     printf -v clean_message '%b' "$message"
     shopt -s extglob
     clean_message=${clean_message//$'\e['+([0-9;])m/}
-    local termwidth="${COLUMNS:-$(stty size < /dev/tty 2>/dev/null | cut -d' ' -f2)}"
-    : "${termwidth:=80}"
+    local termwidth=${COLUMNS:-80}
     local padlen=$(( (termwidth - ${#clean_message}) / 2 ))
     (( padlen < 0 )) && padlen=0
     local padding
@@ -92,6 +92,7 @@ print_header() {
 
 print_header
 space 78
+{{- end }}
 
 if [[ ${EUID} == 0 ]] ; then
 PS1='\[\033[01;31m\]┌─\[\033[01;34m\][\[\e[1;34m\]\[\033[01;31m\]OS\033[01;34m\]@\033[01;31m\]\u\e[0m\]\[\033[01;34m\]]\[\033[01;31m\]┉\e[0m\]\[\033[01;34m\][\[\e[01;33m\]\t\e[0m\]\[\033[01;34m\]]\[\033[01;31m\]

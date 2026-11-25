@@ -69,6 +69,7 @@ Se o repo estiver privado, acrescente `GH_CONFIG_DIR=$HOME/.config/gh GIT_CONFIG
 - O `create_` nunca sobrescreve: para regenerar o `~/.gitconfig-local`, apague-o e rode `chezmoi apply`.
 - O `~/.gitconfig` é gerenciado: não use `git config --global` para a identidade. Ela vem do `.gitconfig-local`, gerado pelas perguntas.
 - `compinit` é carregado no primeiro Tab (peça `zsh_opts_termux`): não mova para a abertura.
+- Textos das perguntas em `.chezmoi.toml.tmpl` não podem ter vírgula nem `=`: o texto vira a chave das opções `--promptString`, `--promptBool` e `--promptChoice` (usadas em automação e CI).
 - O `.chezmoiignore` precisa listar `README.md`, `LICENSE` e `CLAUDE.md`, senão o chezmoi tenta copiá-los para `~/`.
 
 ## Créditos e inspirações

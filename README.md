@@ -91,3 +91,13 @@ Este projeto não existiria sem o trabalho de outras pessoas:
 - [**eza**](https://github.com/eza-community/eza): substituto moderno do `ls`.
 - [**zsh-autosuggestions**](https://github.com/zsh-users/zsh-autosuggestions) e [**zsh-syntax-highlighting**](https://github.com/zsh-users/zsh-syntax-highlighting): plugins do zsh.
 - [**Termux**](https://termux.dev/) e o [**GitHub CLI**](https://cli.github.com/).
+
+## Prévia
+
+| bash | zsh |
+|------|-----|
+| <img src="docs/bash.jpg" width="320"> | <img src="docs/zsh.jpg" width="320"> |
+
+## Licença
+
+Distribuído sob a licença [MIT](LICENSE).

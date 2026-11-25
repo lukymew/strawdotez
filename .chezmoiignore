@@ -2,3 +2,7 @@ README.md
 LICENSE
 CLAUDE.md
 ROADMAP.md
+docs/
+{{- if not .hushlogin }}
+.hushlogin
+{{- end }}

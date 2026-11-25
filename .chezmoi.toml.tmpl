@@ -1,11 +1,16 @@
 {{- if not (hasPrefix "/data/data/com.termux" (env "PREFIX")) -}}
 {{-   fail "Este repositório é só para o Termux. Instale o Termux pelo F-Droid." -}}
 {{- end -}}
-{{- $name := promptStringOnce . "name" "Seu nome para o git (Enter para pular)" "" -}}
-{{- $email := promptStringOnce . "email" "Seu e-mail para o git (Enter para pular)" "" -}}
-{{- $device := promptChoiceOnce . "device" "Perfil do Termux" (list "cell" "tablet") "cell" -}}
+{{- writeToStdout "\n=== strawdotez: configuração do Termux ===\nEnter aceita o padrão de cada pergunta.\n\n" -}}
+{{- $name := promptStringOnce . "name" "Seu nome para o git (opcional: Enter pula)" "" -}}
+{{- $email := promptStringOnce . "email" "Seu e-mail para o git (opcional: Enter pula)" "" -}}
+{{- $device := promptChoiceOnce . "device" "Perfil do Termux (cell para celular ou tablet para tablet)" (list "cell" "tablet") "cell" -}}
+{{- $banner := promptBoolOnce . "banner" "Mostrar o logo e o cabeçalho ao abrir o terminal? (Y/n)" true -}}
+{{- $hush := promptBoolOnce . "hushlogin" "Desligar a mensagem de boas-vindas do Termux? (Y/n)" true -}}
 
 [data]
     name = {{ $name | quote }}
     email = {{ $email | quote }}
     device = {{ $device | quote }}
+    banner = {{ $banner }}
+    hushlogin = {{ $hush }}

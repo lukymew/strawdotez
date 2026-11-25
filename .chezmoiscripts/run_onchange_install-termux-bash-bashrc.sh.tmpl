@@ -1,14 +1,13 @@
 #!/data/data/com.termux/files/usr/bin/bash
 set -euo pipefail
 
-# bash.bashrc hash: {{ include ".chezmoitemplates/bash.bashrc_termux" | sha256sum }}
-
-source_file="{{ joinPath .chezmoi.sourceDir ".chezmoitemplates/bash.bashrc_termux" }}"
 target="${PREFIX}/etc/bash.bashrc"
 
-# backup único (a função crb usa este arquivo para restaurar)
+# backup unico (a funcao crb usa este arquivo para restaurar)
 if [ -f "$target" ] && [ ! -f "${target}.bkp" ]; then
     cp "$target" "${target}.bkp"
 fi
 
-cp "$source_file" "$target"
+cat > "$target" <<'STRAW_BASHRC_EOF'
+{{ template "bash.bashrc_termux" . }}
+STRAW_BASHRC_EOF
