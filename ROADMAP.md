@@ -24,7 +24,7 @@ Legenda: `[x]` feito, `[ ]` planejado. As fases estão em ordem de prioridade, e
 - [x] Aviso de pacotes que falharam no final da instalação
 
 ## Fase 2: qualidade e automação
-- [ ] CI no GitHub: renderizar todos os templates em cada push
+- [x] CI no GitHub: renderizar todos os templates em cada push
 - [ ] CI: `bash -n`, `zsh -n` e `shellcheck` nos scripts e nas peças
 - [ ] CI: teste de instalação em um contêiner do Termux
 - [ ] Script de medição de abertura no repo (`scripts/bench.sh`) com orçamento de tempo
