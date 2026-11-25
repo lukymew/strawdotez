@@ -84,7 +84,7 @@ private_dot_termux/         propriedades, cores e fonte do Termux
 
 Este projeto não existiria sem o trabalho de outras pessoas:
 
-- **SnowPerfectDev**: base do bashrc do Termux (adicione aqui o link do repositório).
+- [**Dragon Bash**](https://github.com/SnowPerfectDev/Dragon-Bash) (SnowPerfectDev): base do bashrc do Termux.
 - [**Gogh**](https://github.com/Mayccoll/Gogh): o tema de cores Argonaut.
 - [**chezmoi**](https://www.chezmoi.io/): gerenciamento dos dotfiles.
 - [**fzf**](https://github.com/junegunn/fzf) e [**zoxide**](https://github.com/ajeetdsouza/zoxide): busca e navegação.
