@@ -1,0 +1,15 @@
+{{- /* Dados para o binário Go (straw-ui): idioma já resolvido. */ -}}
+{{- $msg := dict -}}
+{{- range $k, $_ := (index .i18n "en") -}}
+{{- if hasPrefix "straw_" $k -}}{{- $_ := set $msg (trimPrefix "straw_" $k) (includeTemplate "t" (list $ $k)) -}}{{- end -}}
+{{- end -}}
+{{- $mods := list -}}
+{{- range $id, $m := .straw.modules -}}
+{{- $pk := dict "termux" (index $m "termux" | default (list)) "apt" (index $m "apt" | default (list)) "apk" (index $m "apk" | default (list)) -}}
+{{- $mods = append $mods (dict "id" $id "icon" (index $m "icon" | default "📦") "group" (index $m "group" | default "cli") "desc" (index $m $.lang | default $m.en) "packages" $pk) -}}
+{{- end -}}
+{{- $profs := list -}}
+{{- range $id, $p := .straw.profiles -}}
+{{- $profs = append $profs (dict "id" $id "desc" (index $p $.lang | default $p.en) "modules" $p.modules "only" (index $p "only" | default (list))) -}}
+{{- end -}}
+{{ dict "lang" .lang "msg" $msg "modules" $mods "profiles" $profs | toPrettyJson }}

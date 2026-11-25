@@ -5,66 +5,88 @@
 straw:
   modules:
     utils:
+      icon: "🧰"
+      group: cli
       pt: "Utilitários do dia a dia (jq, tree, htop, rsync)"
       en: "Everyday utilities (jq, tree, htop, rsync)"
       termux: [jq, tree, htop, rsync, termux-api]
       apt: [jq, tree, htop, rsync]
       apk: [jq, tree, htop, rsync]
     dev:
+      icon: "🛠️"
+      group: dev
       pt: "Dev: C e C++ (compilador, make, cmake, gdb)"
       en: "Dev: C and C++ (compiler, make, cmake, gdb)"
       termux: [clang, make, cmake, gdb]
       apt: [build-essential, cmake, gdb]
       apk: [build-base, cmake, gdb]
     golang:
+      icon: "🐹"
+      group: dev
       pt: "Dev: Go"
       en: "Dev: Go"
       termux: [golang]
       apt: [golang-go]
       apk: [go]
     rust:
+      icon: "🦀"
+      group: dev
       pt: "Dev: Rust"
       en: "Dev: Rust"
       termux: [rust]
       apt: [rustc, cargo]
       apk: [rust, cargo]
     web:
+      icon: "🌐"
+      group: dev
       pt: "Dev: web (PHP e SQLite)"
       en: "Dev: web (PHP and SQLite)"
       termux: [php, sqlite]
       apt: [php-cli, sqlite3]
       apk: [php, sqlite]
     network:
+      icon: "📡"
+      group: net
       pt: "Rede (nmap, traceroute, whois, mtr, iperf3, netcat)"
       en: "Network (nmap, traceroute, whois, mtr, iperf3, netcat)"
       termux: [nmap, traceroute, whois, mtr, iperf3, netcat-openbsd, openssl-tool]
       apt: [nmap, traceroute, whois, mtr-tiny, iperf3, netcat-openbsd]
       apk: [nmap, traceroute, whois, mtr, iperf3, netcat-openbsd]
     pentest:
+      icon: "🕵️"
+      group: net
       pt: "Pentest (hydra, sqlmap, john): só em sistemas com autorização"
       en: "Pentest (hydra, sqlmap, john): only on systems you are authorized to test"
       termux: [nmap, hydra, sqlmap]
       apt: [nmap, hydra, sqlmap, john, nikto]
       apk: [nmap, hydra]
     privacy:
+      icon: "🔐"
+      group: cli
       pt: "Criptografia e segredos (gnupg, age, pass)"
       en: "Encryption and secrets (gnupg, age, pass)"
       termux: [gnupg, age, pass]
       apt: [gnupg, age, pass]
       apk: [gnupg, age, pass]
     media:
+      icon: "🎬"
+      group: cli
       pt: "Mídia (ffmpeg, imagemagick, yt-dlp)"
       en: "Media (ffmpeg, imagemagick, yt-dlp)"
       termux: [ffmpeg, imagemagick, yt-dlp]
       apt: [ffmpeg, imagemagick, yt-dlp]
       apk: [ffmpeg, imagemagick, yt-dlp]
     editors:
+      icon: "✏️"
+      group: cli
       pt: "Editores extras (vim, helix)"
       en: "Extra editors (vim, helix)"
       termux: [vim, helix]
       apt: [vim]
       apk: [vim, helix]
     ai:
+      icon: "🤖"
+      group: cli
       pt: "IA local (llama.cpp, experimental)"
       en: "Local AI (llama.cpp, experimental)"
       termux: [llama-cpp]

@@ -11,3 +11,7 @@ install.sh
 scripts/
 CHANGELOG.md
 CHECKLIST.md
+cmd/
+internal/
+go.mod
+go.sum

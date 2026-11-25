@@ -185,9 +185,18 @@ cmd_help() {
     say "$M_help_title"
     say "$M_help_menu"
     say "$M_help_install"
+    say "$M_help_doctor"
     say "$M_help_update"
     say "$M_help_version"
     say "$M_help_help"
+}
+
+cmd_doctor() {
+    local bin="${STRAW_UI:-$HOME/.local/bin/straw-ui}"
+    if [ ! -x "$bin" ]; then
+        command -v straw-ui >/dev/null 2>&1 && bin="$(command -v straw-ui)" || { say "$M_doctor_no_bin" >&2; return 1; }
+    fi
+    "$bin" doctor "$@"
 }
 
 cmd_version() {
@@ -199,6 +208,7 @@ cmd_version() {
 case "${1:-}" in
     menu)                 cmd_menu ;;
     install)              shift; cmd_install "$@" ;;
+    doctor)               shift; cmd_doctor "$@" ;;
     update)               chezmoi update ;;
     version|-v|--version) cmd_version ;;
     help|-h|--help)       cmd_help ;;
