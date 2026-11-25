@@ -64,6 +64,7 @@ Legenda: `[x]` feito, `[ ]` planejado. As fases estão em ordem de prioridade, e
 - [x] Verificação de integridade do script de instalação em uma linha (`install.sh` e sha256 na release)
 
 ## Fase 7: experiência de uso
+- [x] Reavaliação do código (`docs/REVIEW.md`); correções dos achados em andamento
 - [ ] Comando `strawdotez` com subcomandos: `update`, `doctor`, `perfil`, `bench`
 - [x] `straw doctor` em Go: ambiente, ferramentas, PATH e pacotes que não existem (faltam plugins, identidade do git e permissões)
 - [x] `straw tools`: lista com busca, agrupada, em Go

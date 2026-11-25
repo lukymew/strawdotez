@@ -11,9 +11,9 @@
 # =====================================================
 
 ### Allow external applications to execute arbitrary commands within Termux.
-# Atenção: deixa apps com a permissão RUN_COMMAND rodarem comandos aqui (veja SECURITY.md).
-# Não usa Tasker ou automação? Troque por false e rode termux-reload-settings.
-allow-external-apps = true
+# Desligado por padrão: ligar deixa apps com a permissão RUN_COMMAND rodarem comandos aqui (veja SECURITY.md).
+# Usa Tasker ou automação? Troque por true e rode termux-reload-settings.
+allow-external-apps = false
 
 ### Default working directory that will be used when launching the app.
 # default-working-directory = /data/data/com.termux/files/home/Workspace

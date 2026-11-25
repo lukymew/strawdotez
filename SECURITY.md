@@ -11,7 +11,7 @@ English first, português abaixo.
 - Need a secret on your device? Keep it outside the repo (`~/.config`, `pass`, `age` or `gpg`) and read it from there.
 
 ### What the setup changes on your device
-- `allow-external-apps = true` in `termux.properties` lets other apps run commands in Termux, but only apps you granted the `RUN_COMMAND` permission. It is needed for automation (Tasker and similar). If you do not use that, set it to `false` (or comment it out) and run `termux-reload-settings`.
+- `allow-external-apps` in `termux.properties` is **off** (`false`). Turning it on lets other apps run commands in Termux, but only apps you granted the `RUN_COMMAND` permission. You only need it for automation (Tasker and similar): set it to `true` in `~/.termux/termux.properties` and run `termux-reload-settings`.
 - Dangerous aliases were removed (`rmrf`, `iptablesflush`). `rm`, `cp` and `mv` ask for confirmation (`-i`).
 - Aliases worth knowing: `gita` runs `git add .` (stages everything; the pre-commit hook is your safety net), `shareterm` starts an SSH server, `listen` opens a port and `tb` sends text to a public paste service (termbin). Use them knowingly.
 - `straw` and the installer only install packages from your configured package manager and download `straw-ui` from this repository's releases, checking its sha256.
@@ -41,7 +41,7 @@ Open a private report in the repository's **Security** tab ("Report a vulnerabil
 - Precisa de um segredo no aparelho? Guarde fora do repositório (`~/.config`, `pass`, `age` ou `gpg`) e leia de lá.
 
 ### O que a configuração muda no seu aparelho
-- `allow-external-apps = true` no `termux.properties` deixa outros apps rodarem comandos no Termux, mas só os que você deu a permissão `RUN_COMMAND`. É necessário para automação (Tasker e parecidos). Se não usa isso, ponha `false` (ou comente) e rode `termux-reload-settings`.
+- `allow-external-apps` no `termux.properties` fica **desligado** (`false`). Ligar deixa outros apps rodarem comandos no Termux, mas só os que você deu a permissão `RUN_COMMAND`. Só precisa disso para automação (Tasker e parecidos): ponha `true` em `~/.termux/termux.properties` e rode `termux-reload-settings`.
 - Aliases perigosos foram removidos (`rmrf`, `iptablesflush`). `rm`, `cp` e `mv` pedem confirmação (`-i`).
 - Aliases que merecem atenção: `gita` faz `git add .` (põe tudo na área de preparo; o hook de pre-commit é a rede de proteção), `shareterm` inicia um servidor SSH, `listen` abre uma porta e `tb` envia texto a um serviço público (termbin). Use sabendo disso.
 - O `straw` e o instalador só instalam pacotes pelo gerenciador configurado e baixam o `straw-ui` das releases deste repositório, conferindo o sha256.
