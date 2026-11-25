@@ -58,17 +58,27 @@ alias mem='ps aux --sort -rss'
 alias cpuinfo='cat /proc/cpuinfo'
 alias meminfo='cat /proc/meminfo'
 alias diskinfo='df -h'
-# Requer o app Termux:API instalado
-alias battery='termux-battery-status'
-alias wifi='termux-wifi-connectioninfo'
+# Atalhos que dependem de um pacote fora do núcleo: avisam qual instalar.
+# uso interno: _need <comando> <pacote>
+_need() {
+    command -v "$1" >/dev/null 2>&1 && return 0
+    printf '{{ template "t" (list . "need_pkg") }}\n' "$2" "$2" >&2
+    return 1
+}
+
+# Requerem o pacote termux-api (e o app Termux:API instalado)
+battery() { _need termux-battery-status termux-api && termux-battery-status "$@"; }
+wifi() { _need termux-wifi-connectioninfo termux-api && termux-wifi-connectioninfo "$@"; }
 
 # =====================================================
 # 6. REDE
 # =====================================================
 alias myip='ip addr show wlan0 | awk "/inet /{print \$2}"'
-alias whatismyip='curl ifconfig.me'
-alias ports='netstat -tuln'
-alias listen='nc -lvp'
+alias whatismyip='curl -fsS https://ifconfig.me'
+# ports: usa ss se existir; senão netstat (pacote net-tools)
+ports() { if command -v ss >/dev/null 2>&1; then ss -tuln "$@"; else _need netstat net-tools && netstat -tuln "$@"; fi; }
+# listen <porta>: abre uma porta para receber conexão (pacote netcat-openbsd)
+listen() { _need nc netcat-openbsd && nc -lvp "$@"; }
 alias shareterm='sshd'
 
 # =====================================================
@@ -81,7 +91,8 @@ alias diskusage='ncdu'
 alias movieinfo='mediainfo'
 alias cal='cal -3'
 alias timestamp='date +%s'
-alias tb="nc termbin.com 9999 2>/dev/null || echo '{{ template "t" (list . "tb_fail") }}'"
+# tb: envia o texto da entrada ao termbin.com (serviço público, sem criptografia)
+tb() { _need nc netcat-openbsd && { nc termbin.com 9999 2>/dev/null || echo '{{ template "t" (list . "tb_fail") }}'; }; }
 
 alias qr='qrencode -t ansiutf8'
 
@@ -92,7 +103,6 @@ alias encrypt='gpg -c'
 alias decrypt='gpg -d'
 alias encryptfile='openssl aes-256-cbc -a -salt -in'
 alias decryptfile='openssl aes-256-cbc -d -a -in'
-alias cve='searchsploit'
 
 # =====================================================
 # 9. CRONÔMETROS / TIMERS
@@ -101,7 +111,12 @@ alias stopwatch='date && time read -s && echo && date'
 timer() {
     printf "{{ template "t" (list . "timer_ask") }}"; read secs
     echo "{{ template "t" (list . "timer_started") }}"
-    sleep "$secs" && termux-notification --title "Timer" --content "{{ template "t" (list . "timer_done") }}"
+    sleep "$secs" || return
+    if command -v termux-notification >/dev/null 2>&1; then
+        termux-notification --title "Timer" --content "{{ template "t" (list . "timer_done") }}"
+    else
+        echo "{{ template "t" (list . "timer_done") }}"
+    fi
 }
 
 # =====================================================

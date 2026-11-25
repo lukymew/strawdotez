@@ -6,8 +6,14 @@ set -euo pipefail
 # font:    {{ include "private_dot_termux/private_font.ttf" | sha256sum }}
 
 profile="$HOME/.termux/termux.properties.{{ .device }}"
+active="$HOME/.termux/termux.properties"
 if [ -f "$profile" ]; then
-    cp "$profile" "$HOME/.termux/termux.properties"
+    # guarda as edições manuais antes de sobrescrever
+    if [ -f "$active" ] && ! cmp -s "$profile" "$active"; then
+        cp "$active" "$active.bak"
+        echo "{{ template "t" (list . "props_backup") }}"
+    fi
+    cp "$profile" "$active"
 fi
 
 if command -v termux-reload-settings >/dev/null 2>&1; then

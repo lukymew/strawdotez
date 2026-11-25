@@ -11,7 +11,7 @@ function @ip-locator() {
     [ "$1" == "-h" ] && { echo "$USAGE" >&2; return; }
     [ $# -eq 0 ] && { echo "$USAGE" >&2; return; }
     while [ "$1" != "" ]; do
-        curl "ipinfo.io/$1"
+        curl -fsS "https://ipinfo.io/$1"
         shift
     done
 }
