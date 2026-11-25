@@ -29,7 +29,8 @@ Legenda: `[x]` feito, `[ ]` planejado. As fases estão em ordem de prioridade, e
 - [ ] CI: teste de instalação em um contêiner do Termux
 - [x] Script de medição de abertura no repo (`scripts/bench.sh`) com orçamento de tempo
 - [x] Verificação de segredos antes de cada commit (gitleaks ou semelhante)
-- [ ] Testes para as funções utilitárias mais usadas
+- [x] Testes do comando `straw` com bats (`tests/straw.bats`)
+- [ ] Testes para as funções utilitárias do shell mais usadas
 
 ## Fase 3: personalização
 - [x] Comando `straw` com `straw menu`: ferramentas por módulo e perfis (mínimo, padrão e completo)

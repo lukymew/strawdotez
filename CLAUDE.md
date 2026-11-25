@@ -84,6 +84,8 @@ Se o repo estiver privado, acrescente `GH_CONFIG_DIR=$HOME/.config/gh GIT_CONFIG
 - Textos das perguntas em `.chezmoi.toml.tmpl` não podem ter vírgula nem `=`: o texto vira a chave das opções `--promptString`, `--promptBool` e `--promptChoice` (usadas em automação e CI).
 - O `.chezmoiignore` precisa listar `README.md`, `LICENSE` e `CLAUDE.md`, senão o chezmoi tenta copiá-los para `~/`.
 
+- Pacotes de rede no Termux: `mtr` e `tcpdump` estão no `root-repo` (precisam de `pkg install root-repo`); `hydra`, `sqlmap`, `john` e `nikto` não foram achados nos repositórios do Termux (main, root, x11 e tur) pelo caminho do pacote. `openssl-tool` é subpacote do `openssl`. Confirme sempre com `straw doctor`.
+
 ## Créditos e inspirações
 Ver a seção "Inspirações" do README.
 

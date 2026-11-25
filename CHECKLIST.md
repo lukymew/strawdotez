@@ -30,6 +30,7 @@ Antes de dar `git push`, confira o que a mudança toca.
 ## Mexeu no `straw` ou em módulos e perfis
 - [ ] `.chezmoidata/straw.yaml` (pt e en na descrição, `icon` e `group`)
 - [ ] Mudou colunas de `modules.tsv` ou `profiles.tsv`? Atualizar `scripts/ci-check.sh` e o bash
+- [ ] Rodar `~/bats-core/bin/bats tests/` (sem pacote no Termux: `git clone --depth 1 https://github.com/bats-core/bats-core ~/bats-core`)
 - [ ] Rodar `bash scripts/ci-check.sh` e `shellcheck -S warning dot_local/bin/executable_straw`
 - [ ] README (en e pt-BR): tabela de comandos
 

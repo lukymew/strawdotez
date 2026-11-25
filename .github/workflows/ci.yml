@@ -9,6 +9,13 @@ permissions:
   contents: read
 
 jobs:
+  bats:
+    name: Testes do straw (bats)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get install -y bats
+      - run: bats tests/
   go:
     name: Go (vet e testes)
     runs-on: ubuntu-latest
