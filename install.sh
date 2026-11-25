@@ -14,6 +14,31 @@ esac
 # m "texto em português" "text in English"
 m() { if [ "$L" = pt ]; then printf '%s\n' "$1"; else printf '%s\n' "$2"; fi; }
 
+# Baixa o binário straw-ui (Go) da última release. Se falhar, segue só com o bash.
+get_ui() {
+    local arch base dest tmp want got
+    case "$(uname -m)" in
+        aarch64|arm64) arch=arm64 ;;
+        x86_64|amd64)  arch=amd64 ;;
+        *) return 1 ;;
+    esac
+    base="${STRAW_UI_URL:-https://github.com/$REPO/releases/latest/download}"
+    dest="$HOME/.local/bin/straw-ui"
+    tmp="$(mktemp -d "${TMPDIR:-$HOME}/straw-ui.XXXXXX")" || return 1
+    if curl -fsSL "$base/straw-ui-linux-$arch" -o "$tmp/bin" && curl -fsSL "$base/SHA256SUMS" -o "$tmp/sums"; then
+        want="$(awk -v f="straw-ui-linux-$arch" '$2 == f { print $1 }' "$tmp/sums")"
+        got="$(sha256sum "$tmp/bin" | cut -d' ' -f1)"
+        if [ -n "$want" ] && [ "$want" = "$got" ]; then
+            mkdir -p "$HOME/.local/bin"
+            install -m 755 "$tmp/bin" "$dest"
+            rm -f "$tmp/bin" "$tmp/sums"; rmdir "$tmp"
+            return 0
+        fi
+    fi
+    rm -f "$tmp/bin" "$tmp/sums"; rmdir "$tmp" 2>/dev/null || true
+    return 1
+}
+
 case "${PREFIX:-}" in
     /data/data/com.termux*) ;;
     *) m "strawdotez: este instalador é só para o Termux." "strawdotez: this installer is for Termux only."; exit 1 ;;
@@ -41,6 +66,12 @@ if [ "$defaults" = 1 ] || ! { : </dev/tty; } 2>/dev/null; then
 else
     # curl | bash ocupa o stdin: as perguntas são lidas do terminal
     chezmoi "${args[@]}" "$REPO" </dev/tty
+fi
+
+if get_ui; then
+    m "strawdotez: straw-ui instalado (straw doctor e straw tools)." "strawdotez: straw-ui installed (straw doctor and straw tools)."
+else
+    m "strawdotez: não foi possível baixar o straw-ui. Tudo segue funcionando em bash; só 'straw doctor' e 'straw tools' ficam indisponíveis." "strawdotez: could not download straw-ui. Everything keeps working in bash; only 'straw doctor' and 'straw tools' are unavailable."
 fi
 
 m "strawdotez: pronto. Abra uma sessão nova do Termux para ver o resultado." "strawdotez: done. Open a new Termux session to see the result."

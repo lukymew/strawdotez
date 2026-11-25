@@ -84,7 +84,7 @@ Then it installs the packages, downloads the zsh plugins and applies the setting
 | `straw doctor` | diagnoses the environment and package lists (Go) |
 | `straw update` | pulls and applies the latest changes |
 
-`straw tools` and `straw doctor` use the small Go binary `straw-ui`. Until it is published as a release, build it once on the device:
+`straw tools` and `straw doctor` use the small Go binary `straw-ui`, which `install.sh` downloads from the latest release (sha256 checked). If the download fails, everything else keeps working in bash. To build it yourself:
 
 ```sh
 pkg install golang

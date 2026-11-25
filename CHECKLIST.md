@@ -44,5 +44,5 @@ Antes de dar `git push`, confira o que a mudança toca.
 ## Fechou uma fase ou lançou versão
 - [ ] CHANGELOG com data e número
 - [ ] Tag: `git tag -a vX.Y.Z -m "..."` e `git push origin vX.Y.Z`
-- [ ] `gh release create vX.Y.Z --notes-file CHANGELOG.md`
+- [ ] `gh release create vX.Y.Z --notes-file CHANGELOG.md` (o workflow Release anexa o `straw-ui` e o `SHA256SUMS`; confira em `gh release view vX.Y.Z`)
 - [ ] CLAUDE.md: atualizar "Estado atual"

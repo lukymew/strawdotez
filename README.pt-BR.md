@@ -84,7 +84,7 @@ Depois ele instala os pacotes, baixa os plugins do zsh e aplica as configuraçõ
 | `straw doctor` | diagnostica o ambiente e as listas de pacotes (Go) |
 | `straw update` | baixa e aplica as novidades |
 
-`straw tools` e `straw doctor` usam o binário pequeno `straw-ui`, em Go. Até ele virar release, compile uma vez no aparelho:
+`straw tools` e `straw doctor` usam o binário pequeno `straw-ui`, em Go, que o `install.sh` baixa da última release (com conferência de sha256). Se o download falhar, o resto segue funcionando em bash. Para compilar você mesmo:
 
 ```sh
 pkg install golang

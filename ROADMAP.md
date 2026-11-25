@@ -67,7 +67,7 @@ Legenda: `[x]` feito, `[ ]` planejado. As fases estão em ordem de prioridade, e
 - [x] `straw doctor` em Go: ambiente, ferramentas, PATH e pacotes que não existem (faltam plugins, identidade do git e permissões)
 - [x] `straw tools`: lista com busca, agrupada, em Go
 - [x] Emojis no menu (`STRAW_PLAIN=1` desliga)
-- [ ] Release do binário `straw-ui` por CI (arm64 e x86_64) e `install.sh` baixando em vez de compilar
+- [x] Release do binário `straw-ui` por CI (arm64 e x86_64) e `install.sh` baixando e conferindo o sha256 (sem rede, segue só com bash)
 - [ ] Instalar pelo navegador em Go (escolher e instalar de dentro do `straw tools`)
 - [ ] Seção "Ferramentas específicas" com descrição por ferramenta
 - [ ] Desinstalação e volta ao estado anterior (backup automático dos arquivos substituídos)

@@ -15,6 +15,8 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - Emojis in the menu (main menu, tool modules, profiles, back) with `STRAW_PLAIN=1` to turn them off; tool modules grouped as CLI, dev and network.
 - "Search tools (Go)" entry in `straw menu`.
 - CI job for Go (`gofmt`, `go vet`, `go test`).
+- Release workflow: publishing a release builds `straw-ui` for arm64 and amd64 and attaches the binaries and `SHA256SUMS`.
+- `install.sh` downloads `straw-ui` from the latest release and checks its sha256; if that fails it keeps going with bash only.
 
 ### Fixed
 - Removed packages that do not exist in Termux (`hydra`, `sqlmap`, `mtr`) from the Termux lists.

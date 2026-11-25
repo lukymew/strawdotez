@@ -1,0 +1,34 @@
+name: Release
+
+# Quando você publica uma release (gh release create vX.Y.Z), compila o straw-ui
+# e anexa os binários e o sha256 a ela.
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  binaries:
+    name: Binários do straw-ui
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+      - run: go test ./...
+      - name: Compilar
+        run: |
+          mkdir dist
+          for arch in arm64 amd64; do
+            CGO_ENABLED=0 GOOS=linux GOARCH=$arch \
+              go build -trimpath -ldflags "-s -w -X main.version=${GITHUB_REF_NAME}" \
+              -o "dist/straw-ui-linux-$arch" ./cmd/straw-ui
+          done
+          (cd dist && sha256sum straw-ui-linux-* > SHA256SUMS)
+      - name: Anexar à release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$GITHUB_REF_NAME" dist/* --clobber
