@@ -16,11 +16,17 @@ Shell, pacotes, tema, fonte e atalhos, para celular e tablet.
 ## Destaques
 
 - **Um comando** instala tudo e pode ser repetido sem quebrar nada.
-- **Rápido:** o bash abre em cerca de 18ms e o zsh em cerca de 30ms (medido no celular).
+- **Rápido:** o bash abre em cerca de 15ms e o zsh em cerca de 30ms (medido no celular).
 - **Bash e zsh** com os mesmos aliases e funções, escritos uma vez só.
 - **Perfis de tela** para celular e tablet, com troca por comando.
-- **Personalizável** por perguntas na instalação: nome, e-mail e perfil.
+- **Personalizável** por perguntas na instalação: nome, e-mail, perfil, logo e cabeçalho, e mensagem de boas-vindas do Termux.
 - **Sem segredos** no repositório.
+
+## Prévia
+
+| bash | zsh |
+|------|-----|
+| <img src="docs/bash.jpg" width="320"> | <img src="docs/zsh.jpg" width="320"> |
 
 ## Instalação
 
@@ -91,12 +97,6 @@ Este projeto não existiria sem o trabalho de outras pessoas:
 - [**eza**](https://github.com/eza-community/eza): substituto moderno do `ls`.
 - [**zsh-autosuggestions**](https://github.com/zsh-users/zsh-autosuggestions) e [**zsh-syntax-highlighting**](https://github.com/zsh-users/zsh-syntax-highlighting): plugins do zsh.
 - [**Termux**](https://termux.dev/) e o [**GitHub CLI**](https://cli.github.com/).
-
-## Prévia
-
-| bash | zsh |
-|------|-----|
-| <img src="docs/bash.jpg" width="320"> | <img src="docs/zsh.jpg" width="320"> |
 
 ## Licença
 
