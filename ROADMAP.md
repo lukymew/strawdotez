@@ -84,6 +84,17 @@ Inspiração: Dev Core Termux (adicionar o link do repositório aqui e estudar c
 - [ ] Descrição curta de cada ferramenta e dos aliases que ela traz
 - [ ] Documentar como criar um addon novo
 
+## Fase 10: suporte a proot-distro (Debian, Ubuntu e Alpine)
+- [ ] Detectar o ambiente em `.chezmoi.toml.tmpl` e criar a variável `.target`
+- [ ] Trocar a trava "só Termux" por uma checagem dos alvos suportados
+- [ ] Pacotes por alvo no `packages.yaml` (pkg, apt e apk)
+- [ ] Instalação dos pacotes com `apt-get` e `apk`, sem `sudo` (no proot o usuário já é root)
+- [ ] Guardas nos trechos que dependem do Termux (`$PREFIX`, `termux-*`, `.termux/`)
+- [ ] Alpine: instalar bash, zsh, git e curl primeiro e tratar as diferenças do BusyBox
+- [ ] Linha de instalação por distro (o chezmoi usa o instalador oficial no Debian e no Ubuntu)
+- [ ] Testes em `proot-distro` e no CI com contêineres Debian, Ubuntu e Alpine
+- [ ] Documentar no README e na solução de problemas
+
 ## Ideias futuras
 - [ ] Perfil com `proot-distro` para quem precisa de Linux completo
 - [ ] Configuração pronta para usar o Claude Code no Termux

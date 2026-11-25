@@ -35,6 +35,7 @@ O projeto é **só Termux**: não há suporte a PC/Linux, e não deve voltar a h
 
 ## Regras de edição
 - Nada de condicional de plataforma (`isTermux`, Linux, PC). O repo recusa instalar fora do Termux.
+  Planejado (ROADMAP, Fase 10): suporte a proot-distro (Debian, Ubuntu e Alpine). Quando começar, centralize a detecção em `.chezmoi.toml.tmpl` (variável `.target`) e não espalhe condicionais pelos templates. Até lá, não adicione condicionais.
 - Pacotes só em `.chezmoidata/packages.yaml`, com o nome real do pacote do Termux (confira com `pkg search`).
 - Código das peças comuns deve funcionar em **bash e zsh**: evite `read -p` e `read -n`, e prefira `[ ]` e `command -v`. O zsh recebe `unsetopt EQUALS` em `zsh_compat_termux` para aceitar `[ "$1" == "-h" ]`.
 - Coisa específica de bash vai em `bashrc_termux`; de zsh, nas peças `zsh_*`.
