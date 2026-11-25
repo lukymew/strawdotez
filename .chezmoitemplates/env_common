@@ -1,6 +1,6 @@
 # Variáveis de ambiente
 export EDITOR="micro"
-export LANG="en_US.UTF-8"
+export LANG="{{ if eq .lang "pt" }}pt_BR.UTF-8{{ else }}en_US.UTF-8{{ end }}"
 export FZF_DEFAULT_OPTS="--height 40% --border --inline-info"
 
 # zsh: PATH sem entradas duplicadas

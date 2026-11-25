@@ -18,8 +18,8 @@ Gravidade: **alta** (corrigir já), **média** (corrigir na próxima versão), *
 
 | # | Gravidade | Onde | Problema | Sugestão |
 |---|---|---|---|---|
-| 1 | alta | `functions_ai_termux` (`llm`, `llm-server`) | `export LD_LIBRARY_PATH="$HOME/llama-bin:$LD_LIBRARY_PATH"` com a variável vazia gera um `:` no fim, que o carregador entende como "pasta atual": uma biblioteca plantada na pasta onde você está pode ser carregada. Além disso o `export` fica para sempre no shell. | Escopo só no comando: `LD_LIBRARY_PATH="$HOME/llama-bin${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" ~/llama-bin/llama-cli "$@"`. |
-| 2 | alta | `env_common` | `export LANG="en_US.UTF-8"` força inglês para quem escolheu `pt`, e o `install.sh` usa `LANG` para escolher o idioma, então reinstalar depois de aplicar pode mudar o idioma padrão. O Termux não tem locales instalados, então a variável pouco ajuda. | Remover, ou derivar de `.lang` (`pt_BR.UTF-8` ou `en_US.UTF-8`). |
+| 1 | alta (corrigido) | `functions_ai_termux` (`llm`, `llm-server`) | `export LD_LIBRARY_PATH="$HOME/llama-bin:$LD_LIBRARY_PATH"` com a variável vazia gera um `:` no fim, que o carregador entende como "pasta atual": uma biblioteca plantada na pasta onde você está pode ser carregada. Além disso o `export` fica para sempre no shell. | Escopo só no comando: `LD_LIBRARY_PATH="$HOME/llama-bin${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" ~/llama-bin/llama-cli "$@"`. |
+| 2 | alta (corrigido) | `env_common` | `export LANG="en_US.UTF-8"` força inglês para quem escolheu `pt`, e o `install.sh` usa `LANG` para escolher o idioma, então reinstalar depois de aplicar pode mudar o idioma padrão. O Termux não tem locales instalados, então a variável pouco ajuda. | Remover, ou derivar de `.lang` (`pt_BR.UTF-8` ou `en_US.UTF-8`). |
 | 3 | média | `aliases_termux`, `functions_termux` | Atalhos dependem de pacotes que não estão no núcleo: `battery`, `wifi`, `timer` (precisam do `termux-api`), `listen` e `tb` (`netcat-openbsd`), `ports` (`net-tools`), `cve` (`searchsploit`, que não existe no Termux). O aviso de "comando não encontrado" ajuda, mas o atalho parece quebrado. | Colocar `termux-api` e `netcat-openbsd` no núcleo ou envolver cada atalho em `command -v`; remover o `cve`; conferir `ip` e `netstat`. |
 | 4 | média | `.chezmoiscripts/run_onchange_after_apply-termux-settings` | Toda vez que o perfil, as cores ou a fonte mudam, o script copia o perfil por cima do `~/.termux/termux.properties`. Qualquer edição manual (por exemplo ligar o `allow-external-apps`) é perdida sem aviso. | Guardar uma cópia (`termux.properties.bak`) antes de sobrescrever, e avisar no README. |
 | 5 | média | `ui` (Go) | Se o programa tiver um pânico, o terminal fica em modo raw e na tela alternativa (sem eco). Mudança de tamanho da tela só é notada na próxima tecla. | `defer` que restaura o terminal e o cursor; tratar `SIGWINCH`. |
@@ -48,6 +48,11 @@ Gravidade: **alta** (corrigir já), **média** (corrigir na próxima versão), *
 - `aliases_termux` foi lido só em parte (o restante apenas por busca de padrões perigosos).
 - Nada foi executado em um Termux real nem em contêiner (o sandbox não tem Docker); Alpine ficou sem verificação de nomes de pacotes.
 - Desempenho dos novos trechos em Go no celular além do que você já mediu.
+
+## Correções já feitas
+
+- Achado 1: `llm` e `llm-server` passam o `LD_LIBRARY_PATH` só para o comando, sem entrada vazia e sem `export` no shell (testado com a variável vazia e com valor).
+- Achado 2: o `LANG` agora segue o idioma escolhido (`pt_BR.UTF-8` para pt, `en_US.UTF-8` para en). Conferi o render em pt e en.
 
 ## Ordem de correção sugerida
 

@@ -2,13 +2,13 @@
 # =====================================================
 # 11. MODELOS LOCAIS (llama.cpp) — lazy load
 # =====================================================
+# LD_LIBRARY_PATH só vale para o comando (sem export no shell e sem entrada vazia,
+# que faria o carregador procurar bibliotecas na pasta atual)
 llm() {
-    export LD_LIBRARY_PATH="$HOME/llama-bin:$LD_LIBRARY_PATH"
-    ~/llama-bin/llama-cli "$@"
+    LD_LIBRARY_PATH="$HOME/llama-bin${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" ~/llama-bin/llama-cli "$@"
 }
 llm-server() {
-    export LD_LIBRARY_PATH="$HOME/llama-bin:$LD_LIBRARY_PATH"
-    ~/llama-bin/llama-server "$@"
+    LD_LIBRARY_PATH="$HOME/llama-bin${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" ~/llama-bin/llama-server "$@"
 }
 qwen() { llm -m ~/models/qwen.gguf "$@"; }
 coder() { llm -m ~/models/coder.gguf "$@"; }
