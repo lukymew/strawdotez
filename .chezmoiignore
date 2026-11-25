@@ -7,3 +7,4 @@ docs/
 {{- if not .hushlogin }}
 .hushlogin
 {{- end }}
+install.sh
