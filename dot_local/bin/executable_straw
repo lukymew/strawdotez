@@ -1,5 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
-# straw: comando do strawdotez. Uso: straw menu | straw update | straw version | straw help
+# straw: comando do strawdotez. Uso: straw menu | install | update | version | help   # straw v2
 # shellcheck disable=SC2154  # as variáveis M_* vêm do messages.sh gerado pelo chezmoi
 set -u
 DATA="${STRAW_DIR:-$HOME/.local/share/strawdotez}"
@@ -11,24 +11,70 @@ fi
 # shellcheck source=/dev/null
 . "$DATA/messages.sh"
 
-say()  { printf '%s\n' "$1"; }
-fmt()  { printf '%s\n' "${1//%s/$2}"; }
+say() { printf '%s\n' "$1"; }
+fmt() { printf '%s\n' "${1//%s/$2}"; }
+
+# ---- ambiente: termux, apt (Debian, Ubuntu, Kali) ou apk (Alpine)
+KEY="${STRAW_ENV:-}"
+ENVNAME=""
+if [ -z "$KEY" ]; then
+    case "${PREFIX:-}" in /data/data/com.termux*) KEY=termux ;; esac
+fi
+if [ -z "$KEY" ] && [ -r /etc/os-release ]; then
+    id="$(sed -n 's/^ID=//p' /etc/os-release | tr -d '"')"
+    like="$(sed -n 's/^ID_LIKE=//p' /etc/os-release | tr -d '"')"
+    ENVNAME="$id"
+    case "$id $like" in
+        *alpine*)                    KEY=apk ;;
+        *debian*|*ubuntu*|*kali*)    KEY=apt ;;
+    esac
+fi
+case "$KEY" in
+    termux) COL=3; ENVNAME=Termux ;;
+    apt)    COL=4; : "${ENVNAME:=apt}" ;;
+    apk)    COL=5; : "${ENVNAME:=alpine}" ;;
+    *)      COL=0 ;;
+esac
+
+SUDO=()
+if [ "$KEY" != termux ] && [ "$(id -u)" != 0 ] && command -v sudo >/dev/null 2>&1; then SUDO=(sudo); fi
+
+pm_has() {
+    case "$KEY" in
+        apk) apk info -e "$1" >/dev/null 2>&1 ;;
+        *)   dpkg -s "$1" >/dev/null 2>&1 ;;
+    esac
+}
+pm_install() {
+    case "$KEY" in
+        termux) pkg install -y "$@" ;;
+        apt)    "${SUDO[@]+"${SUDO[@]}"}" apt-get install -y "$@" ;;
+        apk)    "${SUDO[@]+"${SUDO[@]}"}" apk add "$@" ;;
+    esac
+}
+pm_refresh() {
+    case "$KEY" in
+        apt) "${SUDO[@]+"${SUDO[@]}"}" apt-get update -qq ;;
+        apk) "${SUDO[@]+"${SUDO[@]}"}" apk update -q ;;
+    esac
+}
 
 installed() {
     local p
-    for p in "$@"; do dpkg -s "$p" >/dev/null 2>&1 || return 1; done
+    for p in "$@"; do pm_has "$p" || return 1; done
     return 0
 }
 
 install_pkgs() {
     local falta=() falhou=() p
-    for p in "$@"; do dpkg -s "$p" >/dev/null 2>&1 || falta+=("$p"); done
+    for p in "$@"; do pm_has "$p" || falta+=("$p"); done
     if [ "${#falta[@]}" -eq 0 ]; then say "$M_nothing_to_install"; return 0; fi
     fmt "$M_installing" "${falta[*]}"
-    if ! pkg install -y "${falta[@]}"; then
+    pm_refresh
+    if ! pm_install "${falta[@]}"; then
         for p in "${falta[@]}"; do
-            dpkg -s "$p" >/dev/null 2>&1 && continue
-            pkg install -y "$p" || falhou+=("$p")
+            pm_has "$p" && continue
+            pm_install "$p" || falhou+=("$p")
         done
     fi
     if [ "${#falhou[@]}" -gt 0 ]; then
@@ -43,58 +89,102 @@ col() { # arquivo id coluna
     awk -F'\t' -v id="$2" -v c="$3" '$1 == id { print $c }' "$1"
 }
 
-pick() { # cabeçalho  (linhas "id<TAB>texto" no stdin; multi com PICK_MULTI=1)
+mod_pkgs() { # id -> pacotes do ambiente atual (vazio se o módulo não existe aqui)
+    local v
+    v="$(col "$DATA/modules.tsv" "$1" "$COL")"
+    [ "$v" = "-" ] && v=""
+    printf '%s' "$v"
+}
+
+pause() {
+    if [ -t 0 ]; then read -r -p "$M_continue " _; fi
+    return 0
+}
+
+pick() { # cabeçalho  (linhas "id<TAB>texto" no stdin; PICK_MULTI=1 liga a seleção múltipla)
     local opts=(--delimiter=$'\t' --with-nth=2 --header="$1" --prompt="straw> ")
     [ "${PICK_MULTI:-0}" = 1 ] && opts+=(--multi)
     fzf "${opts[@]}" | cut -f1
 }
 
 menu_tools() {
-    local lines="" id desc pk mark sel pkgs=()
-    while IFS=$'\t' read -r id desc pk; do
+    local lines="back"$'\t'"$M_back"$'\n' id desc pk mark sel pkgs=() m
+    while IFS=$'\t' read -r id desc _; do
         [ -z "$id" ] && continue
+        pk="$(mod_pkgs "$id")"
+        [ -z "$pk" ] && continue
         # shellcheck disable=SC2086
         if installed $pk; then mark="[x]"; else mark="[ ]"; fi
         lines+="$id"$'\t'"$mark $desc"$'\n'
     done < "$DATA/modules.tsv"
-    sel="$(printf '%s' "$lines" | PICK_MULTI=1 pick "$M_tools_header")" || return 0
-    if [ -z "$sel" ]; then say "$M_nothing"; return 0; fi
+    sel="$(printf '%s' "$lines" | PICK_MULTI=1 pick "$M_tools_header")"
+    if [ -z "$sel" ] || printf '%s\n' "$sel" | grep -qx back; then return 0; fi
     while IFS= read -r id; do
-        # shellcheck disable=SC2207
-        pkgs+=($(col "$DATA/modules.tsv" "$id" 3))
+        m="$(mod_pkgs "$id")"
+        # shellcheck disable=SC2206
+        pkgs+=($m)
     done <<< "$sel"
     install_pkgs "${pkgs[@]}"
+    pause
 }
 
 menu_profiles() {
-    local lines="" id desc sel m pkgs=()
-    while IFS=$'\t' read -r id desc _; do
+    local lines="back"$'\t'"$M_back"$'\n' id desc only sel m pkgs=() mp
+    while IFS=$'\t' read -r id desc _ only; do
         [ -z "$id" ] && continue
+        if [ "$only" != "-" ] && [[ ",$only," != *",$KEY,"* ]]; then continue; fi
         lines+="$id"$'\t'"$desc"$'\n'
     done < "$DATA/profiles.tsv"
-    sel="$(printf '%s' "$lines" | pick "$M_profiles_header")" || return 0
-    if [ -z "$sel" ]; then say "$M_nothing"; return 0; fi
+    sel="$(printf '%s' "$lines" | pick "$M_profiles_header")"
+    if [ -z "$sel" ] || [ "$sel" = back ]; then return 0; fi
     for m in $(col "$DATA/profiles.tsv" "$sel" 3); do
-        # shellcheck disable=SC2207
-        pkgs+=($(col "$DATA/modules.tsv" "$m" 3))
+        [ "$m" = "-" ] && continue
+        mp="$(mod_pkgs "$m")"
+        # shellcheck disable=SC2206
+        pkgs+=($mp)
     done
+    if [ "${#pkgs[@]}" -eq 0 ]; then say "$M_nothing_to_install"; pause; return 0; fi
     install_pkgs "${pkgs[@]}"
+    pause
+}
+
+menu_one() {
+    local names
+    read -r -p "$M_ask_pkgs " names || return 0
+    if [ -z "$names" ]; then say "$M_nothing"; return 0; fi
+    # shellcheck disable=SC2086
+    install_pkgs $names
+    pause
 }
 
 cmd_menu() {
     command -v fzf >/dev/null 2>&1 || { say "$M_need_fzf" >&2; return 1; }
-    local sel
-    sel="$(printf 'tools\t%s\nprofiles\t%s\nsoon\t%s\n' "$M_menu_tools" "$M_menu_profiles" "$M_menu_soon" | pick "$M_menu_header")" || return 0
-    case "$sel" in
-        tools)    menu_tools ;;
-        profiles) menu_profiles ;;
-        soon)     say "$M_soon" ;;
-    esac
+    [ "$COL" -gt 0 ] || { say "$M_no_pm" >&2; return 1; }
+    local sel head
+    head="${M_menu_header//%s/$ENVNAME}"
+    while :; do
+        sel="$(printf 'tools\t%s\nprofiles\t%s\none\t%s\nsoon\t%s\nquit\t%s\n' \
+            "$M_menu_tools" "$M_menu_profiles" "$M_menu_one" "$M_menu_soon" "$M_quit" | pick "$head")"
+        case "$sel" in
+            tools)    menu_tools ;;
+            profiles) menu_profiles ;;
+            one)      menu_one ;;
+            soon)     say "$M_soon"; pause ;;
+            *)        return 0 ;;
+        esac
+    done
+}
+
+cmd_install() {
+    [ "$COL" -gt 0 ] || { say "$M_no_pm" >&2; return 1; }
+    if [ "$#" -eq 0 ]; then say "$M_install_usage" >&2; return 2; fi
+    install_pkgs "$@"
 }
 
 cmd_help() {
     say "$M_help_title"
     say "$M_help_menu"
+    say "$M_help_install"
     say "$M_help_update"
     say "$M_help_version"
     say "$M_help_help"
@@ -107,10 +197,11 @@ cmd_version() {
 }
 
 case "${1:-}" in
-    menu)               cmd_menu ;;
-    update)             chezmoi update ;;
+    menu)                 cmd_menu ;;
+    install)              shift; cmd_install "$@" ;;
+    update)               chezmoi update ;;
     version|-v|--version) cmd_version ;;
-    help|-h|--help)     cmd_help ;;
-    "")                 if [ -t 0 ] && [ -t 1 ] && command -v fzf >/dev/null 2>&1; then cmd_menu; else cmd_help; fi ;;
-    *)                  fmt "$M_unknown" "$1" >&2; cmd_help >&2; exit 2 ;;
+    help|-h|--help)       cmd_help ;;
+    "")                   if [ -t 0 ] && [ -t 1 ] && command -v fzf >/dev/null 2>&1; then cmd_menu; else cmd_help; fi ;;
+    *)                    fmt "$M_unknown" "$1" >&2; cmd_help >&2; exit 2 ;;
 esac

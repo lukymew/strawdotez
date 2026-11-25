@@ -1,31 +1,73 @@
 # Módulos e perfis do comando `straw menu`.
-# Para adicionar um módulo: crie a chave com pt, en e packages (nomes de pacote do Termux).
+# Cada módulo tem uma lista de pacotes por ambiente: termux, apt (Debian, Ubuntu, Kali) e apk (Alpine).
+# Módulo sem lista para o ambiente atual não aparece nele.
+# Perfil com `only` aparece só nos ambientes listados (termux, apt, apk).
 straw:
   modules:
     utils:
       pt: "Utilitários do dia a dia (jq, tree, htop, rsync)"
       en: "Everyday utilities (jq, tree, htop, rsync)"
-      packages: [jq, tree, htop, rsync, termux-api]
+      termux: [jq, tree, htop, rsync, termux-api]
+      apt: [jq, tree, htop, rsync]
+      apk: [jq, tree, htop, rsync]
     dev:
-      pt: "Desenvolvimento (clang, make, cmake, golang, rust)"
-      en: "Development (clang, make, cmake, golang, rust)"
-      packages: [clang, make, cmake, golang, rust]
+      pt: "Dev: C e C++ (compilador, make, cmake, gdb)"
+      en: "Dev: C and C++ (compiler, make, cmake, gdb)"
+      termux: [clang, make, cmake, gdb]
+      apt: [build-essential, cmake, gdb]
+      apk: [build-base, cmake, gdb]
+    golang:
+      pt: "Dev: Go"
+      en: "Dev: Go"
+      termux: [golang]
+      apt: [golang-go]
+      apk: [go]
+    rust:
+      pt: "Dev: Rust"
+      en: "Dev: Rust"
+      termux: [rust]
+      apt: [rustc, cargo]
+      apk: [rust, cargo]
+    web:
+      pt: "Dev: web (PHP e SQLite)"
+      en: "Dev: web (PHP and SQLite)"
+      termux: [php, sqlite]
+      apt: [php-cli, sqlite3]
+      apk: [php, sqlite]
     network:
-      pt: "Rede e segurança (nmap, traceroute, whois, netcat, openssl)"
-      en: "Network and security (nmap, traceroute, whois, netcat, openssl)"
-      packages: [nmap, traceroute, whois, netcat-openbsd, openssl-tool]
+      pt: "Rede (nmap, traceroute, whois, mtr, iperf3, netcat)"
+      en: "Network (nmap, traceroute, whois, mtr, iperf3, netcat)"
+      termux: [nmap, traceroute, whois, mtr, iperf3, netcat-openbsd, openssl-tool]
+      apt: [nmap, traceroute, whois, mtr-tiny, iperf3, netcat-openbsd]
+      apk: [nmap, traceroute, whois, mtr, iperf3, netcat-openbsd]
+    pentest:
+      pt: "Pentest (hydra, sqlmap, john): só em sistemas com autorização"
+      en: "Pentest (hydra, sqlmap, john): only on systems you are authorized to test"
+      termux: [nmap, hydra, sqlmap]
+      apt: [nmap, hydra, sqlmap, john, nikto]
+      apk: [nmap, hydra]
+    privacy:
+      pt: "Criptografia e segredos (gnupg, age, pass)"
+      en: "Encryption and secrets (gnupg, age, pass)"
+      termux: [gnupg, age, pass]
+      apt: [gnupg, age, pass]
+      apk: [gnupg, age, pass]
     media:
       pt: "Mídia (ffmpeg, imagemagick, yt-dlp)"
       en: "Media (ffmpeg, imagemagick, yt-dlp)"
-      packages: [ffmpeg, imagemagick, yt-dlp]
+      termux: [ffmpeg, imagemagick, yt-dlp]
+      apt: [ffmpeg, imagemagick, yt-dlp]
+      apk: [ffmpeg, imagemagick, yt-dlp]
     editors:
       pt: "Editores extras (vim, helix)"
       en: "Extra editors (vim, helix)"
-      packages: [vim, helix]
+      termux: [vim, helix]
+      apt: [vim]
+      apk: [vim, helix]
     ai:
       pt: "IA local (llama.cpp, experimental)"
       en: "Local AI (llama.cpp, experimental)"
-      packages: [llama-cpp]
+      termux: [llama-cpp]
   profiles:
     minimal:
       pt: "Mínimo: só o essencial, nada a mais"
@@ -35,7 +77,25 @@ straw:
       pt: "Padrão: essencial mais utilitários"
       en: "Standard: essentials plus utilities"
       modules: [utils]
+    developer:
+      pt: "Desenvolvedor: utilitários, C/C++, Go, Rust, web e editores"
+      en: "Developer: utilities, C/C++, Go, Rust, web and editors"
+      modules: [utils, dev, golang, rust, web, editors]
+    network:
+      pt: "Redes: utilitários e ferramentas de rede"
+      en: "Networking: utilities and network tools"
+      modules: [utils, network]
+    pentest:
+      pt: "Pentest: rede, ferramentas de teste e criptografia (uso autorizado)"
+      en: "Pentest: network, testing tools and encryption (authorized use only)"
+      modules: [utils, network, pentest, privacy]
+      only: [termux, apt]
+    creator:
+      pt: "Criador: utilitários, mídia e editores"
+      en: "Creator: utilities, media and editors"
+      modules: [utils, media, editors]
+      only: [termux, apt, apk]
     full:
-      pt: "Completo: utilitários, desenvolvimento, rede, mídia e editores"
-      en: "Full: utilities, development, network, media and editors"
-      modules: [utils, dev, network, media, editors]
+      pt: "Completo: tudo, menos pentest e IA"
+      en: "Full: everything except pentest and AI"
+      modules: [utils, dev, golang, rust, web, network, privacy, media, editors]

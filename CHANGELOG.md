@@ -7,7 +7,9 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Added
 - `straw` command: `straw menu` (tools by module and tool profiles, with fzf), `straw update`, `straw version`, `straw help`.
-- Modules and profiles in `.chezmoidata/straw.yaml`.
+- Modules and profiles in `.chezmoidata/straw.yaml`, with package lists per environment (Termux, Debian/Ubuntu/Kali, Alpine).
+- Focused modules (C/C++, Go, Rust, web, network, pentest, privacy, media, editors) and more profiles (developer, networking, pentest, creator).
+- Back button and quit in the menu; `straw install <package>` to install any package by name.
 
 ## [1.1.0] - 2026-11-25
 

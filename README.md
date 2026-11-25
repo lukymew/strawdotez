@@ -79,6 +79,7 @@ Then it installs the packages, downloads the zsh plugins and applies the setting
 | `termux-modo-celular` | enables the phone profile |
 | `crb` | restores Termux's `bash.bashrc` if it gets corrupted |
 | `straw menu` | opens the menu: tools (package modules) and profiles |
+| `straw install` | installs packages by name |
 | `straw update` | pulls and applies the latest changes |
 
 ## Layout
