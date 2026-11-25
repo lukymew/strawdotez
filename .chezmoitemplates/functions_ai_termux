@@ -1,0 +1,17 @@
+# Modelos locais (llama.cpp)
+# =====================================================
+# 11. MODELOS LOCAIS (llama.cpp) — lazy load
+# =====================================================
+llm() {
+    export LD_LIBRARY_PATH="$HOME/llama-bin:$LD_LIBRARY_PATH"
+    ~/llama-bin/llama-cli "$@"
+}
+llm-server() {
+    export LD_LIBRARY_PATH="$HOME/llama-bin:$LD_LIBRARY_PATH"
+    ~/llama-bin/llama-server "$@"
+}
+qwen() { llm -m ~/models/qwen.gguf "$@"; }
+coder() { llm -m ~/models/coder.gguf "$@"; }
+r1() { llm -m ~/models/r1.gguf "$@"; }
+tiny() { llm -m ~/models/tiny.gguf "$@"; }
+ask() { llm -m ~/models/qwen.gguf -p "$*" -n 256; }

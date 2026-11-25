@@ -1,0 +1,55 @@
+# Ferramentas do Termux (crb, perfis celular/tablet)
+# --- crb ---
+# Verifica se o bash.bashrc do Termux está corrompido/vazio e restaura a partir do .bkp, se existir.
+# uso: crb
+crb() {
+    local b="$PREFIX/etc/bash.bashrc"
+    local size
+    size=$(wc -c < "$b" 2>/dev/null || echo 0)
+
+    if [ ! -f "$b" ] || [ "$size" -lt 100 ]; then
+        if [ -f "${b}.bkp" ]; then
+            cat "${b}.bkp" > "$b"
+            echo "✅ bash.bashrc restaurado!"
+            [[ $- == *i* ]] && source "$b" && echo "✅ Recarregado!"
+        else
+            echo "⚠️ Backup ${b}.bkp não encontrado."
+        fi
+    else
+        echo "✅ bash.bashrc OK"
+    fi
+}
+
+# --- termux-modo-tablet ---
+# Ativa o perfil de interface para tablet.
+# uso: termux-modo-tablet
+function termux-modo-tablet() {
+    local perfil="$HOME/.termux/termux.properties.tablet"
+    local ativo="$HOME/.termux/termux.properties"
+
+    if [ ! -f "$perfil" ]; then
+        echo "⚠️ Perfil de tablet não encontrado: $perfil"
+        return 1
+    fi
+
+    cp "$perfil" "$ativo" || return 1
+    termux-reload-settings
+    echo "📐 Perfil de tablet ativado!"
+}
+
+# --- termux-modo-celular ---
+# Ativa o perfil de interface para celular.
+# uso: termux-modo-celular
+function termux-modo-celular() {
+    local perfil="$HOME/.termux/termux.properties.cell"
+    local ativo="$HOME/.termux/termux.properties"
+
+    if [ ! -f "$perfil" ]; then
+        echo "⚠️ Perfil de celular não encontrado: $perfil"
+        return 1
+    fi
+
+    cp "$perfil" "$ativo" || return 1
+    termux-reload-settings
+    echo "📱 Perfil de celular ativado!"
+}

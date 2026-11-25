@@ -1,0 +1,33 @@
+# Funcoes de rede
+# =====================================================
+# 13. FUNÇÕES — REDE
+# =====================================================
+
+# --- @ip-locator ---
+# Consulta informações de geolocalização/ISP de um ou mais IPs via ipinfo.io.
+# uso: ip-locator <ip> [<ip>..]
+function @ip-locator() {
+    local USAGE="uso: ip-locator <ip> [<ip>..]"
+    [ "$1" == "-h" ] && { echo "$USAGE" >&2; return; }
+    [ $# -eq 0 ] && { echo "$USAGE" >&2; return; }
+    while [ "$1" != "" ]; do
+        curl "ipinfo.io/$1"
+        shift
+    done
+}
+
+# --- @ip-resolver ---
+# Resolve o IP de um ou mais domínios usando o resolver da OpenDNS.
+# uso: ip-resolver <nome-domínio> [<nome-domínio>..]
+function @ip-resolver() {
+    local USAGE="uso: ip-resolver <nome-domínio> [<nome-domínio>..]"
+    [ "$1" == "-h" ] && { echo "$USAGE" >&2; return; }
+    [ $# -eq 0 ] && { echo "$USAGE" >&2; return; }
+    while [ "$1" != "" ]; do
+        echo -n "$1 "
+        dig +short @resolver1.opendns.com "$1"
+        shift
+    done
+}
+
+google() { ping -c 3 www.google.com.br; }

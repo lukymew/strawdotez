@@ -21,7 +21,9 @@ fi
 center_message() {
     local message="$1"
     local clean_message
-    clean_message=$(echo -e "$message" | sed -r 's/\x1b\[[0-9;]*m//g')
+    printf -v clean_message '%b' "$message"
+    shopt -s extglob
+    clean_message=${clean_message//$'\e['+([0-9;])m/}
     local termwidth="${COLUMNS:-$(stty size < /dev/tty 2>/dev/null | cut -d' ' -f2)}"
     : "${termwidth:=80}"
     local padlen=$(( (termwidth - ${#clean_message}) / 2 ))

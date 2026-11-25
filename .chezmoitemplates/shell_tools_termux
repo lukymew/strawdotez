@@ -1,9 +1,27 @@
 # Ferramentas interativas (só carregam se estiverem instaladas)
 if command -v fzf >/dev/null 2>&1; then
     # Ctrl+R busca no histórico, Ctrl+T busca arquivos, Alt+C entra em pastas
-    if [ -n "$ZSH_VERSION" ]; then source <(fzf --zsh); else eval "$(fzf --bash)"; fi
+    if [ -n "$ZSH_VERSION" ]; then
+        _fc="${XDG_CACHE_HOME:-$HOME/.cache}/fzf-init.zsh"
+        if [ ! -s "$_fc" ] || [ "$(command -v fzf)" -nt "$_fc" ]; then
+            mkdir -p "$(dirname "$_fc")" && fzf --zsh > "$_fc"
+        fi
+        source "$_fc"
+        unset _fc
+    elif [ -f "$PREFIX/share/fzf/key-bindings.bash" ]; then
+        source "$PREFIX/share/fzf/key-bindings.bash"   # só atalhos: abre bem mais rápido
+    else
+        eval "$(fzf --bash)"
+    fi
 fi
 if command -v zoxide >/dev/null 2>&1; then
     # z <parte-do-nome> pula para a pasta mais usada; zi abre seleção
-    if [ -n "$ZSH_VERSION" ]; then eval "$(zoxide init zsh)"; else eval "$(zoxide init bash)"; fi
+    # O código de init fica em cache e só é refeito quando o zoxide é atualizado.
+    if [ -n "$ZSH_VERSION" ]; then _zsh_sh=zsh; else _zsh_sh=bash; fi
+    _zc="${XDG_CACHE_HOME:-$HOME/.cache}/zoxide-init.$_zsh_sh"
+    if [ ! -s "$_zc" ] || [ "$(command -v zoxide)" -nt "$_zc" ]; then
+        mkdir -p "$(dirname "$_zc")" && zoxide init "$_zsh_sh" > "$_zc"
+    fi
+    source "$_zc"
+    unset _zc _zsh_sh
 fi

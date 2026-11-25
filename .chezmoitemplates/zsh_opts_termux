@@ -8,8 +8,16 @@ HISTSIZE=5000
 SAVEHIST=5000
 HISTFILE="$HOME/.zsh_history"
 
-autoload -Uz compinit
-compinit -C
+# Completion carregado so no primeiro Tab (abertura do shell fica mais leve)
+_lazy_compinit_tab() {
+    bindkey '^I' expand-or-complete
+    mkdir -p "${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+    autoload -Uz compinit
+    compinit -C -d "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump"
+    zle expand-or-complete
+}
+zle -N _lazy_compinit_tab
+bindkey '^I' _lazy_compinit_tab
 zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 

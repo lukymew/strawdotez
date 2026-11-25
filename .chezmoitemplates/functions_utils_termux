@@ -1,0 +1,271 @@
+# Funcoes de uso geral (historico, arquivos, geradores, processos, git)
+# =====================================================
+# 12. FUNÇÕES — BUSCA E HISTÓRICO
+# =====================================================
+
+# --- his ---
+# Busca no histórico de comandos por múltiplos termos combinados.
+# uso: his consulta1 consulta2 ... | ex: his ssh 192
+function his() {
+    local commandlog
+    commandlog=$(history | grep -oE "[a-zA-Z]{1}.*" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' | sort | uniq)
+    for var in "$@"; do
+        commandlog=$(echo "$commandlog" | grep -i "$var")
+    done
+    echo "$commandlog"
+}
+
+# --- xtop ---
+# Lista os N comandos mais usados no histórico (padrão: 10).
+# uso: xtop [N]
+function xtop() {
+    local N=${1:-10}
+    history | awk '{a[$2]++ } END{for(i in a){print a[i] " " i}}' | sort -rn | head -n "$N"
+}
+
+# =====================================================
+# 14. FUNÇÕES — ARQUIVOS E TEXTO
+# =====================================================
+
+# --- jsv ---
+# Valida a sintaxe de um ou mais arquivos JSON.
+# uso: jsv <arquivo.json> [<arquivo.json>..]
+function jsv() {
+    local USAGE="uso: jsv <arquivo.json> [<arquivo.json>..]"
+    [ -z "$1" ] && { echo "$USAGE" >&2; return; }
+    [ "$1" == "-h" ] && { echo "$USAGE" >&2; return; }
+    command -v python3 >/dev/null 2>&1 || { echo "Comando python3 não encontrado" >&2; return; }
+    while [ "$1" != "" ]; do
+        echo -n "$1: "
+        python3 -m json.tool "$1" >/dev/null && echo "OK"
+        shift
+    done
+}
+
+# --- lcfile ---
+# Renomeia arquivo(s) convertendo o nome para minúsculas.
+# uso: lcfile <arquivo> [<arquivo>..]
+function lcfile() {
+    local USAGE="uso: lcfile <arquivo> [<arquivo>..]"
+    [ "$1" = "" ] && { echo "$USAGE" >&2; return; }
+    [ "$1" = "-h" ] || [ "$1" = "--help" ] && { echo "$USAGE" >&2; return; }
+    while [ "$1" != "" ]; do
+        if [ -e "$1" ]; then
+            local DST
+            DST="$(dirname "$1")/$(basename "$1" | tr '[:upper:]' '[:lower:]')"
+            [ ! -e "$DST" ] && mv -T "$1" "$DST" || echo "falha ao renomear: $1" >&2
+        else
+            echo "arquivo inválido: $1" >&2
+        fi
+        shift
+    done
+}
+
+# --- rsfile ---
+# Substitui uma substring pelo nome de um ou mais arquivos.
+# uso: rsfile <string-busca> <string-substituição> <arquivo> [<arquivo>..]
+function rsfile() {
+    local USAGE="uso: rsfile <string-busca> <string-substituição> <arquivo> [<arquivo>..]"
+    local sstr=""
+    local rstr=""
+    while [ "$rstr" == "" ]; do
+        [ "$1" = "" ] && { echo "$USAGE" >&2; return; }
+        [ "$1" = "-h" ] || [ "$1" = "--help" ] && { echo "$USAGE" >&2; return; }
+        if [ "$sstr" == "" ]; then
+            sstr="$1"
+        else
+            rstr="$1"
+        fi
+        shift
+    done
+    while [ "$1" != "" ]; do
+        if [ -e "$1" ]; then
+            local FNAME DST
+            FNAME="$(basename "$1")"
+            DST="$(dirname "$1")/${FNAME/${sstr}/${rstr}}"
+            [ ! -e "$DST" ] && mv -T "$1" "$DST" || echo "falha ao renomear: $1" >&2
+        else
+            echo "arquivo inválido: $1" >&2
+        fi
+        shift
+    done
+}
+
+# --- ascify ---
+# Remove caracteres não-ASCII do conteúdo de um ou mais arquivos (saída no stdout).
+# uso: ascify <arquivo> [<arquivo> ..]
+function ascify() {
+    local USAGE="uso: ascify <arquivo> [<arquivo> ..]"
+    [ -z "$1" ] && { echo "$USAGE" >&2; return; }
+    [ "$1" == "-h" ] && { echo "$USAGE" >&2; return; }
+    while [ "$1" != "" ]; do
+        tr -cd '\11\12\15\40-\176' < "$1"
+        shift
+    done
+}
+
+# --- trim-ws ---
+# Remove espaços em branco no final das linhas de um ou mais arquivos.
+# uso: trim-ws <arquivo> [<arquivo> ..]
+function trim-ws() {
+    local USAGE="uso: trim-ws <arquivo> [<arquivo> ..]"
+    [ -z "$1" ] && { echo "$USAGE" >&2; return; }
+    [ "$1" == "-h" ] && { echo "$USAGE" >&2; return; }
+    sed -i 's/[ \t]*$//' "$@"
+}
+
+# --- trim-tab ---
+# Converte tabs em espaços (4 colunas) em um ou mais arquivos. Requer moreutils (sponge).
+# uso: trim-tab <arquivo> [<arquivo> ..]
+function trim-tab() {
+    local USAGE="uso: trim-tab <arquivo> [<arquivo> ..]"
+    [ -z "$1" ] && { echo "$USAGE" >&2; return; }
+    [ "$1" == "-h" ] && { echo "$USAGE" >&2; return; }
+    command -v sponge >/dev/null 2>&1 || { echo "sponge não encontrado. Instale moreutils" >&2; return; }
+    while [ "$1" != "" ]; do
+        expand -t 4 "$1" | sponge "$1"
+        shift
+    done
+}
+
+# --- code-analysis ---
+# Extrai apenas chaves, aspas e ponto-e-vírgula de arquivos de código, útil para comparar "assinaturas" estruturais.
+# uso: code-analysis <arquivo> [<arquivo> ..]
+function code-analysis() {
+    for i in "$@"; do
+        echo -n "$i: "
+        sed 's/[^"{};]//g' "$i" | tr -d '\n'
+        echo
+    done
+}
+
+# --- c-src / py-src / r-src / json-src ---
+# Listam arquivos-fonte por linguagem em um diretório.
+# uso: c-src|py-src|r-src|json-src [diretório]
+function c-src() {
+    [ "$1" == "-h" ] && { echo "uso: c-src [diretório]" >&2; return; }
+    local SRC="${1:-.}"
+    find "$SRC" -regextype posix-extended -regex "^.*\.(cpp|hpp|c|h)$" | grep -ve "^\./debian"
+}
+
+function py-src() {
+    [ "$1" == "-h" ] && { echo "uso: py-src [diretório]" >&2; return; }
+    local SRC="${1:-.}"
+    find "$SRC" -name "*.py"
+}
+
+function r-src() {
+    [ "$1" == "-h" ] && { echo "uso: r-src [diretório]" >&2; return; }
+    local SRC="${1:-.}"
+    find "$SRC" -regex ".*\.[rR]"
+}
+
+function json-src() {
+    [ "$1" == "-h" ] && { echo "uso: json-src [diretório]" >&2; return; }
+    local SRC="${1:-.}"
+    find "$SRC" -iname "*.json"
+}
+
+# --- extract ---
+# Extrai automaticamente arquivos compactados detectando a extensão.
+# uso: extract <arquivo>
+function extract() {
+    if [ -f "$1" ]; then
+        case "$1" in
+        *.tar.bz2) tar xjf "$1" ;;
+        *.tar.gz) tar xzf "$1" ;;
+        *.tar.xz) tar xJf "$1" ;;
+        *.bz2) bunzip2 "$1" ;;
+        *.rar) unrar x "$1" ;;
+        *.gz) gunzip "$1" ;;
+        *.tar) tar xf "$1" ;;
+        *.tbz2) tar xjf "$1" ;;
+        *.tgz) tar xzf "$1" ;;
+        *.zip) unzip "$1" ;;
+        *.Z) uncompress "$1" ;;
+        *.7z) 7z x "$1" ;;
+        *.xz) unxz "$1" ;;
+        *.zst) unzstd "$1" ;;
+        *) echo "'$1' não pode ser extraído usando a função 'extract'" ;;
+        esac
+    else
+        echo "'$1' não é um arquivo válido"
+    fi
+}
+
+# =====================================================
+# 15. FUNÇÕES — GERADORES (SENHA, PIN, CIFRA)
+# =====================================================
+
+# --- genpasswd ---
+# Gera uma senha aleatória alfanumérica (padrão: 32 caracteres).
+# uso: genpasswd [tamanho]
+function genpasswd() {
+    local PWDLEN=${1:-32}
+    tr -dc 'A-Za-z0-9_' </dev/urandom | head -c "$PWDLEN"
+    echo
+}
+
+# --- genpin ---
+# Gera um código PIN numérico aleatório (padrão: 4 dígitos).
+# uso: genpin [tamanho]
+function genpin() {
+    local PINLEN=${1:-4}
+    tr -dc '0-9' </dev/urandom | head -c "$PINLEN"
+    echo
+}
+
+# --- rot13 ---
+# Aplica a cifra de César (ROT-13) em texto via stdin ou em um arquivo.
+# uso: rot13 [arquivo]
+function rot13() {
+    if [ $# = 0 ]; then
+        tr "[a-m][n-z][A-M][N-Z]" "[n-z][a-m][N-Z][A-M]"
+    else
+        tr "[a-m][n-z][A-M][N-Z]" "[n-z][a-m][N-Z][A-M]" < "$1"
+    fi
+}
+
+# =====================================================
+# 16. FUNÇÕES — PROCESSOS
+# =====================================================
+
+# --- atop ---
+# Mostra as threads de um processo em tempo real via top -H.
+# uso: atop <nome-processo>
+function atop() {
+    [ -z "$1" ] && { echo "uso: atop <nome-processo>" >&2; return; }
+    local pids
+    pids=$(pgrep -d, "$1")
+    [ -z "$pids" ] && { echo "processo não encontrado: $1" >&2; return; }
+    top -H -p "$pids"
+}
+
+# =====================================================
+# 17. FUNÇÕES — GIT
+# =====================================================
+
+# --- clone ---
+# Clona um repositório git para ~/clones, criando uma pasta numerada automaticamente.
+# uso: clone <url_repositório>
+function clone() {
+    if [ $# -lt 1 ]; then
+        echo "Uso: clone <url_repositório>"
+        return 1
+    fi
+
+    local default_destination="$HOME/clones"
+    local counter=1
+    while [ -d "$default_destination/clone-$counter" ]; do
+        counter=$((counter + 1))
+    done
+    local destination="$default_destination/clone-$counter"
+
+    if ! git clone -q "$1" "$destination"; then
+        echo "Erro: Falha ao clonar."
+        return 1
+    fi
+    echo "Clone realizado com sucesso. Repositório clonado para '$destination'"
+}
+
+mkcd() { mkdir -p "$1" && cd "$1"; }

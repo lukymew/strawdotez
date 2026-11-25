@@ -1,0 +1,116 @@
+# Aliases (basicos, navegacao, sistema, rede, git)
+# =====================================================
+# 2. ALIASES — COMANDOS BÁSICOS
+# =====================================================
+# Isso é só um apelido (alias), não executa nada
+alias ell='eza -lah --icons'
+alias trez='eza --tree --icons'
+alias f='fzf'
+
+alias ls='ls --color=auto'
+alias ll='ls -alF'
+alias l='ls -CF'
+alias rm='rm -i'
+alias cpi='cp -i'
+alias mv='mv -i'
+alias df='df -h'
+alias du='du -h'
+alias top='top -o %CPU'
+alias h='history'
+alias c='clear'
+alias e='exit'
+alias vi='nvim'
+alias n='nano'
+alias mkdir='mkdir -p'
+alias rmrf='rm -rf'          # cuidado: ignora confirmação
+alias reloa='source ~/.bashrc'
+
+# =====================================================
+# 3. NAVEGAÇÃO E DIRETÓRIOS
+# =====================================================
+alias ..='cd ..'
+alias ...='cd ../..'
+
+alias cdd='cd ~/Downloads'
+alias cdm='cd ~/Music'
+alias cdp='cd ~/Pictures'
+alias cdw='cd ~/Workspace'
+alias cdt='cd ~/Termux'
+alias cds='cd ~/Scripts'
+alias cdocs='cd ~/Documents'
+
+alias lists='nano $PREFIX/etc/apt/sources.list'
+# Bash TermuxConfigs
+alias babashrc='nano $PREFIX/etc/bash.bashrc'
+alias bashrc='nano ~/.bashrc'
+
+# =====================================================
+# 4. SISTEMA / PACOTES
+# =====================================================
+alias update='apt update && apt upgrade'
+alias uppkg='pkg update && pkg upgrade'
+alias uppzsh='source ~/.zshrc'
+alias tt='clear; termux-reload-settings && source "$PREFIX/etc/bash.bashrc"'
+
+# =====================================================
+# 5. INFORMAÇÕES DO SISTEMA
+# =====================================================
+alias mem='ps aux --sort -rss'
+alias cpuinfo='cat /proc/cpuinfo'
+alias meminfo='cat /proc/meminfo'
+alias diskinfo='df -h'
+# Requer o app Termux:API instalado
+alias battery='termux-battery-status'
+alias wifi='termux-wifi-connectioninfo'
+
+# =====================================================
+# 6. REDE
+# =====================================================
+alias myip='ip addr show wlan0 | awk "/inet /{print \$2}"'
+alias whatismyip='curl ifconfig.me'
+alias ports='netstat -tuln'
+alias listen='nc -lvp'
+alias iptablesflush='iptables -F'
+alias shareterm='sshd'
+
+# =====================================================
+# 7. UTILITÁRIOS DIVERSOS
+# =====================================================
+alias py='python'
+alias py3='python3'
+alias randpass='openssl rand -base64 12'
+alias diskusage='ncdu'
+alias movieinfo='mediainfo'
+alias cal='cal -3'
+alias timestamp='date +%s'
+alias tb="nc termbin.com 9999 2>/dev/null || echo 'Falha ao conectar com termbin'"
+
+alias qr='qrencode -t ansiutf8'
+
+# =====================================================
+# 8. CRIPTOGRAFIA E SEGURANÇA
+# =====================================================
+alias encrypt='gpg -c'
+alias decrypt='gpg -d'
+alias encryptfile='openssl aes-256-cbc -a -salt -in'
+alias decryptfile='openssl aes-256-cbc -d -a -in'
+alias cve='searchsploit'
+
+# =====================================================
+# 9. CRONÔMETROS / TIMERS
+# =====================================================
+alias stopwatch='date && time read -s && echo && date'
+timer() {
+    printf "Digite o tempo em segundos: "; read secs
+    echo "Timer iniciado por $secs segundos."
+    sleep "$secs" && termux-notification --title "Timer" --content "Timer finalizado!"
+}
+
+# =====================================================
+# 10. GIT
+# =====================================================
+alias gitinit='git init'
+alias gita='git add .'
+alias gitc='git commit -m'
+alias gitp='git push'
+alias gitlog='git log'
