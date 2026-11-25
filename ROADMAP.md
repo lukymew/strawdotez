@@ -1,0 +1,82 @@
+# Roadmap
+
+Legenda: `[x]` feito, `[ ]` planejado. As fases estão em ordem de prioridade, e dentro de cada uma os itens também.
+
+## Fase 0: base (concluída)
+- [x] Repo só Termux, gerenciado com chezmoi
+- [x] Instalação em um comando e idempotente
+- [x] Perguntas na instalação: nome, e-mail (opcionais) e perfil celular/tablet
+- [x] Pacotes em um arquivo de dados (`.chezmoidata/packages.yaml`)
+- [x] Plugins do zsh baixados do GitHub (`.chezmoiexternal.toml`)
+- [x] Código comum a bash e zsh, dividido por assunto
+- [x] Desempenho: bash ~18ms e zsh ~30ms de abertura
+- [x] fzf e zoxide com cache; autocompletar do zsh carregado no primeiro Tab
+- [x] README, `CLAUDE.md`, licença MIT e créditos
+
+## Fase 1: lançamento
+- [ ] Descrição e tópicos no GitHub (`termux`, `dotfiles`, `chezmoi`, `bash`, `zsh`)
+- [ ] Teste de instalação limpa como estranho (repo público, sem login)
+- [ ] Prints ou GIF curto no README
+- [ ] Primeira versão marcada (`v1.0.0`) e `CHANGELOG.md`
+- [ ] Script de instalação em uma linha (instala `chezmoi` e `git` e já roda o `init`)
+- [ ] Aviso de pacotes que falharam no final da instalação
+
+## Fase 2: qualidade e automação
+- [ ] CI no GitHub: renderizar todos os templates em cada push
+- [ ] CI: `bash -n`, `zsh -n` e `shellcheck` nos scripts e nas peças
+- [ ] CI: teste de instalação em um contêiner do Termux
+- [ ] Script de medição de abertura no repo (`scripts/bench.sh`) com orçamento de tempo
+- [ ] Verificação de segredos antes de cada commit (gitleaks ou semelhante)
+- [ ] Testes para as funções utilitárias mais usadas
+
+## Fase 3: personalização
+- [ ] Módulos opcionais por pergunta: IA local (llama.cpp), rede e segurança, criptografia
+- [ ] Perfis de instalação: mínimo, padrão e completo
+- [ ] Escolha de tema de cores (temas do Gogh) e de fonte na instalação
+- [ ] Mais perfis de tela, como celular com teclado físico
+- [ ] Escolha do shell padrão (bash ou zsh) por pergunta
+- [ ] Opção de prompt: o atual ou o Starship
+
+## Fase 4: ambiente completo
+- [ ] Configuração do tmux
+- [ ] Configuração do neovim
+- [ ] Configuração do lazygit e extras do git (aliases, ignore global)
+- [ ] Ajuda para chaves SSH (gerar e cadastrar no GitHub)
+- [ ] Integração com Termux:API (bateria, notificações, área de transferência)
+- [ ] Scripts de inicialização com Termux:Boot e atalhos com Termux:Widget
+- [ ] Configuração do Termux:Styling
+
+## Fase 5: desempenho
+- [ ] Carregar o syntax-highlighting depois do primeiro prompt (zsh-defer)
+- [ ] Compilar o `.zshrc` (`zcompile`) se o ganho compensar
+- [ ] Revisar o cabeçalho do bash: logo e cálculo de largura
+- [ ] Meta fixa: bash abaixo de 30ms e zsh abaixo de 50ms, verificada no CI
+
+## Fase 6: segurança e privacidade
+- [ ] Política escrita de segredos (nunca no repo)
+- [ ] Criptografia de arquivos sensíveis com `age`, se algum dia houver
+- [ ] Revisar aliases perigosos (`rmrf`, `iptablesflush`) e documentar
+- [ ] Revisar o `allow-external-apps` do `termux.properties` e documentar o risco
+- [ ] Verificação de integridade do script de instalação em uma linha
+
+## Fase 7: experiência de uso
+- [ ] Comando `strawdotez` com subcomandos: `update`, `doctor`, `perfil`, `bench`
+- [ ] `strawdotez doctor`: diagnóstico (pacotes, plugins, identidade do git, permissões)
+- [ ] Desinstalação e volta ao estado anterior (backup automático dos arquivos substituídos)
+- [ ] Mensagem final da instalação dizendo o que foi instalado e o que fazer depois
+- [ ] Mensagens e documentação em português e inglês
+
+## Fase 8: documentação e comunidade
+- [ ] Seção "Solução de problemas" com os erros já encontrados (pacote inexistente, `/tmp` sem permissão, `Repository not found`)
+- [ ] Guia "Como personalizar" com exemplos
+- [ ] `CONTRIBUTING.md` e modelos de issue e de pull request
+- [ ] README em inglês
+- [ ] Wiki ou site com a lista de aliases e funções
+- [ ] Agradecimentos e links atualizados para as fontes de cada trecho
+
+## Ideias futuras
+- [ ] Perfil com `proot-distro` para quem precisa de Linux completo
+- [ ] Configuração pronta para usar o Claude Code no Termux
+- [ ] Sincronização entre vários dispositivos
+- [ ] Backup e restauração dos dados do Termux
+- [ ] Notificações de fim de comando longo
