@@ -1,8 +1,8 @@
-#!/usr/bin/env bash
+#!{{ env "PREFIX" }}/bin/bash
 # strawdotez: instala os pacotes do Termux (lista em .chezmoidata/packages.yaml)
 pkgs=({{ join " " .packages.termux }})
 
-printf 'strawdotez: conferindo %d pacotes...\n' "${#pkgs[@]}"
+printf 'strawdotez: conferindo %d pacote(s)...\n' "${#pkgs[@]}"
 faltando=()
 for p in "${pkgs[@]}"; do
     dpkg -s "$p" >/dev/null 2>&1 || faltando+=("$p")
@@ -10,7 +10,7 @@ done
 
 falhou=()
 if [ "${#faltando[@]}" -gt 0 ]; then
-    printf 'strawdotez: instalando %d pacotes...\n' "${#faltando[@]}"
+    printf 'strawdotez: instalando %d pacote(s)...\n' "${#faltando[@]}"
     if ! pkg install -y "${faltando[@]}"; then
         for p in "${faltando[@]}"; do
             dpkg -s "$p" >/dev/null 2>&1 && continue
