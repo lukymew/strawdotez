@@ -47,16 +47,16 @@ straw:
     network:
       icon: "📡"
       group: net
-      pt: "Rede (nmap, traceroute, whois, mtr, iperf3, netcat)"
-      en: "Network (nmap, traceroute, whois, mtr, iperf3, netcat)"
+      pt: "Rede (nmap, traceroute, whois, iperf3, netcat)"
+      en: "Network (nmap, traceroute, whois, iperf3, netcat)"
       termux: [nmap, traceroute, whois, iperf3, netcat-openbsd, openssl-tool]
       apt: [nmap, traceroute, whois, mtr-tiny, iperf3, netcat-openbsd]
       apk: [nmap, traceroute, whois, mtr, iperf3, netcat-openbsd]
     pentest:
       icon: "🕵️"
       group: net
-      pt: "Pentest (hydra, sqlmap, john): só em sistemas com autorização"
-      en: "Pentest (hydra, sqlmap, john): only on systems you are authorized to test"
+      pt: "Pentest (hydra, sqlmap, john; no Termux só nmap): só com autorização"
+      en: "Pentest (hydra, sqlmap, john; only nmap on Termux): only with authorization"
       termux: [nmap]
       apt: [nmap, hydra, sqlmap, john, nikto]
       apk: [nmap, hydra]

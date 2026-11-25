@@ -1,3 +1,3 @@
 {{- range $id, $m := .straw.modules -}}
-{{ $id }}	{{ index $m $.lang | default $m.en }}	{{ join " " (index $m "termux" | default (list)) | default "-" }}	{{ join " " (index $m "apt" | default (list)) | default "-" }}	{{ join " " (index $m "apk" | default (list)) | default "-" }}
+{{ $id }}	{{ index $m $.lang | default $m.en }}	{{ join " " (index $m "termux" | default (list)) | default "-" }}	{{ join " " (index $m "apt" | default (list)) | default "-" }}	{{ join " " (index $m "apk" | default (list)) | default "-" }}	{{ index $m "icon" | default "📦" }}	{{ index $m "group" | default "cli" }}
 {{ end -}}

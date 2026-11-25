@@ -109,14 +109,18 @@ pick() { # cabeçalho  (linhas "id<TAB>texto" no stdin; PICK_MULTI=1 liga a sele
 
 menu_tools() {
     local lines="back"$'\t'"$M_back"$'\n' id desc pk mark sel pkgs=() m
-    while IFS=$'\t' read -r id desc _; do
-        [ -z "$id" ] && continue
-        pk="$(mod_pkgs "$id")"
-        [ -z "$pk" ] && continue
-        # shellcheck disable=SC2086
-        if installed $pk; then mark="[x]"; else mark="[ ]"; fi
-        lines+="$id"$'\t'"$mark $desc"$'\n'
-    done < "$DATA/modules.tsv"
+    local icon group order
+    for group in cli dev net; do
+        while IFS=$'\t' read -r id desc _ _ _ icon order; do
+            [ -z "$id" ] || [ "$order" != "$group" ] && continue
+            pk="$(mod_pkgs "$id")"
+            [ -z "$pk" ] && continue
+            # shellcheck disable=SC2086
+            if installed $pk; then mark="[x]"; else mark="[ ]"; fi
+            [ "${STRAW_PLAIN:-0}" = 1 ] && icon=""
+            lines+="$id"$'\t'"$mark ${icon:+$icon }$desc"$'\n'
+        done < "$DATA/modules.tsv"
+    done
     sel="$(printf '%s' "$lines" | PICK_MULTI=1 pick "$M_tools_header")"
     if [ -z "$sel" ] || printf '%s\n' "$sel" | grep -qx back; then return 0; fi
     while IFS= read -r id; do
