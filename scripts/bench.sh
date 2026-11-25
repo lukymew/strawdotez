@@ -2,10 +2,10 @@
 # strawdotez: mede a abertura do shell e compara com o orçamento
 #   bash scripts/bench.sh              (50 aberturas, bash e zsh)
 #   bash scripts/bench.sh 100          (100 aberturas)
-# Orçamento (ms): BUDGET_BASH=30 BUDGET_ZSH=50 (valores acima do medido no celular)
+# Orçamento (ms): BUDGET_BASH=20 BUDGET_ZSH=40 (cerca de 30% acima do medido no celular)
 N="${1:-50}"
-BUDGET_BASH="${BUDGET_BASH:-30}"
-BUDGET_ZSH="${BUDGET_ZSH:-50}"
+BUDGET_BASH="${BUDGET_BASH:-20}"
+BUDGET_ZSH="${BUDGET_ZSH:-40}"
 fail=0
 
 medir() { # shell
