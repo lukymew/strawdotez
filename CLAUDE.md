@@ -97,3 +97,5 @@ Ver a seção "Inspirações" do README.
 - Zsh e bash dividem os mesmos templates: mexeu em um, confira o outro (`bash -n` e `zsh -n` na saída renderizada).
 - Nunca versionar tokens, chaves ou e-mails reais. Teste mudanças renderizando os templates antes de pedir ao dono para aplicar.
 - Ao concluir um item, marque no ROADMAP e registre no CHANGELOG.
+
+- Antes de cada push, siga o `CHECKLIST.md`.
