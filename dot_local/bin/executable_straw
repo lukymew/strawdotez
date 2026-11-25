@@ -189,6 +189,7 @@ cmd_help() {
     say "$M_help_title"
     say "$M_help_menu"
     say "$M_help_install"
+    say "$M_help_tools"
     say "$M_help_doctor"
     say "$M_help_update"
     say "$M_help_version"
@@ -203,6 +204,13 @@ cmd_doctor() {
     "$bin" doctor "$@"
 }
 
+cmd_tools() {
+    local bin="${STRAW_UI:-$HOME/.local/bin/straw-ui}"
+    [ -x "$bin" ] || bin="$(command -v straw-ui 2>/dev/null || true)"
+    if [ -z "$bin" ]; then say "$M_doctor_no_bin" >&2; return 1; fi
+    "$bin" tools "$@"
+}
+
 cmd_version() {
     local v
     v="$(git -C "$(chezmoi source-path 2>/dev/null)" describe --tags 2>/dev/null)"
@@ -212,6 +220,7 @@ cmd_version() {
 case "${1:-}" in
     menu)                 cmd_menu ;;
     install)              shift; cmd_install "$@" ;;
+    tools)                shift; cmd_tools "$@" ;;
     doctor)               shift; cmd_doctor "$@" ;;
     update)               chezmoi update ;;
     version|-v|--version) cmd_version ;;
