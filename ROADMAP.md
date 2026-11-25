@@ -19,7 +19,7 @@ Legenda: `[x]` feito, `[ ]` planejado. As fases estão em ordem de prioridade, e
 - [x] Teste de instalação limpa como estranho (repo público, sem login)
 - [x] Prints no README (bash e zsh)
 - [x] Português e inglês: idioma escolhido na instalação, mensagens em `.chezmoidata/i18n.yaml`, README nos dois idiomas
-- [ ] Primeira versão marcada (`v1.0.0`) e `CHANGELOG.md`
+- [x] Primeira versão marcada (`v1.0.0`) e `CHANGELOG.md`
 - [x] Script de instalação em uma linha (instala `chezmoi` e `git` e já roda o `init`)
 - [x] Aviso de pacotes que falharam no final da instalação
 
