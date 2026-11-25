@@ -1,0 +1,9 @@
+{{- if or .name .email }}
+[user]
+{{- if .name }}
+    name = {{ .name }}
+{{- end }}
+{{- if .email }}
+    email = {{ .email }}
+{{- end }}
+{{- end }}
