@@ -6,17 +6,18 @@ Legenda: `[x]` feito, `[ ]` planejado. As fases estão em ordem de prioridade, e
 - [x] Repo só Termux, gerenciado com chezmoi
 - [x] Instalação em um comando e idempotente
 - [x] Perguntas na instalação: nome, e-mail (opcionais) e perfil celular/tablet
+- [x] Opções na instalação: logo e cabeçalho, e mensagem de boas-vindas do Termux (`.hushlogin`)
 - [x] Pacotes em um arquivo de dados (`.chezmoidata/packages.yaml`)
 - [x] Plugins do zsh baixados do GitHub (`.chezmoiexternal.toml`)
 - [x] Código comum a bash e zsh, dividido por assunto
-- [x] Desempenho: bash ~18ms e zsh ~30ms de abertura
+- [x] Desempenho: bash ~15ms e zsh ~30ms de abertura
 - [x] fzf e zoxide com cache; autocompletar do zsh carregado no primeiro Tab
 - [x] README, `CLAUDE.md`, licença MIT e créditos
 
 ## Fase 1: lançamento
 - [x] Descrição e tópicos no GitHub (`termux`, `dotfiles`, `chezmoi`, `bash`, `zsh`)
 - [x] Teste de instalação limpa como estranho (repo público, sem login)
-- [ ] Prints ou GIF curto no README
+- [x] Prints no README (bash e zsh)
 - [ ] Primeira versão marcada (`v1.0.0`) e `CHANGELOG.md`
 - [ ] Script de instalação em uma linha (instala `chezmoi` e `git` e já roda o `init`)
 - [ ] Aviso de pacotes que falharam no final da instalação
