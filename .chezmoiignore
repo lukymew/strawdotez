@@ -9,3 +9,4 @@ docs/
 {{- end }}
 install.sh
 scripts/
+CHANGELOG.md
