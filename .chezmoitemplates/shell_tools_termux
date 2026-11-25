@@ -1,0 +1,9 @@
+# Ferramentas interativas (só carregam se estiverem instaladas)
+if command -v fzf >/dev/null 2>&1; then
+    # Ctrl+R busca no histórico, Ctrl+T busca arquivos, Alt+C entra em pastas
+    if [ -n "$ZSH_VERSION" ]; then source <(fzf --zsh); else eval "$(fzf --bash)"; fi
+fi
+if command -v zoxide >/dev/null 2>&1; then
+    # z <parte-do-nome> pula para a pasta mais usada; zi abre seleção
+    if [ -n "$ZSH_VERSION" ]; then eval "$(zoxide init zsh)"; else eval "$(zoxide init bash)"; fi
+fi
