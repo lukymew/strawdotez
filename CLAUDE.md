@@ -81,3 +81,19 @@ Ver a seção "Inspirações" do README.
 - As perguntas da instalação ficam dentro de `.chezmoi.toml.tmpl` (o init não enxerga `.chezmoidata`).
 - Texto de pergunta não pode ter vírgula nem `=` (as flags `--promptString` usam o texto como chave).
 - README.md é em inglês e README.pt-BR.md em português: ao mudar um, mude o outro.
+
+## Estado atual (2026-11-25)
+
+- v1.0.0 lançada. Fase 1 do ROADMAP concluída; a próxima é a Fase 2 (CI, medição de abertura, verificação de segredos).
+- Repositório público, licença MIT. Bash abre em ~15 ms e zsh em ~30 ms no celular do dono.
+
+## Como trabalhar neste projeto
+
+- O dono usa só o celular (Termux). Trabalhe com comandos curtos, um passo por vez, e peça a saída de cada um.
+- Arquivos grandes: envie como arquivo para baixar. Colar heredocs longos no Termux quebra.
+- O repo de desenvolvimento fica em `~/strawdotez`: sempre `chezmoi -S ~/strawdotez ...`. A pasta `~/.local/share/chezmoi` é a cópia instalada pelo `install.sh`.
+- Mudou uma chave em `.chezmoi.toml.tmpl` ou em `.chezmoidata/`? Rode `chezmoi init -S ~/strawdotez` (senão `missingkey=error`).
+- Shebang dos scripts: `#!{{ env "PREFIX" }}/bin/bash` (o Termux não tem `/usr/bin/env`). `/tmp` não é gravável: use `$HOME` ou `$TMPDIR`.
+- Zsh e bash dividem os mesmos templates: mexeu em um, confira o outro (`bash -n` e `zsh -n` na saída renderizada).
+- Nunca versionar tokens, chaves ou e-mails reais. Teste mudanças renderizando os templates antes de pedir ao dono para aplicar.
+- Ao concluir um item, marque no ROADMAP e registre no CHANGELOG.
