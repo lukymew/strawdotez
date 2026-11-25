@@ -14,8 +14,8 @@ Legenda: `[x]` feito, `[ ]` planejado. As fases estão em ordem de prioridade, e
 - [x] README, `CLAUDE.md`, licença MIT e créditos
 
 ## Fase 1: lançamento
-- [ ] Descrição e tópicos no GitHub (`termux`, `dotfiles`, `chezmoi`, `bash`, `zsh`)
-- [ ] Teste de instalação limpa como estranho (repo público, sem login)
+- [x] Descrição e tópicos no GitHub (`termux`, `dotfiles`, `chezmoi`, `bash`, `zsh`)
+- [x] Teste de instalação limpa como estranho (repo público, sem login)
 - [ ] Prints ou GIF curto no README
 - [ ] Primeira versão marcada (`v1.0.0`) e `CHANGELOG.md`
 - [ ] Script de instalação em uma linha (instala `chezmoi` e `git` e já roda o `init`)
