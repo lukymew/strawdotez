@@ -3,6 +3,15 @@
 All notable changes to this project are documented here.
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.0] - 2026-11-25
+
+### Added
+- GitHub Actions CI: renders every template in pt and en, checks syntax (`bash -n`, `zsh -n`, `shellcheck`) and runs the secret scan (gitleaks).
+- `scripts/check-i18n.py`: checks that pt and en have the same messages.
+- `scripts/bench.sh`: measures shell startup against a time budget.
+- Pre-commit hook (`.githooks/pre-commit`) that blocks commits with tokens or private keys.
+- `CHECKLIST.md`: what to update for each kind of change.
+
 ## [1.0.0] - 2026-11-25
 
 First stable release.

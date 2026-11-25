@@ -84,7 +84,7 @@ Ver a seção "Inspirações" do README.
 
 ## Estado atual (2026-11-25)
 
-- v1.0.0 lançada. Fase 1 do ROADMAP concluída; a próxima é a Fase 2 (CI, medição de abertura, verificação de segredos).
+- v1.1.0 lançada. Fases 1 e 2 do ROADMAP concluídas (faltam, na Fase 2, o teste em contêiner do Termux e os testes das funções). A próxima é a Fase 3 (módulos opcionais, perfis de instalação e temas).
 - Repositório público, licença MIT. Bash abre em ~15 ms e zsh em ~30 ms no celular do dono.
 
 ## Como trabalhar neste projeto
