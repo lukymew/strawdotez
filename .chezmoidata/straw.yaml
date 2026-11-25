@@ -49,7 +49,7 @@ straw:
       group: net
       pt: "Rede (nmap, traceroute, whois, mtr, iperf3, netcat)"
       en: "Network (nmap, traceroute, whois, mtr, iperf3, netcat)"
-      termux: [nmap, traceroute, whois, mtr, iperf3, netcat-openbsd, openssl-tool]
+      termux: [nmap, traceroute, whois, iperf3, netcat-openbsd, openssl-tool]
       apt: [nmap, traceroute, whois, mtr-tiny, iperf3, netcat-openbsd]
       apk: [nmap, traceroute, whois, mtr, iperf3, netcat-openbsd]
     pentest:
@@ -57,7 +57,7 @@ straw:
       group: net
       pt: "Pentest (hydra, sqlmap, john): só em sistemas com autorização"
       en: "Pentest (hydra, sqlmap, john): only on systems you are authorized to test"
-      termux: [nmap, hydra, sqlmap]
+      termux: [nmap]
       apt: [nmap, hydra, sqlmap, john, nikto]
       apk: [nmap, hydra]
     privacy:
