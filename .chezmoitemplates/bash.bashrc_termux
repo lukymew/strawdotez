@@ -44,7 +44,7 @@ space() {
 }
 
 # Cache se lolcat está disponível (evita checar toda vez que print_logo roda)
-_HAS_LOLCAT=$(command -v lolcat)
+command -v lolcat >/dev/null 2>&1 && _HAS_LOLCAT=1
 
 # Função para exibir o logotipo
 print_logo() {

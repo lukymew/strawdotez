@@ -95,6 +95,15 @@ Inspiração: Dev Core Termux (adicionar o link do repositório aqui e estudar c
 - [ ] Testes em `proot-distro` e no CI com contêineres Debian, Ubuntu e Alpine
 - [ ] Documentar no README e na solução de problemas
 
+## Fase 11: bash enxuto (shell principal em todos os alvos)
+- [x] Abertura sem processos extras para fzf e zoxide
+- [ ] Zero processos (`$(...)`) em toda a abertura do bash
+- [ ] Carregar sob demanda as funções raras (IA local, rede), mantendo só stubs na abertura
+- [ ] Opção de instalação para desligar o logo e o cabeçalho (modo silencioso)
+- [ ] Um único arquivo de configuração em vez de `/etc/bash.bashrc` mais `~/.bashrc`
+- [ ] Meta: abertura a no máximo 1,5 vez o piso do bash (hoje 18ms contra 9ms)
+- [ ] Mesma configuração de bash no Debian, Ubuntu e Alpine (Fase 10)
+
 ## Ideias futuras
 - [ ] Perfil com `proot-distro` para quem precisa de Linux completo
 - [ ] Configuração pronta para usar o Claude Code no Termux
