@@ -74,6 +74,16 @@ Legenda: `[x]` feito, `[ ]` planejado. As fases estão em ordem de prioridade, e
 - [ ] Wiki ou site com a lista de aliases e funções
 - [ ] Agradecimentos e links atualizados para as fontes de cada trecho
 
+## Fase 9: menu interativo e addons
+Inspiração: Dev Core Termux (adicionar o link do repositório aqui e estudar como ele organiza os menus).
+- [ ] Menu interativo no terminal (`strawdotez menu`), com fzf ou gum
+- [ ] Catálogo de ferramentas por categoria (dev, rede, mídia, IA local, segurança), com instalação em um toque
+- [ ] Mostrar o que já está instalado e permitir remover
+- [ ] Addons: módulos do projeto que podem ser ligados e desligados depois da instalação
+- [ ] Lista de ferramentas escolhidas guardada em um arquivo local, aplicada pelo `chezmoi apply`
+- [ ] Descrição curta de cada ferramenta e dos aliases que ela traz
+- [ ] Documentar como criar um addon novo
+
 ## Ideias futuras
 - [ ] Perfil com `proot-distro` para quem precisa de Linux completo
 - [ ] Configuração pronta para usar o Claude Code no Termux
