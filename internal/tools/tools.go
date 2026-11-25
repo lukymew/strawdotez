@@ -74,17 +74,17 @@ func Render(w io.Writer, d *data.Data, es []Entry, plain bool, installed func(st
 	}
 	sort.Slice(groups, func(i, j int) bool { return rank(groups[i]) < rank(groups[j]) })
 	for _, g := range groups {
-		fmt.Fprintf(w, "\n%s\n", d.M("group_"+g))
+		head := d.M("group_" + g)
+		if plain {
+			head = stripEmoji(head)
+		}
+		fmt.Fprintf(w, "\n%s\n", head)
 		for _, e := range byGroup[g] {
 			mark := "  "
 			if installed != nil && installed(e.Pkg) {
 				mark = "✔ "
 			}
-			icon := ""
-			if !plain {
-				icon = e.Icon + " "
-			}
-			fmt.Fprintf(w, "  %s%s%-16s %s\n", mark, icon, e.Pkg, e.Module)
+			fmt.Fprintf(w, "  %s%-16s %s\n", mark, e.Pkg, e.Module)
 		}
 	}
 	if len(es) == 0 {
@@ -99,4 +99,22 @@ func rank(g string) int {
 		}
 	}
 	return len(groupOrder)
+}
+
+func stripEmoji(s string) string {
+	var b strings.Builder
+	skip := false
+	for _, r := range s {
+		if r >= 0x1F000 || r == 0xFE0F {
+			skip = true
+			continue
+		}
+		if skip && r == ' ' {
+			skip = false
+			continue
+		}
+		skip = false
+		b.WriteRune(r)
+	}
+	return b.String()
 }

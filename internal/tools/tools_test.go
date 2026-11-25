@@ -9,7 +9,7 @@ import (
 )
 
 func sample() *data.Data {
-	return &data.Data{Msg: map[string]string{"group_cli": "CLI tools", "group_net": "Network", "tools_none": "nothing found"},
+	return &data.Data{Msg: map[string]string{"group_cli": "🧰 CLI tools", "group_net": "Network", "tools_none": "nothing found"},
 		Modules: []data.Module{
 			{ID: "network", Icon: "📡", Group: "net", Desc: "Network tools", Packages: map[string][]string{"apt": {"nmap", "whois"}}},
 			{ID: "utils", Icon: "🧰", Group: "cli", Desc: "Everyday utilities", Packages: map[string][]string{"apt": {"jq", "nmap"}}},
@@ -54,15 +54,15 @@ func TestRender(t *testing.T) {
 	var b bytes.Buffer
 	Render(&b, d, es, false, func(p string) bool { return p == "jq" })
 	out := b.String()
-	for _, w := range []string{"CLI tools", "Network", "✔ 🧰 jq", "📡 whois"} {
+	for _, w := range []string{"🧰 CLI tools", "Network", "✔ jq", "whois"} {
 		if !strings.Contains(out, w) {
 			t.Errorf("falta %q:\n%s", w, out)
 		}
 	}
 	b.Reset()
 	Render(&b, d, es, true, nil)
-	if strings.Contains(b.String(), "🧰") {
-		t.Error("plain não deve ter emoji")
+	if strings.Contains(b.String(), "🧰") || !strings.Contains(b.String(), "CLI tools") {
+		t.Errorf("plain: texto sem emoji esperado:\n%s", b.String())
 	}
 	b.Reset()
 	Render(&b, d, nil, true, nil)

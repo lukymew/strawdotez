@@ -80,7 +80,7 @@ Depois ele instala os pacotes, baixa os plugins do zsh e aplica as configuraçõ
 | `crb` | restaura o `bash.bashrc` do Termux se ele for corrompido |
 | `straw menu` | abre o menu: ferramentas (módulos de pacotes) e perfis |
 | `straw install` | instala pacotes pelo nome |
-| `straw tools [busca]` | lista e busca ferramentas por grupo, com marca de instaladas (Go) |
+| `straw tools [busca]` | navegador interativo: busca ao vivo, marca várias e instala (Go); com um termo, só lista os resultados |
 | `straw doctor` | diagnostica o ambiente e as listas de pacotes (Go) |
 | `straw update` | baixa e aplica as novidades |
 

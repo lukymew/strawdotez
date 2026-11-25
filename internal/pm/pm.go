@@ -2,6 +2,8 @@
 package pm
 
 import (
+	"fmt"
+	"os"
 	"os/exec"
 	"strings"
 )
@@ -16,4 +18,28 @@ func Installed(env, pkg string) bool {
 		return err == nil && strings.TrimSpace(string(out)) != ""
 	}
 	return false
+}
+
+// Install instala os pacotes mostrando a saída do gerenciador. Fora do Termux
+// usa sudo quando não é root.
+func Install(env string, pkgs []string) error {
+	var args []string
+	switch env {
+	case "termux":
+		args = append([]string{"pkg", "install", "-y"}, pkgs...)
+	case "apt":
+		args = append([]string{"apt-get", "install", "-y"}, pkgs...)
+	case "apk":
+		args = append([]string{"apk", "add"}, pkgs...)
+	default:
+		return fmt.Errorf("ambiente não suportado")
+	}
+	if env != "termux" && os.Geteuid() != 0 {
+		if _, err := exec.LookPath("sudo"); err == nil {
+			args = append([]string{"sudo"}, args...)
+		}
+	}
+	c := exec.Command(args[0], args[1:]...)
+	c.Stdin, c.Stdout, c.Stderr = os.Stdin, os.Stdout, os.Stderr
+	return c.Run()
 }

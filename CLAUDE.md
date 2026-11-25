@@ -51,7 +51,8 @@ O projeto é **só Termux**: não há suporte a PC/Linux, e não deve voltar a h
 ## Parte em Go
 - Só o que compensa em Go (doctor, navegador com busca). O bash continua sendo a base; o menu principal é bash com fzf.
 - Dados vêm do `straw.json`; mensagens do `.chezmoidata/i18n.yaml` (chaves `straw_*`, usadas sem o prefixo no Go).
-- Sem dependências externas por enquanto (só a biblioteca padrão). Antes de adicionar uma, meça o tempo de build no celular.
+- `internal/ui`: interface de terminal própria (modo raw via `syscall`, teclas, tela com cores e emojis). Sem dependências externas: o sandbox não alcança `proxy.golang.org` nem `golang.org/x`. `STRAW_UI_SIMPLE=1` usa o modo simples (lista e prompt).
+- Antes de adicionar uma, meça o tempo de build no celular.
 - Código de sistema (`dpkg`, `apk`, `PATH`) fica atrás da interface `System` para os testes usarem um falso.
 - Teste: `gofmt -l .`, `go vet ./...` e `go test ./...` (o CI roda os três). Compilar no celular: `go build -o ~/.local/bin/straw-ui ./cmd/straw-ui`.
 - Colunas dos `.tsv` são conferidas em `scripts/ci-check.sh`: mudou a quantidade, ajuste lá e no bash.

@@ -11,6 +11,7 @@ import (
 	"github.com/lukymew/strawdotez/internal/doctor"
 	"github.com/lukymew/strawdotez/internal/pm"
 	"github.com/lukymew/strawdotez/internal/tools"
+	"github.com/lukymew/strawdotez/internal/ui"
 )
 
 // version é preenchida no build: -ldflags "-X main.version=v1.2.0".
@@ -68,10 +69,18 @@ func runTools(args []string) int {
 		show(strings.Join(args, " "))
 		return 0
 	}
-	show("")
 	if !isTTY() {
+		show("")
 		return 0
 	}
+	if os.Getenv("STRAW_UI_SIMPLE") != "1" && env.Key != "" {
+		th := ui.Theme{Color: os.Getenv("NO_COLOR") == "", Plain: plain}
+		return ui.Run(d, all, th, ui.Hooks{
+			Installed: inst,
+			Install:   func(p []string) error { return pm.Install(env.Key, p) },
+		})
+	}
+	show("")
 	in := bufio.NewScanner(os.Stdin)
 	for {
 		fmt.Print("\n" + d.M("tools_prompt") + " ")
