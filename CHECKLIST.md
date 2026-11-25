@@ -27,6 +27,17 @@ Antes de dar `git push`, confira o que a mudança toca.
 - [ ] `.chezmoidata/packages.yaml`
 - [ ] README (en e pt-BR): lista de pacotes
 
+## Mexeu no `straw` ou em módulos e perfis
+- [ ] `.chezmoidata/straw.yaml` (pt e en na descrição, `icon` e `group`)
+- [ ] Mudou colunas de `modules.tsv` ou `profiles.tsv`? Atualizar `scripts/ci-check.sh` e o bash
+- [ ] Rodar `bash scripts/ci-check.sh` e `shellcheck -S warning dot_local/bin/executable_straw`
+- [ ] README (en e pt-BR): tabela de comandos
+
+## Mexeu em Go (`cmd/`, `internal/`)
+- [ ] `gofmt -l .` vazio, `go vet ./...` e `go test ./...` passando
+- [ ] Recompilar no celular: `go build -o ~/.local/bin/straw-ui ./cmd/straw-ui`
+- [ ] Mensagem nova: chave `straw_*` nos dois idiomas
+
 ## Mudou o visual (logo, prompt, cores)
 - [ ] Refazer os prints em `docs/bash.jpg` e `docs/zsh.jpg`
 

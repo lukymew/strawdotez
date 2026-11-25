@@ -80,7 +80,18 @@ Depois ele instala os pacotes, baixa os plugins do zsh e aplica as configuraçõ
 | `crb` | restaura o `bash.bashrc` do Termux se ele for corrompido |
 | `straw menu` | abre o menu: ferramentas (módulos de pacotes) e perfis |
 | `straw install` | instala pacotes pelo nome |
+| `straw tools [busca]` | lista e busca ferramentas por grupo, com marca de instaladas (Go) |
+| `straw doctor` | diagnostica o ambiente e as listas de pacotes (Go) |
 | `straw update` | baixa e aplica as novidades |
+
+`straw tools` e `straw doctor` usam o binário pequeno `straw-ui`, em Go. Até ele virar release, compile uma vez no aparelho:
+
+```sh
+pkg install golang
+go build -o ~/.local/bin/straw-ui ./cmd/straw-ui
+```
+
+`STRAW_PLAIN=1` desliga os emojis do menu.
 
 ## Estrutura
 
@@ -89,6 +100,7 @@ Depois ele instala os pacotes, baixa os plugins do zsh e aplica as configuraçõ
 .chezmoidata/packages.yaml  lista de pacotes
 .chezmoidata/straw.yaml     módulos e perfis do `straw menu`
 .chezmoiexternal.toml       plugins do zsh baixados do GitHub
+cmd/ e internal/            parte em Go do `straw` (doctor e tools)
 .chezmoiscripts/            instala pacotes, bash.bashrc e recarrega o Termux
 .chezmoitemplates/          peças reutilizáveis (aliases, funções, opções)
 dot_bashrc.tmpl             monta o ~/.bashrc

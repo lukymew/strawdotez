@@ -34,7 +34,7 @@ Legenda: `[x]` feito, `[ ]` planejado. As fases estão em ordem de prioridade, e
 ## Fase 3: personalização
 - [x] Comando `straw` com `straw menu`: ferramentas por módulo e perfis (mínimo, padrão e completo)
 - [ ] Módulos opcionais por pergunta: IA local (llama.cpp), rede e segurança, criptografia
-- [ ] Perfis de instalação: mínimo, padrão e completo
+- [x] Perfis de instalação: mínimo, padrão e completo (`straw menu`)
 - [ ] Escolha de tema de cores (temas do Gogh) e de fonte na instalação
 - [ ] Mais perfis de tela, como celular com teclado físico
 - [ ] Escolha do shell padrão (bash ou zsh) por pergunta
@@ -64,7 +64,12 @@ Legenda: `[x]` feito, `[ ]` planejado. As fases estão em ordem de prioridade, e
 
 ## Fase 7: experiência de uso
 - [ ] Comando `strawdotez` com subcomandos: `update`, `doctor`, `perfil`, `bench`
-- [ ] `strawdotez doctor`: diagnóstico (pacotes, plugins, identidade do git, permissões)
+- [x] `straw doctor` em Go: ambiente, ferramentas, PATH e pacotes que não existem (faltam plugins, identidade do git e permissões)
+- [x] `straw tools`: lista com busca, agrupada, em Go
+- [x] Emojis no menu (`STRAW_PLAIN=1` desliga)
+- [ ] Release do binário `straw-ui` por CI (arm64 e x86_64) e `install.sh` baixando em vez de compilar
+- [ ] Instalar pelo navegador em Go (escolher e instalar de dentro do `straw tools`)
+- [ ] Seção "Ferramentas específicas" com descrição por ferramenta
 - [ ] Desinstalação e volta ao estado anterior (backup automático dos arquivos substituídos)
 - [ ] Mensagem final da instalação dizendo o que foi instalado e o que fazer depois
 - [ ] Mensagens e documentação em português e inglês

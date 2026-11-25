@@ -80,7 +80,18 @@ Then it installs the packages, downloads the zsh plugins and applies the setting
 | `crb` | restores Termux's `bash.bashrc` if it gets corrupted |
 | `straw menu` | opens the menu: tools (package modules) and profiles |
 | `straw install` | installs packages by name |
+| `straw tools [search]` | lists and searches tools by group, with installed marks (Go) |
+| `straw doctor` | diagnoses the environment and package lists (Go) |
 | `straw update` | pulls and applies the latest changes |
+
+`straw tools` and `straw doctor` use the small Go binary `straw-ui`. Until it is published as a release, build it once on the device:
+
+```sh
+pkg install golang
+go build -o ~/.local/bin/straw-ui ./cmd/straw-ui
+```
+
+`STRAW_PLAIN=1` turns the menu emojis off.
 
 ## Layout
 
@@ -90,6 +101,7 @@ Then it installs the packages, downloads the zsh plugins and applies the setting
 .chezmoidata/i18n.yaml      messages in Portuguese and English
 .chezmoidata/straw.yaml     modules and profiles for `straw menu`
 .chezmoiexternal.toml       zsh plugins downloaded from GitHub
+cmd/ and internal/          Go part of `straw` (doctor and tools)
 .chezmoiscripts/            installs packages, bash.bashrc and reloads Termux
 .chezmoitemplates/          reusable pieces (aliases, functions, options)
 dot_bashrc.tmpl             builds ~/.bashrc

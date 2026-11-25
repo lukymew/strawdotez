@@ -21,6 +21,10 @@ O projeto é **só Termux**: não há suporte a PC/Linux, e não deve voltar a h
 - `dot_bashrc.tmpl` e `dot_zshrc.tmpl`: só montam as peças, em ordem.
 - `private_dot_gitconfig` e `create_private_dot_gitconfig-local.tmpl`: git.
 - `private_dot_termux/`: `termux.properties.cell` e `.tablet`, cores e fonte.
+- `.chezmoidata/straw.yaml`: módulos (com `icon`, `group` cli/dev/net e pacotes por ambiente termux/apt/apk) e perfis (com `icon`) do comando `straw`.
+- `dot_local/bin/executable_straw`: o comando `straw` em bash (menu fzf, install, doctor, tools). É a base e o plano B.
+- `dot_local/share/strawdotez/`: dados gerados pelo chezmoi para o `straw`: `messages.sh`, `modules.tsv` (7 colunas), `profiles.tsv` (5 colunas) e `straw.json` (para o Go).
+- `cmd/straw-ui/` e `internal/{data,doctor,tools,pm}/`: parte em Go que **completa** o bash (`straw doctor` e `straw tools`). Lê o `straw.json`. Não substitui o bash.
 
 ### Peças em `.chezmoitemplates/`
 - Comuns a bash e zsh: `env_common`, `aliases_common`, `aliases_termux`, `functions_utils_termux`, `functions_net_termux`, `functions_termux`, `functions_ai_termux`, `shell_tools_termux` (fzf e zoxide). `shell_common_termux` só agrega as funções e aliases.
@@ -43,6 +47,14 @@ O projeto é **só Termux**: não há suporte a PC/Linux, e não deve voltar a h
 - Não adicione `$(...)` ou `eval` na abertura do shell sem medir. Para saídas de ferramentas, use cache (como em `shell_tools_termux`, com cache em `~/.cache`).
 - Aliases e funções novos vão no arquivo do assunto, com comentário de uso.
 - Mensagens de commit em português, curtas e no imperativo.
+
+## Parte em Go
+- Só o que compensa em Go (doctor, navegador com busca). O bash continua sendo a base; o menu principal é bash com fzf.
+- Dados vêm do `straw.json`; mensagens do `.chezmoidata/i18n.yaml` (chaves `straw_*`, usadas sem o prefixo no Go).
+- Sem dependências externas por enquanto (só a biblioteca padrão). Antes de adicionar uma, meça o tempo de build no celular.
+- Código de sistema (`dpkg`, `apk`, `PATH`) fica atrás da interface `System` para os testes usarem um falso.
+- Teste: `gofmt -l .`, `go vet ./...` e `go test ./...` (o CI roda os três). Compilar no celular: `go build -o ~/.local/bin/straw-ui ./cmd/straw-ui`.
+- Colunas dos `.tsv` são conferidas em `scripts/ci-check.sh`: mudou a quantidade, ajuste lá e no bash.
 
 ## Como testar (sempre antes de commitar)
     chezmoi -S ~/strawdotez diff
@@ -84,7 +96,9 @@ Ver a seção "Inspirações" do README.
 
 ## Estado atual (2026-11-25)
 
-- v1.1.0 lançada. Fases 1 e 2 do ROADMAP concluídas (faltam, na Fase 2, o teste em contêiner do Termux e os testes das funções). A próxima é a Fase 3 (módulos opcionais, perfis de instalação e temas).
+- v1.1.0 lançada. Em "Unreleased" (rumo à v1.2.0): `straw` com menu, módulos e perfis; parte em Go (`straw doctor`, `straw tools`); emojis no menu. Falta a release do binário por CI (hoje o `straw-ui` é compilado no celular).
+- Fase 2: faltam o teste em contêiner (Ubuntu e Alpine, prompt para o Gemini pronto) e os testes das funções (bats).
+- Pacotes que não existem no Termux padrão (`hydra`, `sqlmap`, `mtr`) foram removidos da lista do Termux; falta confirmar nomes e o `tur-repo`.
 - Repositório público, licença MIT. Bash abre em ~15 ms e zsh em ~30 ms no celular do dono.
 
 ## Como trabalhar neste projeto
