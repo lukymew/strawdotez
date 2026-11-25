@@ -74,3 +74,10 @@ Se o repo estiver privado, acrescente `GH_CONFIG_DIR=$HOME/.config/gh GIT_CONFIG
 
 ## Créditos e inspirações
 Ver a seção "Inspirações" do README.
+
+## Idiomas (pt e en)
+
+- O idioma vem da chave `lang` (pergunta no `chezmoi init`). Mensagens de execução ficam em `.chezmoidata/i18n.yaml`, sempre nos dois idiomas, e entram nos templates com `{{ index .i18n .lang "chave" }}`.
+- As perguntas da instalação ficam dentro de `.chezmoi.toml.tmpl` (o init não enxerga `.chezmoidata`).
+- Texto de pergunta não pode ter vírgula nem `=` (as flags `--promptString` usam o texto como chave).
+- README.md é em inglês e README.pt-BR.md em português: ao mudar um, mude o outro.

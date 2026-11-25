@@ -10,10 +10,10 @@ crb() {
     if [ ! -f "$b" ] || [ "$size" -lt 100 ]; then
         if [ -f "${b}.bkp" ]; then
             cat "${b}.bkp" > "$b"
-            echo "✅ bash.bashrc restaurado!"
-            [[ $- == *i* ]] && source "$b" && echo "✅ Recarregado!"
+            echo "✅ {{ index .i18n .lang "crb_restored" }}"
+            [[ $- == *i* ]] && source "$b" && echo "✅ {{ index .i18n .lang "crb_reloaded" }}"
         else
-            echo "⚠️ Backup ${b}.bkp não encontrado."
+            echo "⚠️ {{ index .i18n .lang "crb_nobkp" }}"
         fi
     else
         echo "✅ bash.bashrc OK"
@@ -28,13 +28,13 @@ function termux-modo-tablet() {
     local ativo="$HOME/.termux/termux.properties"
 
     if [ ! -f "$perfil" ]; then
-        echo "⚠️ Perfil de tablet não encontrado: $perfil"
+        echo "⚠️ {{ index .i18n .lang "tab_missing" }}"
         return 1
     fi
 
     cp "$perfil" "$ativo" || return 1
     termux-reload-settings
-    echo "📐 Perfil de tablet ativado!"
+    echo "📐 {{ index .i18n .lang "tab_on" }}"
 }
 
 # --- termux-modo-celular ---
@@ -45,11 +45,11 @@ function termux-modo-celular() {
     local ativo="$HOME/.termux/termux.properties"
 
     if [ ! -f "$perfil" ]; then
-        echo "⚠️ Perfil de celular não encontrado: $perfil"
+        echo "⚠️ {{ index .i18n .lang "cell_missing" }}"
         return 1
     fi
 
     cp "$perfil" "$ativo" || return 1
     termux-reload-settings
-    echo "📱 Perfil de celular ativado!"
+    echo "📱 {{ index .i18n .lang "cell_on" }}"
 }

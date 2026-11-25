@@ -29,12 +29,12 @@ function xtop() {
 
 # --- jsv ---
 # Valida a sintaxe de um ou mais arquivos JSON.
-# uso: jsv <arquivo.json> [<arquivo.json>..]
+# {{ index .i18n .lang "u_jsv" }}
 function jsv() {
-    local USAGE="uso: jsv <arquivo.json> [<arquivo.json>..]"
+    local USAGE="{{ index .i18n .lang "u_jsv" }}"
     [ -z "$1" ] && { echo "$USAGE" >&2; return; }
     [ "$1" == "-h" ] && { echo "$USAGE" >&2; return; }
-    command -v python3 >/dev/null 2>&1 || { echo "Comando python3 não encontrado" >&2; return; }
+    command -v python3 >/dev/null 2>&1 || { echo "{{ index .i18n .lang "e_python3" }}" >&2; return; }
     while [ "$1" != "" ]; do
         echo -n "$1: "
         python3 -m json.tool "$1" >/dev/null && echo "OK"
@@ -44,18 +44,18 @@ function jsv() {
 
 # --- lcfile ---
 # Renomeia arquivo(s) convertendo o nome para minúsculas.
-# uso: lcfile <arquivo> [<arquivo>..]
+# {{ index .i18n .lang "u_lcfile" }}
 function lcfile() {
-    local USAGE="uso: lcfile <arquivo> [<arquivo>..]"
+    local USAGE="{{ index .i18n .lang "u_lcfile" }}"
     [ "$1" = "" ] && { echo "$USAGE" >&2; return; }
     [ "$1" = "-h" ] || [ "$1" = "--help" ] && { echo "$USAGE" >&2; return; }
     while [ "$1" != "" ]; do
         if [ -e "$1" ]; then
             local DST
             DST="$(dirname "$1")/$(basename "$1" | tr '[:upper:]' '[:lower:]')"
-            [ ! -e "$DST" ] && mv -T "$1" "$DST" || echo "falha ao renomear: $1" >&2
+            [ ! -e "$DST" ] && mv -T "$1" "$DST" || echo "{{ index .i18n .lang "e_rename" }}" >&2
         else
-            echo "arquivo inválido: $1" >&2
+            echo "{{ index .i18n .lang "e_invalid" }}" >&2
         fi
         shift
     done
@@ -63,9 +63,9 @@ function lcfile() {
 
 # --- rsfile ---
 # Substitui uma substring pelo nome de um ou mais arquivos.
-# uso: rsfile <string-busca> <string-substituição> <arquivo> [<arquivo>..]
+# {{ index .i18n .lang "u_rsfile" }}
 function rsfile() {
-    local USAGE="uso: rsfile <string-busca> <string-substituição> <arquivo> [<arquivo>..]"
+    local USAGE="{{ index .i18n .lang "u_rsfile" }}"
     local sstr=""
     local rstr=""
     while [ "$rstr" == "" ]; do
@@ -83,9 +83,9 @@ function rsfile() {
             local FNAME DST
             FNAME="$(basename "$1")"
             DST="$(dirname "$1")/${FNAME/${sstr}/${rstr}}"
-            [ ! -e "$DST" ] && mv -T "$1" "$DST" || echo "falha ao renomear: $1" >&2
+            [ ! -e "$DST" ] && mv -T "$1" "$DST" || echo "{{ index .i18n .lang "e_rename" }}" >&2
         else
-            echo "arquivo inválido: $1" >&2
+            echo "{{ index .i18n .lang "e_invalid" }}" >&2
         fi
         shift
     done
@@ -93,9 +93,9 @@ function rsfile() {
 
 # --- ascify ---
 # Remove caracteres não-ASCII do conteúdo de um ou mais arquivos (saída no stdout).
-# uso: ascify <arquivo> [<arquivo> ..]
+# {{ index .i18n .lang "u_ascify" }}
 function ascify() {
-    local USAGE="uso: ascify <arquivo> [<arquivo> ..]"
+    local USAGE="{{ index .i18n .lang "u_ascify" }}"
     [ -z "$1" ] && { echo "$USAGE" >&2; return; }
     [ "$1" == "-h" ] && { echo "$USAGE" >&2; return; }
     while [ "$1" != "" ]; do
@@ -106,9 +106,9 @@ function ascify() {
 
 # --- trim-ws ---
 # Remove espaços em branco no final das linhas de um ou mais arquivos.
-# uso: trim-ws <arquivo> [<arquivo> ..]
+# {{ index .i18n .lang "u_trimws" }}
 function trim-ws() {
-    local USAGE="uso: trim-ws <arquivo> [<arquivo> ..]"
+    local USAGE="{{ index .i18n .lang "u_trimws" }}"
     [ -z "$1" ] && { echo "$USAGE" >&2; return; }
     [ "$1" == "-h" ] && { echo "$USAGE" >&2; return; }
     sed -i 's/[ \t]*$//' "$@"
@@ -116,12 +116,12 @@ function trim-ws() {
 
 # --- trim-tab ---
 # Converte tabs em espaços (4 colunas) em um ou mais arquivos. Requer moreutils (sponge).
-# uso: trim-tab <arquivo> [<arquivo> ..]
+# {{ index .i18n .lang "u_trimtab" }}
 function trim-tab() {
-    local USAGE="uso: trim-tab <arquivo> [<arquivo> ..]"
+    local USAGE="{{ index .i18n .lang "u_trimtab" }}"
     [ -z "$1" ] && { echo "$USAGE" >&2; return; }
     [ "$1" == "-h" ] && { echo "$USAGE" >&2; return; }
-    command -v sponge >/dev/null 2>&1 || { echo "sponge não encontrado. Instale moreutils" >&2; return; }
+    command -v sponge >/dev/null 2>&1 || { echo "{{ index .i18n .lang "e_sponge" }}" >&2; return; }
     while [ "$1" != "" ]; do
         expand -t 4 "$1" | sponge "$1"
         shift
@@ -143,25 +143,25 @@ function code-analysis() {
 # Listam arquivos-fonte por linguagem em um diretório.
 # uso: c-src|py-src|r-src|json-src [diretório]
 function c-src() {
-    [ "$1" == "-h" ] && { echo "uso: c-src [diretório]" >&2; return; }
+    [ "$1" == "-h" ] && { echo "{{ index .i18n .lang "u_csrc" }}" >&2; return; }
     local SRC="${1:-.}"
     find "$SRC" -regextype posix-extended -regex "^.*\.(cpp|hpp|c|h)$" | grep -ve "^\./debian"
 }
 
 function py-src() {
-    [ "$1" == "-h" ] && { echo "uso: py-src [diretório]" >&2; return; }
+    [ "$1" == "-h" ] && { echo "{{ index .i18n .lang "u_pysrc" }}" >&2; return; }
     local SRC="${1:-.}"
     find "$SRC" -name "*.py"
 }
 
 function r-src() {
-    [ "$1" == "-h" ] && { echo "uso: r-src [diretório]" >&2; return; }
+    [ "$1" == "-h" ] && { echo "{{ index .i18n .lang "u_rsrc" }}" >&2; return; }
     local SRC="${1:-.}"
     find "$SRC" -regex ".*\.[rR]"
 }
 
 function json-src() {
-    [ "$1" == "-h" ] && { echo "uso: json-src [diretório]" >&2; return; }
+    [ "$1" == "-h" ] && { echo "{{ index .i18n .lang "u_jsonsrc" }}" >&2; return; }
     local SRC="${1:-.}"
     find "$SRC" -iname "*.json"
 }
@@ -186,10 +186,10 @@ function extract() {
         *.7z) 7z x "$1" ;;
         *.xz) unxz "$1" ;;
         *.zst) unzstd "$1" ;;
-        *) echo "'$1' não pode ser extraído usando a função 'extract'" ;;
+        *) echo "{{ index .i18n .lang "e_extract" }}" ;;
         esac
     else
-        echo "'$1' não é um arquivo válido"
+        echo "{{ index .i18n .lang "e_notfile" }}"
     fi
 }
 
@@ -232,12 +232,12 @@ function rot13() {
 
 # --- atop ---
 # Mostra as threads de um processo em tempo real via top -H.
-# uso: atop <nome-processo>
+# {{ index .i18n .lang "u_atop" }}
 function atop() {
-    [ -z "$1" ] && { echo "uso: atop <nome-processo>" >&2; return; }
+    [ -z "$1" ] && { echo "{{ index .i18n .lang "u_atop" }}" >&2; return; }
     local pids
     pids=$(pgrep -d, "$1")
-    [ -z "$pids" ] && { echo "processo não encontrado: $1" >&2; return; }
+    [ -z "$pids" ] && { echo "{{ index .i18n .lang "e_noproc" }}" >&2; return; }
     top -H -p "$pids"
 }
 
@@ -250,7 +250,7 @@ function atop() {
 # uso: clone <url_repositório>
 function clone() {
     if [ $# -lt 1 ]; then
-        echo "Uso: clone <url_repositório>"
+        echo "{{ index .i18n .lang "u_clone" }}"
         return 1
     fi
 
@@ -262,10 +262,10 @@ function clone() {
     local destination="$default_destination/clone-$counter"
 
     if ! git clone -q "$1" "$destination"; then
-        echo "Erro: Falha ao clonar."
+        echo "{{ index .i18n .lang "e_clone" }}"
         return 1
     fi
-    echo "Clone realizado com sucesso. Repositório clonado para '$destination'"
+    echo "{{ index .i18n .lang "ok_clone" }}"
 }
 
 mkcd() { mkdir -p "$1" && cd "$1"; }

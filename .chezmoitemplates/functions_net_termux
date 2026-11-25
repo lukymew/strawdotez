@@ -5,9 +5,9 @@
 
 # --- @ip-locator ---
 # Consulta informações de geolocalização/ISP de um ou mais IPs via ipinfo.io.
-# uso: ip-locator <ip> [<ip>..]
+# {{ index .i18n .lang "u_iploc" }}
 function @ip-locator() {
-    local USAGE="uso: ip-locator <ip> [<ip>..]"
+    local USAGE="{{ index .i18n .lang "u_iploc" }}"
     [ "$1" == "-h" ] && { echo "$USAGE" >&2; return; }
     [ $# -eq 0 ] && { echo "$USAGE" >&2; return; }
     while [ "$1" != "" ]; do
@@ -18,9 +18,9 @@ function @ip-locator() {
 
 # --- @ip-resolver ---
 # Resolve o IP de um ou mais domínios usando o resolver da OpenDNS.
-# uso: ip-resolver <nome-domínio> [<nome-domínio>..]
+# {{ index .i18n .lang "u_ipres" }}
 function @ip-resolver() {
-    local USAGE="uso: ip-resolver <nome-domínio> [<nome-domínio>..]"
+    local USAGE="{{ index .i18n .lang "u_ipres" }}"
     [ "$1" == "-h" ] && { echo "$USAGE" >&2; return; }
     [ $# -eq 0 ] && { echo "$USAGE" >&2; return; }
     while [ "$1" != "" ]; do
