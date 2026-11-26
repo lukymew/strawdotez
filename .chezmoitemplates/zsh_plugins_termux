@@ -1,4 +1,4 @@
-# Plugins do zsh (instalados via pkg)
+# Plugins do zsh (baixados do GitHub pelo .chezmoiexternal.toml)
 ZSH_AUTOSUGGEST_STRATEGY=(history)
 ZSH_AUTOSUGGEST_USE_ASYNC=1
 

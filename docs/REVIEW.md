@@ -33,6 +33,20 @@ Gravidade: **alta** (corrigir já), **média** (corrigir na próxima versão), *
 | 13 | baixa (corrigido) | `functions_ai_termux` e módulo `ai` | As funções esperam binários em `~/llama-bin`, mas o módulo `ai` do `straw` instala o pacote `llama-cpp` do Termux. Os dois caminhos coexistem sem explicação. | Escolher um e documentar. |
 | 14 | baixa (corrigido) | `.githooks/pre-commit` | O hook só vale depois de `git config core.hooksPath .githooks`, feito à mão em cada clone. | Documentar no `CONTRIBUTING.md` (planejado) ou ativar pelo `install.sh` no clone de desenvolvimento. |
 
+## Segunda rodada: zsh, `ci-check.sh` e `check-i18n.py`
+
+Lidos depois da primeira revisão: `zsh_opts_termux`, `zsh_compat_termux`, `zsh_prompt_termux`, `zsh_plugins_termux`, `.chezmoiexternal.toml`, `scripts/ci-check.sh` e `scripts/check-i18n.py`.
+
+| # | Gravidade | Onde | Problema | Situação |
+|---|---|---|---|---|
+| 15 | média | `.chezmoiexternal.toml` | Os plugins do zsh são clonados do ramo principal (`git-repo`) e rodam em toda sessão do zsh: se o repositório deles for comprometido, o código chega ao seu terminal em até 7 dias. | **Pendente**: fixar uma versão com `archive` e `checksum` (o sandbox não alcança os arquivos do GitHub para calcular o sha256; o dono calcula no celular). |
+| 16 | média | `check-i18n.py` | Só comparava os nomes das chaves. Uma mensagem com `%s` em pt e sem em en passava, e um `$` ou crase numa chave `straw_*` quebraria o `messages.sh`. | Corrigido: confere os `%s`/`%d` e proíbe `$` e crase nas chaves `straw_*` (testado com uma mudança forçada). |
+| 17 | baixa | `ci-check.sh` | Deixava pastas temporárias para trás e não validava o `straw.json`. | Corrigido: limpa ao sair e valida o JSON. |
+| 18 | baixa | `bashrc_termux` | `HISTCONTROL=ignoredups` salva comandos que começam com espaço; o zsh não salva (`HIST_IGNORE_SPACE`). Um segredo digitado com espaço na frente ficava no histórico do bash. | Corrigido: `ignoreboth`. |
+| 19 | baixa | `zsh_plugins_termux` | O comentário dizia "instalados via pkg", mas vêm do GitHub. | Corrigido. |
+| 20 | baixa | `zsh_compat_termux` | O `command_not_found_handler` do zsh é mais pobre que o do bash (sem as dicas por comando). | Aberto, preferência. |
+| 21 | baixa | `zsh_opts_termux` | `setopt CORRECT` pergunta "corrigir para...?" a cada comando digitado errado, o que atrapalha no teclado do celular. | Aberto, preferência: considerar `unsetopt CORRECT`. |
+
 ## Pontos fortes (manter)
 
 - Núcleo rápido e medido, com orçamento de tempo e cache nas ferramentas interativas.

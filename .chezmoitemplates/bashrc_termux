@@ -11,7 +11,7 @@ shopt -s checkwinsize
 
 HISTSIZE=4000
 HISTFILESIZE=5000
-HISTCONTROL=ignoredups
+HISTCONTROL=ignoreboth   # ignora repetidos e comandos que começam com espaço (bom para segredos)
 
 {{ template "env_common" . }}
 {{ template "aliases_common" . }}

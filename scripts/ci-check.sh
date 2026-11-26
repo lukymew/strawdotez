@@ -8,6 +8,8 @@ REPO="$(cd "$(dirname "$0")/.." && pwd)"
 export PREFIX="${PREFIX:-/data/data/com.termux/files/usr}"
 case "$PREFIX" in /data/data/com.termux*) ;; *) export PREFIX=/data/data/com.termux/files/usr ;; esac
 fail=0
+tmps=()
+trap 'rm -rf "${tmps[@]}"' EXIT
 ok()  { printf '  ok   %s\n' "$1"; }
 bad() { printf '  ERRO %s\n' "$1"; fail=1; }
 
@@ -16,7 +18,7 @@ echo "== mensagens pt/en"
 
 for lang in pt en; do
     echo "== idioma: $lang"
-    H="$(mktemp -d)"
+    H="$(mktemp -d)"; tmps+=("$H")
     if ! HOME="$H" "$CZ" init -S "$REPO" --promptDefaults --promptChoice "Idioma / Language (pt or en)=$lang" >"$H/init.log" 2>&1; then
         bad "init ($lang)"; cat "$H/init.log"; continue
     fi
@@ -31,9 +33,10 @@ for lang in pt en; do
     bash -n "$H/.bashrc.out" 2>"$H/err" && ok "bash -n .bashrc" || { bad "bash -n .bashrc"; cat "$H/err"; }
     zsh -n "$H/.zshrc.out" 2>"$H/err" && ok "zsh -n .zshrc" || { bad "zsh -n .zshrc"; cat "$H/err"; }
     D=".local/share/strawdotez"
-    for f in messages.sh modules.tsv profiles.tsv; do
+    for f in messages.sh modules.tsv profiles.tsv straw.json; do
         HOME="$H" "$CZ" -S "$REPO" cat "$H/$D/$f" >"$H/$f" 2>"$H/err" && [ -s "$H/$f" ] && ok "straw: $f" || { bad "straw: $f"; cat "$H/err"; }
     done
+    python3 -m json.tool "$H/straw.json" >/dev/null 2>"$H/err" && ok "straw.json é JSON válido" || { bad "straw.json inválido"; cat "$H/err"; }
     bash -n "$H/messages.sh" 2>"$H/err" && ok "bash -n messages.sh" || { bad "bash -n messages.sh"; cat "$H/err"; }
     awk -F'\t' 'NF != 7 { exit 1 }' "$H/modules.tsv" && awk -F'\t' 'NF != 5 { exit 1 }' "$H/profiles.tsv" && ok "straw: colunas" || bad "straw: colunas"
     for s in "$REPO"/.chezmoiscripts/*.tmpl; do
