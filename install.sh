@@ -1,5 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
-# strawdotez: instalador de uma linha / one-line installer (Termux)
+# strawdotez: instalador de uma linha / one-line installer (Termux, Debian, Ubuntu)
 #   curl -fsSL https://raw.githubusercontent.com/lukymew/strawdotez/main/install.sh | bash
 #   ... | bash -s -- --defaults     (sem perguntas / no questions)
 #   ... | bash -s -- --version v1.2.0   (fixa uma versão / pin a version)
@@ -44,9 +44,25 @@ get_ui() {
     return 1
 }
 
-case "${PREFIX:-}" in
-    /data/data/com.termux*) ;;
-    *) m "strawdotez: este instalador é só para o Termux." "strawdotez: this installer is for Termux only."; exit 1 ;;
+# alvo: Termux, ou Debian/Ubuntu (proot-distro ou nativo)
+TARGET="${STRAW_TARGET:-}"
+if [ -z "$TARGET" ]; then
+    case "${PREFIX:-}" in
+        /data/data/com.termux*) TARGET=termux ;;
+        *)
+            ids=""
+            [ -r /etc/os-release ] && ids="$(sed -n 's/^ID=//p;s/^ID_LIKE=//p' /etc/os-release | tr -d '"' | tr '\n' ' ')"
+            case "$ids" in
+                *debian*|*ubuntu*) TARGET=debian ;;
+                *alpine*) TARGET=alpine ;;
+                *) TARGET=unknown ;;
+            esac ;;
+    esac
+fi
+case "$TARGET" in
+    termux|debian) ;;
+    alpine) m "strawdotez: o Alpine ainda não é suportado (só Termux e Debian/Ubuntu)." "strawdotez: Alpine is not supported yet (only Termux and Debian/Ubuntu)."; exit 1 ;;
+    *) m "strawdotez: ambiente não suportado (só Termux e Debian/Ubuntu)." "strawdotez: unsupported environment (only Termux and Debian/Ubuntu)."; exit 1 ;;
 esac
 
 defaults=0
@@ -67,9 +83,24 @@ if [ -n "$ver" ]; then
     m "strawdotez: instalando a versão $ver (fixada: 'straw update' não atualiza; rode o instalador de novo para trocar)." "strawdotez: installing version $ver (pinned: 'straw update' will not move it; run the installer again to change)."
 fi
 
-if ! command -v chezmoi >/dev/null 2>&1 || ! command -v git >/dev/null 2>&1; then
-    m "strawdotez: instalando chezmoi e git..." "strawdotez: installing chezmoi and git..."
-    pkg install -y chezmoi git
+if [ "$TARGET" = termux ]; then
+    if ! command -v chezmoi >/dev/null 2>&1 || ! command -v git >/dev/null 2>&1; then
+        m "strawdotez: instalando chezmoi e git..." "strawdotez: installing chezmoi and git..."
+        pkg install -y chezmoi git
+    fi
+else
+    sudo=""
+    [ "$(id -u)" != 0 ] && command -v sudo >/dev/null 2>&1 && sudo=sudo
+    if ! command -v git >/dev/null 2>&1; then
+        m "strawdotez: instalando git..." "strawdotez: installing git..."
+        $sudo apt-get update -qq && $sudo apt-get install -y -qq git
+    fi
+    export PATH="$HOME/.local/bin:$PATH"
+    if ! command -v chezmoi >/dev/null 2>&1; then
+        m "strawdotez: instalando o chezmoi (instalador oficial)..." "strawdotez: installing chezmoi (official installer)..."
+        mkdir -p "$HOME/.local/bin"
+        sh -c "$(curl -fsSL https://get.chezmoi.io)" -- -b "$HOME/.local/bin"
+    fi
 fi
 
 args=(init --apply)
@@ -90,5 +121,9 @@ else
     m "strawdotez: não foi possível baixar o straw-ui. Tudo segue funcionando em bash; só 'straw doctor' e 'straw tools' ficam indisponíveis." "strawdotez: could not download straw-ui. Everything keeps working in bash; only 'straw doctor' and 'straw tools' are unavailable."
 fi
 
-m "strawdotez: pronto. Abra uma sessão nova do Termux para ver o resultado." "strawdotez: done. Open a new Termux session to see the result."
+if [ "$TARGET" = termux ]; then
+    m "strawdotez: pronto. Abra uma sessão nova do Termux para ver o resultado." "strawdotez: done. Open a new Termux session to see the result."
+else
+    m "strawdotez: pronto. Rode 'exec bash' ou abra uma sessão nova para ver o resultado." "strawdotez: done. Run 'exec bash' or open a new session to see the result."
+fi
 m "Dica: rode 'straw menu' para escolher ferramentas e perfis." "Tip: run 'straw menu' to pick tools and profiles."

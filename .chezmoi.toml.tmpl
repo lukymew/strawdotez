@@ -1,5 +1,18 @@
-{{- if not (hasPrefix "/data/data/com.termux" (env "PREFIX")) -}}
-{{-   fail "Este repositório é só para o Termux. / This repo is Termux-only. Get Termux from F-Droid." -}}
+{{- /* alvo: termux, ou debian (Debian, Ubuntu, Kali via proot-distro ou nativo). STRAW_TARGET força um valor (testes). */ -}}
+{{- $target := env "STRAW_TARGET" -}}
+{{- if not $target -}}
+{{-   if hasPrefix "/data/data/com.termux" (env "PREFIX") -}}
+{{-     $target = "termux" -}}
+{{-   else -}}
+{{-     $os := index .chezmoi "osRelease" | default dict -}}
+{{-     $ids := printf "%s %s" (index $os "id" | default "") (index $os "idLike" | default "") -}}
+{{-     if or (contains "debian" $ids) (contains "ubuntu" $ids) -}}
+{{-       $target = "debian" -}}
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+{{- if not (has $target (list "termux" "debian")) -}}
+{{-   fail "Ambiente não suportado: use o Termux (F-Droid) ou Debian/Ubuntu. Alpine ainda não. / Unsupported environment: use Termux (F-Droid) or Debian/Ubuntu. Alpine is not supported yet." -}}
 {{- end -}}
 {{- $lang := promptChoiceOnce . "lang" "Idioma / Language (pt or en)" (list "pt" "en") "en" -}}
 {{- $t := dict
@@ -23,15 +36,22 @@
 {{- writeToStdout (index $m "intro" | default (index $t "en" "intro")) -}}
 {{- $name := promptStringOnce . "name" (index $m "name" | default (index $t "en" "name")) "" -}}
 {{- $email := promptStringOnce . "email" (index $m "email" | default (index $t "en" "email")) "" -}}
-{{- $device := promptChoiceOnce . "device" (index $m "device" | default (index $t "en" "device")) (list "cell" "tablet") "cell" -}}
-{{- $shell := promptChoiceOnce . "shell" (index $m "shell" | default (index $t "en" "shell")) (list "bash" "zsh") "bash" -}}
+{{- $device := "cell" -}}
+{{- $shell := "bash" -}}
+{{- $banner := true -}}
+{{- $hush := true -}}
+{{- if eq $target "termux" -}}
+{{- $device = promptChoiceOnce . "device" (index $m "device" | default (index $t "en" "device")) (list "cell" "tablet") "cell" -}}
+{{- $shell = promptChoiceOnce . "shell" (index $m "shell" | default (index $t "en" "shell")) (list "bash" "zsh") "bash" -}}
+{{- $banner = promptBoolOnce . "banner" (index $m "banner" | default (index $t "en" "banner")) true -}}
+{{- $hush = promptBoolOnce . "hushlogin" (index $m "hush" | default (index $t "en" "hush")) true -}}
+{{- end -}}
 {{- $font := index . "font" | default "default" -}}
 {{- $theme := index . "theme" | default "default" -}}
 {{- $prompt := index . "prompt" | default "default" -}}
-{{- $banner := promptBoolOnce . "banner" (index $m "banner" | default (index $t "en" "banner")) true -}}
-{{- $hush := promptBoolOnce . "hushlogin" (index $m "hush" | default (index $t "en" "hush")) true -}}
 
 [data]
+    target = {{ $target | quote }}
     lang = {{ $lang | quote }}
     name = {{ $name | quote }}
     email = {{ $email | quote }}

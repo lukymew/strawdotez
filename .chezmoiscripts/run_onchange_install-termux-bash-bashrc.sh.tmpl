@@ -1,3 +1,4 @@
+{{- if eq (index . "target" | default "termux") "termux" -}}
 #!/data/data/com.termux/files/usr/bin/bash
 set -euo pipefail
 
@@ -11,3 +12,4 @@ fi
 cat > "$target" <<'STRAW_BASHRC_EOF'
 {{ template "bash.bashrc_termux" . }}
 STRAW_BASHRC_EOF
+{{- end }}

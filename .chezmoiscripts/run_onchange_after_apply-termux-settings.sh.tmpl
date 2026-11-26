@@ -1,3 +1,4 @@
+{{- if eq (index . "target" | default "termux") "termux" -}}
 #!/data/data/com.termux/files/usr/bin/bash
 set -euo pipefail
 
@@ -49,3 +50,4 @@ fi
 if command -v termux-reload-settings >/dev/null 2>&1; then
     termux-reload-settings || true
 fi
+{{- end }}

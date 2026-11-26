@@ -1,3 +1,4 @@
+{{- if eq (index . "target" | default "termux") "termux" -}}
 # Plugins do zsh, fixados em uma versão (tag) com checksum.
 # Para atualizar: troque a tag na url, calcule o sha256 com
 #   curl -fsSL <url> | sha256sum
@@ -37,4 +38,5 @@
     url = {{ .url | quote }}
     checksum.sha256 = {{ .sha256 | quote }}
 {{-   end }}
+{{- end }}
 {{- end }}

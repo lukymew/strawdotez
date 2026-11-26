@@ -1,3 +1,24 @@
+{{- if eq (index . "target" | default "termux") "debian" -}}
+#!/bin/bash
+# strawdotez: instala o básico no Debian/Ubuntu (lista em .chezmoidata/packages.yaml)
+pkgs=({{ join " " .packages.debian }})
+sudo=""
+[ "$(id -u)" != 0 ] && command -v sudo >/dev/null 2>&1 && sudo=sudo
+
+faltando=()
+for p in "${pkgs[@]}"; do
+    [ "$(dpkg-query -W -f='${Status}' "$p" 2>/dev/null)" = "install ok installed" ] || faltando+=("$p")
+done
+if [ "${#faltando[@]}" -gt 0 ]; then
+    printf '{{ template "t" (list . "pkg_installing") }}\n' "${#faltando[@]}"
+    export DEBIAN_FRONTEND=noninteractive
+    $sudo apt-get update -qq >/dev/null 2>&1 || true
+    for p in "${faltando[@]}"; do
+        $sudo apt-get install -y -qq "$p" >/dev/null 2>&1 || printf '  - %s\n' "$p"
+    done
+fi
+exit 0
+{{- else -}}
 #!{{ env "PREFIX" }}/bin/bash
 # strawdotez: instala os pacotes do Termux (lista em .chezmoidata/packages.yaml)
 pkgs=({{ join " " .packages.termux }})
@@ -28,3 +49,4 @@ if [ "${#falhou[@]}" -gt 0 ]; then
     printf '{{ template "t" (list . "pkg_hint") }}\n\n'
 fi
 exit 0
+{{- end }}

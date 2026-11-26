@@ -24,3 +24,14 @@ packages:
     - libqrencode
     - gh
     - zoxide
+  debian:
+    - git
+    - curl
+    - tmux
+    - fzf
+    - ripgrep
+    - ncdu
+    - zoxide
+    - micro
+    - neovim
+    - jq

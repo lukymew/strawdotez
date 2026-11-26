@@ -1,3 +1,4 @@
+{{- $target := index . "target" | default "termux" }}
 README.md
 README.pt-BR.md
 LICENSE
@@ -23,4 +24,10 @@ tests/
 {{- end }}
 {{- if ne (index . "theme" | default "default") "default" }}
 .termux/colors.properties
+{{- end }}
+{{- if ne $target "termux" }}
+.termux
+.zshrc
+.hushlogin
+.local/share/zsh
 {{- end }}

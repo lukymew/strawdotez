@@ -1,0 +1,29 @@
+# *********************************************
+# * local: ${HOME}/.bashrc                   *
+# * strawdotez • bash enxuto (Debian/Ubuntu)  *
+# *********************************************
+
+[ -z "$PS1" ] && return   # só em shell interativo
+
+shopt -s checkwinsize
+HISTSIZE=4000
+HISTFILESIZE=5000
+HISTCONTROL=ignoreboth
+
+{{ template "env_common" . }}
+{{ template "aliases_common" . }}
+{{ template "shell_tools_termux" . }}
+
+# O script do straw usa o caminho do Termux no shebang; aqui ele roda pelo bash.
+straw() { bash "$HOME/.local/bin/straw" "$@"; }
+
+# cd lista a pasta ao entrar
+cd() {
+    if [ "$1" == ".." ]; then builtin cd .. && ls
+    elif [ -n "$1" ]; then builtin cd "$1" && ls
+    else builtin cd && ls
+    fi
+}
+
+# PATH do usuário
+[ -d "$HOME/.local/bin" ] && case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) PATH="$HOME/.local/bin:$PATH" ;; esac
