@@ -181,3 +181,4 @@ terminal-margin-horizontal=8
 
 ### Vertical (top/bottom) Margin
 terminal-margin-vertical=4
+terminal-toolbar-height = 0.7
