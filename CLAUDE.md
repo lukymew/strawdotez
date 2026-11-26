@@ -100,9 +100,9 @@ Ver a seção "Inspirações" do README.
 
 ## Estado atual (2026-11-25)
 
-- v1.4.0 lançada (2026-11-25): `straw` com menu, módulos e perfis; parte em Go (`straw doctor`, `straw tools`); emojis no menu; release do binário `straw-ui` por CI (arm64 e amd64, com sha256) e `install.sh` baixando-o, com fallback em bash.
-- Fase 2: faltam o teste em contêiner (Ubuntu e Alpine, prompt para o Gemini pronto) e os testes das funções (bats).
-- Pacotes que não existem no Termux padrão (`hydra`, `sqlmap`, `mtr`) foram removidos da lista do Termux; falta confirmar nomes e o `tur-repo`.
+- v1.4.2 lançada (2026-11-25): `straw` com menu, módulos, perfis e `straw config` (shell, fonte, tema, prompt, idioma); parte em Go (`straw doctor`, `straw tools`); `straw update` também atualiza o `straw-ui`; release do binário por CI (arm64 e amd64, sha256 e atestação) e `install.sh` com fallback em bash.
+- Testes: 69 no bats (`~/bats-core/bin/bats tests/`). Falta testar Alpine e Debian em sistema real.
+- Nomes dos pacotes do Termux conferidos; no Alpine, `php` vira `php83`.
 - Repositório público, licença MIT. Bash abre em ~15 ms e zsh em ~30 ms no celular do dono.
 
 ## Como trabalhar neste projeto
