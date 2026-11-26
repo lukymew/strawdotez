@@ -44,7 +44,7 @@ Lidos depois da primeira revisão: `zsh_opts_termux`, `zsh_compat_termux`, `zsh_
 | 17 | baixa | `ci-check.sh` | Deixava pastas temporárias para trás e não validava o `straw.json`. | Corrigido: limpa ao sair e valida o JSON. |
 | 18 | baixa | `bashrc_termux` | `HISTCONTROL=ignoredups` salva comandos que começam com espaço; o zsh não salva (`HIST_IGNORE_SPACE`). Um segredo digitado com espaço na frente ficava no histórico do bash. | Corrigido: `ignoreboth`. |
 | 19 | baixa | `zsh_plugins_termux` | O comentário dizia "instalados via pkg", mas vêm do GitHub. | Corrigido. |
-| 20 | baixa | `zsh_compat_termux` | O `command_not_found_handler` do zsh é mais pobre que o do bash (sem as dicas por comando). | Aberto, preferência. |
+| 20 | baixa | `zsh_compat_termux` | O `command_not_found_handler` do zsh é mais pobre que o do bash (sem as dicas por comando). | Corrigido: bash e zsh usam o mesmo corpo de dicas. |
 | 21 | baixa (corrigido) | `zsh_opts_termux` | `setopt CORRECT` pergunta "corrigir para...?" a cada comando digitado errado, o que atrapalha no teclado do celular. | Corrigido: `setopt CORRECT` removido. |
 
 ## Pontos fortes (manter)

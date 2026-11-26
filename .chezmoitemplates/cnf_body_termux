@@ -1,0 +1,20 @@
+    printf "%b{{ template "t" (list . "cnf") }}%b %s%b\n" "$blue" "$red" "$cmd" "$rst"
+
+    case "$cmd" in
+        adb|fastboot)
+            printf "%b{{ template "t" (list . "pkg_avail") }}%b\n" "$green" "$rst"
+            printf "  • pkg install android-tools\n"
+            ;;
+        git|curl|wget|python|node|npm|php|java|gcc|g++)
+            printf "%b{{ template "t" (list . "pkg_avail") }}%b\n" "$green" "$rst"
+            printf "  • pkg install %s\n" "$cmd"
+            ;;
+        docker|kubectl|terraform)
+            printf "%b{{ template "t" (list . "pkg_unavail") }}%b\n" "$yellow" "$rst"
+            printf "  • {{ template "t" (list . "use_proot") }}\n"
+            ;;
+        *)
+            printf "%b{{ template "t" (list . "check_pkgs") }}%b\n" "$yellow" "$rst"
+            printf "  • pkg search %s\n" "$cmd"
+            ;;
+    esac

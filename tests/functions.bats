@@ -116,3 +116,24 @@ fn() { bash --norc -c "shopt -s expand_aliases; source '$D/functions_utils_termu
     [ "$status" -ne 0 ]
     [[ "$output" == *"termux-api"* ]]
 }
+
+@test "command_not_found do bash sugere o pacote" {
+    f="$BATS_FILE_TMPDIR/bashrc_termux.sh"
+    HOME="$D" PREFIX=/data/data/com.termux/files/usr \
+        chezmoi execute-template --source "$REPO" --config "$D/c.toml" < "$REPO/.chezmoitemplates/bashrc_termux" > "$f"
+    run bash --norc -c "blue= red= green= yellow= rst=; $(sed -n '/^command_not_found_handle() {/,/^}/p' "$f"); command_not_found_handle adb; echo rc=\$?"
+    [ "$status" -eq 0 ]
+    [[ "$output" == *"rc=127"* ]]
+    [[ "$output" == *"pkg install android-tools"* ]]
+}
+
+@test "command_not_found do zsh dá as mesmas dicas que o bash" {
+    command -v zsh >/dev/null 2>&1 || skip "zsh não instalado"
+    f="$BATS_FILE_TMPDIR/zsh_compat_termux.sh"
+    HOME="$D" PREFIX=/data/data/com.termux/files/usr \
+        chezmoi execute-template --source "$REPO" --config "$D/c.toml" < "$REPO/.chezmoitemplates/zsh_compat_termux" > "$f"
+    run zsh -c "source '$f'; command_not_found_handler adb; echo rc=\$?"
+    [ "$status" -eq 0 ]
+    [[ "$output" == *"rc=127"* ]]
+    [[ "$output" == *"pkg install android-tools"* ]]
+}

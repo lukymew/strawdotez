@@ -6,9 +6,12 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+- Release binaries now carry a build provenance attestation: `gh attestation verify straw-ui-linux-arm64 --repo lukymew/strawdotez`.
+- Tests for the `straw-ui` download in `install.sh` (good checksum, bad checksum, missing files) and for `command_not_found`.
 - `docs/TROUBLESHOOTING.md` (English and Portuguese), `CONTRIBUTING.md` and issue and PR templates.
 
 ### Fixed
+- zsh `command_not_found` now gives the same hints as bash (one shared template).
 - The Alpine `php` package is now `php83` (there is no plain `php`).
 
 ## [1.3.0] - 2026-11-25
