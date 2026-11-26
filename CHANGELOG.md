@@ -12,6 +12,13 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - Changing the device profile no longer shows a false "saved to termux.properties.bak" notice; the backup is only made when you edited the file yourself.
 - Changing the theme or font with `straw config` no longer makes chezmoi ask whether to overwrite the file.
 
+## [1.4.1] - 2026-11-25
+
+### Fixed
+- `straw-ui` no longer crashes with "bad system call" on Android devices that block the `faccessat2` syscall (`straw doctor` and `straw tools` now find programs without it).
+- Changing the device profile no longer shows a false "saved to termux.properties.bak" notice; the backup is only made when you edited the file yourself.
+- Changing the theme or font with `straw config` no longer makes chezmoi ask whether to overwrite the file.
+
 ## [1.4.0] - 2026-11-25
 
 ### Added
