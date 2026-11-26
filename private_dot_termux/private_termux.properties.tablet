@@ -23,11 +23,11 @@ allow-external-apps = false
 ### Uncomment to disable toasts shown on terminal session change.
 disable-terminal-session-change-toast = true
 
-### Tablet: teclado bluetooth é mais comum, evita esconder o teclado touch à toa
-hide-soft-keyboard-on-startup = false
+### Teclado touch não sobe ao abrir o Termux (toque no ícone de teclado para abri-lo)
+hide-soft-keyboard-on-startup = true
 
-### enable/disable: toggle liga/desliga o teclado, em vez de só mostrar/esconder
-soft-keyboard-toggle-behaviour = enable/disable
+### enable: o botão de teclado só mostra/esconde (igual ao celular)
+soft-keyboard-toggle-behaviour = enable
 
 ### Tela grande mostra mais linhas de uma vez — buffer maior
 ### (máximo 50000; valores muito altos podem pesar no desempenho)
@@ -67,9 +67,9 @@ terminal-cursor-style = bar
 ### Choose between default, arrows-only, arrows-all, all and none
 extra-keys-style = all
 
-### 💡 Em tela grande sobra espaço: "all" mostra os símbolos de todas as teclas.
-### Se preferir a barra mais discreta, use "arrows-only".
+### Mesmo estilo do celular. Alternativas: "arrows-only" (mais discreto) ou "all" (símbolos em todas as teclas).
 # extra-keys-style = arrows-only
+# extra-keys-style = all
 
 ### Force capitalize all text in extra keys row button labels.
 extra-keys-text-all-caps = true
@@ -77,15 +77,15 @@ extra-keys-text-all-caps = true
 ### Default extra-key configuration
 # extra-keys = [[ESC, TAB, CTRL, ALT, {key: '-', popup: '|'}, DOWN, UP]]
 
-### Layout do tablet: duas linhas, sem fileira de números (o teclado normal digita). Toque normal digita a tecla;
-### deslizar para cima numa tecla com popup dispara a segunda função:
-###   ESC     → abre a gaveta (DRAWER)
-###   -       → |  (pipe)
-###   KEYBOARD → CTRL+d (sair do shell)
-### SHIFT precisa do Termux 0.118 ou mais novo.
+### Layout do tablet: o mesmo do celular (2 linhas) com 2 teclas a mais por linha,
+### 10 por linha para ficar proporcional. Extras: HOME, / (deslizar: ~), SHFT e - (deslizar: |).
+### Deslizar para cima numa tecla com popup dispara a segunda função:
+###   ESC → gaveta (DRAWER) | / → ~ | - → | | KEYBOARD → CTRL+d (sair do shell)
+### SHFT precisa do Termux 0.118 ou mais novo. Outras teclas úteis para trocar:
+### INS, FN, '_', PGUP/PGDN, F1-F12.
 extra-keys = [ \
-    [{key: ESC, popup: DRAWER},'TAB','CTRL','ALT','SHIFT','FN','HOME','UP','END','PGUP','INS','PASTE',{key: KEYBOARD, popup: {macro: "CTRL d", display: exit}}], \
-    [{key: '-', popup: '|'},'/','_','~','LEFT','DOWN','RIGHT','PGDN','BKSP','DEL','ENTER'] \
+    [{key: ESC, popup: DRAWER},'BKSP','DEL','PASTE','HOME','UP','END','PGUP',{key: '/', popup: '~'},{key: KEYBOARD, popup: {macro: "CTRL d", display: exit}}], \
+    ['TAB','CTRL','ALT','SHFT','LEFT','DOWN','RIGHT','PGDN',{key: '-', popup: '|'},'ENTER'] \
 ]
 
 ### Alternativa para quem usa vim: salvar e sair com um toque (ou deslizando).
@@ -181,4 +181,3 @@ terminal-margin-horizontal=8
 
 ### Vertical (top/bottom) Margin
 terminal-margin-vertical=4
-terminal-toolbar-height = 0.7
