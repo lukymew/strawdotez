@@ -77,16 +77,15 @@ extra-keys-text-all-caps = true
 ### Default extra-key configuration
 # extra-keys = [[ESC, TAB, CTRL, ALT, {key: '-', popup: '|'}, DOWN, UP]]
 
-### Layout do tablet: três linhas com tudo à mão. Toque normal digita a tecla;
+### Layout do tablet: duas linhas, sem fileira de números (o teclado normal digita). Toque normal digita a tecla;
 ### deslizar para cima numa tecla com popup dispara a segunda função:
 ###   ESC     → abre a gaveta (DRAWER)
 ###   -       → |  (pipe)
 ###   KEYBOARD → CTRL+d (sair do shell)
 ### SHIFT precisa do Termux 0.118 ou mais novo.
 extra-keys = [ \
-    [{key: ESC, popup: DRAWER},'1','2','3','4','5','6','7','8','9','0','BKSP','DEL'], \
-    ['TAB','CTRL','ALT','SHIFT','FN','HOME','UP','END','PGUP','INS','PASTE',{key: KEYBOARD, popup: {macro: "CTRL d", display: exit}}], \
-    [{key: '-', popup: '|'},'/','_','~','LEFT','DOWN','RIGHT','PGDN','ENTER'] \
+    [{key: ESC, popup: DRAWER},'TAB','CTRL','ALT','SHIFT','FN','HOME','UP','END','PGUP','INS','PASTE',{key: KEYBOARD, popup: {macro: "CTRL d", display: exit}}], \
+    [{key: '-', popup: '|'},'/','_','~','LEFT','DOWN','RIGHT','PGDN','BKSP','DEL','ENTER'] \
 ]
 
 ### Alternativa para quem usa vim: salvar e sair com um toque (ou deslizando).

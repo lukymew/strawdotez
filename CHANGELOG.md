@@ -9,7 +9,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Changed
 - `straw update` now also updates the `straw-ui` binary from the latest release (checked by sha256). A pinned install (`--version`) keeps its binary.
-- Tablet `termux.properties` profile reworked: now includes everything from the phone profile, plus a 3-row extra-keys layout (SHIFT, FN, INS, PASTE, popups for `|` and `exit`), vim and tmux macro alternatives, and hardware-keyboard shortcut notes. New `tests/properties.bats` validates both profiles.
+- Tablet `termux.properties` profile reworked: now includes everything from the phone profile, plus a 2-row extra-keys layout (SHIFT, FN, INS, PASTE, popups for `|` and `exit`), vim and tmux macro alternatives, and hardware-keyboard shortcut notes. New `tests/properties.bats` validates both profiles.
 
 ## [1.4.1] - 2026-11-25
 

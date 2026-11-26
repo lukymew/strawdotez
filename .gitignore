@@ -21,3 +21,5 @@ secrets*
 .gnupg/
 .git-credentials
 *.age
+straw-ui-linux-*
+SHA256SUMS
