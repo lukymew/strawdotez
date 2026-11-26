@@ -14,3 +14,16 @@
     url = "https://github.com/zsh-users/zsh-syntax-highlighting/archive/refs/tags/0.8.0.tar.gz"
     stripComponents = 1
     checksum.sha256 = "5981c19ebaab027e356fe1ee5284f7a021b89d4405cc53dc84b476c3aee9cc32"
+
+# Fonte escolhida (straw config). Fica em ~/.local/share/strawdotez/font.ttf e um script
+# a copia para ~/.termux/font.ttf. A fonte "default" vem do próprio repositório.
+{{- $font := index . "font" | default "default" }}
+{{- range .fonts }}
+{{-   if and (eq .id $font) (ne .id "default") }}
+
+[".local/share/strawdotez/font.ttf"]
+    type = "file"
+    url = {{ .url | quote }}
+    checksum.sha256 = {{ .sha256 | quote }}
+{{-   end }}
+{{- end }}

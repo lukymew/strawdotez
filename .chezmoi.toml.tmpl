@@ -8,6 +8,7 @@
         "name" "Seu nome para o git (opcional: Enter pula)"
         "email" "Seu e-mail para o git (opcional: Enter pula)"
         "device" "Perfil do Termux (cell para celular ou tablet para tablet)"
+        "shell" "Shell padrão do Termux (bash ou zsh)"
         "banner" "Mostrar o logo e o cabeçalho ao abrir o terminal? (Y/n)"
         "hush" "Desligar a mensagem de boas-vindas do Termux? (Y/n)")
     "en" (dict
@@ -15,6 +16,7 @@
         "name" "Your name for git (optional: Enter skips)"
         "email" "Your email for git (optional: Enter skips)"
         "device" "Termux profile (cell for phone or tablet for tablet)"
+        "shell" "Default Termux shell (bash or zsh)"
         "banner" "Show the logo and header when the terminal opens? (Y/n)"
         "hush" "Turn off the Termux welcome message? (Y/n)") -}}
 {{- $m := index $t $lang -}}
@@ -22,6 +24,8 @@
 {{- $name := promptStringOnce . "name" (index $m "name" | default (index $t "en" "name")) "" -}}
 {{- $email := promptStringOnce . "email" (index $m "email" | default (index $t "en" "email")) "" -}}
 {{- $device := promptChoiceOnce . "device" (index $m "device" | default (index $t "en" "device")) (list "cell" "tablet") "cell" -}}
+{{- $shell := promptChoiceOnce . "shell" (index $m "shell" | default (index $t "en" "shell")) (list "bash" "zsh") "bash" -}}
+{{- $font := index . "font" | default "default" -}}
 {{- $banner := promptBoolOnce . "banner" (index $m "banner" | default (index $t "en" "banner")) true -}}
 {{- $hush := promptBoolOnce . "hushlogin" (index $m "hush" | default (index $t "en" "hush")) true -}}
 
@@ -30,5 +34,7 @@
     name = {{ $name | quote }}
     email = {{ $email | quote }}
     device = {{ $device | quote }}
+    shell = {{ $shell | quote }}
+    font = {{ $font | quote }}
     banner = {{ $banner }}
     hushlogin = {{ $hush }}

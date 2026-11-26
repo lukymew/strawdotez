@@ -1,0 +1,22 @@
+# Fontes do Termux (Nerd Fonts, licença OFL). "default" é a fonte que vem no repositório.
+# Cada uma das outras é baixada de uma tag fixa do nerd-fonts e conferida pelo sha256.
+# Para atualizar: troque a tag na url, rode  curl -fsSL <url> | sha256sum  e cole o resultado.
+fonts:
+  - id: default
+    name: Fira Code Nerd Font (padrão)
+  - id: jetbrains
+    name: JetBrains Mono Nerd Font
+    url: https://raw.githubusercontent.com/ryanoasis/nerd-fonts/v3.4.0/patched-fonts/JetBrainsMono/Ligatures/Regular/JetBrainsMonoNerdFontMono-Regular.ttf
+    sha256: f01031f40e48dc29e1112e6b0b0450a2c6cd097f3f35cfff05c55cb311f8034c
+  - id: firacode
+    name: Fira Code Nerd Font (v3.4)
+    url: https://raw.githubusercontent.com/ryanoasis/nerd-fonts/v3.4.0/patched-fonts/FiraCode/Regular/FiraCodeNerdFontMono-Regular.ttf
+    sha256: ad88c69cb6a497db9f2714e4b414817aabbee621484a1560bfdb3fd73abdd564
+  - id: hack
+    name: Hack Nerd Font
+    url: https://raw.githubusercontent.com/ryanoasis/nerd-fonts/v3.4.0/patched-fonts/Hack/Regular/HackNerdFontMono-Regular.ttf
+    sha256: 03e60d3c1a9f8bef4e1f78836f80aacb9ec005260a6b094f5bfc10043bb115ab
+  - id: meslo
+    name: Meslo LG M Nerd Font
+    url: https://raw.githubusercontent.com/ryanoasis/nerd-fonts/v3.4.0/patched-fonts/Meslo/M/Regular/MesloLGMNerdFontMono-Regular.ttf
+    sha256: a440f036bcb21a13b9c0b6852d2e53a5df4752d5be4de318046fab4c52d7ce55

@@ -19,6 +19,7 @@ M_help_menu="  straw menu"
 M_help_install="  straw install"
 M_help_tools="  straw tools"
 M_help_doctor="  straw doctor"
+M_help_config="  straw config"
 M_help_update="  straw update"
 M_help_version="  straw version"
 M_help_help="  straw help"
@@ -63,7 +64,7 @@ S
 @test "help lista todos os comandos" {
     run bash "$STRAW" help
     [ "$status" -eq 0 ]
-    for w in menu install tools doctor update version help; do
+    for w in menu install tools doctor config update version help; do
         [[ "$output" == *"straw $w"* ]]
     done
 }

@@ -4,6 +4,8 @@ set -euo pipefail
 # profile: {{ include (printf "private_dot_termux/private_termux.properties.%s" .device) | sha256sum }}
 # colors:  {{ include "private_dot_termux/private_colors.properties" | sha256sum }}
 # font:    {{ include "private_dot_termux/private_font.ttf" | sha256sum }}
+{{- $font := index . "font" | default "default" }}
+# fonte escolhida: {{ $font }}{{ range .fonts }}{{ if and (eq .id $font) (hasKey . "sha256") }} {{ .sha256 }}{{ end }}{{ end }}
 
 profile="$HOME/.termux/termux.properties.{{ .device }}"
 active="$HOME/.termux/termux.properties"
@@ -16,6 +18,14 @@ if [ -f "$profile" ]; then
     cp "$profile" "$active"
 fi
 
+{{ if ne $font "default" -}}
+fontsrc="$HOME/.local/share/strawdotez/font.ttf"
+if [ -f "$fontsrc" ]; then
+    mkdir -p "$HOME/.termux"
+    cp "$fontsrc" "$HOME/.termux/font.ttf"
+fi
+
+{{ end -}}
 if command -v termux-reload-settings >/dev/null 2>&1; then
     termux-reload-settings || true
 fi

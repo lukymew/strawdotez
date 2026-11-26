@@ -16,6 +16,9 @@ bad() { printf '  ERRO %s\n' "$1"; fail=1; }
 echo "== mensagens pt/en"
 (cd "$REPO" && python3 scripts/check-i18n.py) && ok "i18n" || bad "i18n: faltam chaves"
 
+echo "== fontes"
+(cd "$REPO" && python3 scripts/check-fonts.py) && ok "fonts.yaml" || bad "fonts.yaml"
+
 for lang in pt en; do
     echo "== idioma: $lang"
     H="$(mktemp -d)"; tmps+=("$H")

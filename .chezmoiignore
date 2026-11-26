@@ -18,3 +18,6 @@ go.mod
 go.sum
 CONTRIBUTING.md
 tests/
+{{- if ne (index . "font" | default "default") "default" }}
+.termux/font.ttf
+{{- end }}

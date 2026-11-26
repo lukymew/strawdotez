@@ -1,5 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
-# straw: comando do strawdotez. Uso: straw menu | install | update | version | help   # straw v2
+# straw: comando do strawdotez. Uso: straw menu | install | tools | doctor | config | update | version | help
 # shellcheck disable=SC2154  # as variáveis M_* vêm do messages.sh gerado pelo chezmoi
 set -u
 DATA="${STRAW_DIR:-$HOME/.local/share/strawdotez}"
@@ -171,15 +171,15 @@ cmd_menu() {
     local sel head
     head="${M_menu_header//%s/$ENVNAME}"
     while :; do
-        sel="$(printf 'tools\t%s%s\nprofiles\t%s%s\nbrowse\t%s%s\none\t%s%s\nsoon\t%s%s\nquit\t%s%s\n' \
+        sel="$(printf 'tools\t%s%s\nprofiles\t%s%s\nbrowse\t%s%s\none\t%s%s\nconfig\t%s%s\nquit\t%s%s\n' \
             "$(ic 🧰)" "$M_menu_tools" "$(ic 🎭)" "$M_menu_profiles" "$(ic 🔎)" "$M_menu_browse" \
-            "$(ic 📦)" "$M_menu_one" "$(ic 🎨)" "$M_menu_soon" "$(ic 👋)" "$M_quit" | pick "$head")"
+            "$(ic 📦)" "$M_menu_one" "$(ic ⚙️)" "$M_menu_config" "$(ic 👋)" "$M_quit" | pick "$head")"
         case "$sel" in
             tools)    menu_tools ;;
             profiles) menu_profiles ;;
             browse)   cmd_tools; pause ;;
             one)      menu_one ;;
-            soon)     say "$M_soon"; pause ;;
+            config)   cfg_menu ;;
             *)        return 0 ;;
         esac
     done
@@ -197,6 +197,7 @@ cmd_help() {
     say "$M_help_install"
     say "$M_help_tools"
     say "$M_help_doctor"
+    say "$M_help_config"
     say "$M_help_update"
     say "$M_help_version"
     say "$M_help_help"
@@ -217,6 +218,116 @@ cmd_tools() {
     "$bin" tools "$@"
 }
 
+# ---- config: lê e grava as opções do chezmoi ([data] em chezmoi.toml) e aplica
+CFG="${STRAW_CONFIG:-$HOME/.config/chezmoi/chezmoi.toml}"
+CFG_KEYS="lang shell font device banner hushlogin name email"
+
+cfg_has_key() { case " $CFG_KEYS " in *" $1 "*) return 0 ;; esac; return 1; }
+
+# valores permitidos de uma opção, um por linha; vazio = texto livre
+cfg_opts() {
+    case "$1" in
+        lang)             printf 'pt\nen\n' ;;
+        shell)            printf 'bash\nzsh\n' ;;
+        device)           printf 'cell\ntablet\n' ;;
+        banner|hushlogin) printf 'true\nfalse\n' ;;
+        font)             cut -f1 "$DATA/fonts.tsv" 2>/dev/null ;;
+    esac
+}
+
+cfg_get() {
+    local v
+    v="$(sed -n "/^\[data\]/,\$ { s/^[[:space:]]*$1[[:space:]]*=[[:space:]]*//p; }" "$CFG" 2>/dev/null | head -n 1)"
+    v="${v#\"}"; v="${v%\"}"
+    if [ -z "$v" ]; then
+        case "$1" in shell) v=bash ;; font) v=default ;; esac
+    fi
+    printf '%s\n' "$v"
+}
+
+# grava uma opção no [data]; valida a chave e o valor
+cfg_set() {
+    local k="$1" v="$2" lit tmp opts
+    cfg_has_key "$k" || { fmt "$M_cfg_unknown" "$k" >&2; return 2; }
+    [ -f "$CFG" ] || { say "$M_cfg_nofile" >&2; return 1; }
+    opts="$(cfg_opts "$k")"
+    if [ -n "$opts" ]; then
+        printf '%s\n' "$opts" | grep -qxF -- "$v" || { fmt "$M_cfg_invalid" "$k=$v" >&2; return 2; }
+    else
+        case "$v" in *\"*|*\\*|*[[:cntrl:]]*) fmt "$M_cfg_invalid" "$k" >&2; return 2 ;; esac
+    fi
+    case "$k" in
+        banner|hushlogin) lit="$v" ;;
+        *)                lit="\"$v\"" ;;
+    esac
+    tmp="$CFG.tmp.$$"
+    if grep -Eq "^[[:space:]]*${k}[[:space:]]*=" "$CFG"; then
+        awk -v k="$k" -v v="$lit" '$0 ~ "^[ \t]*" k "[ \t]*=" { print "    " k " = " v; next } { print }' "$CFG" > "$tmp"
+    else
+        awk -v k="$k" -v v="$lit" '{ print } /^\[data\]/ && !d { print "    " k " = " v; d=1 }' "$CFG" > "$tmp"
+    fi
+    cat "$tmp" > "$CFG"; rm -f "$tmp"
+}
+
+cfg_label() { local n="M_cfg_$1"; printf '%s' "${!n}"; }
+
+cfg_show() { # chave valor -> texto legível
+    case "$1" in
+        banner|hushlogin) if [ "$2" = true ]; then printf '%s' "$M_cfg_on"; else printf '%s' "$M_cfg_off"; fi ;;
+        font)             awk -F'\t' -v id="$2" '$1 == id { print $2; f=1 } END { if (!f) print id }' "$DATA/fonts.tsv" 2>/dev/null ;;
+        *)                printf '%s' "$2" ;;
+    esac
+}
+
+cfg_list() {
+    local k
+    for k in $CFG_KEYS; do
+        printf '%s\t%s\n' "$k" "$(cfg_get "$k")"
+    done
+}
+
+cfg_change() { # chave valor: grava e aplica
+    cfg_set "$1" "$2" || return $?
+    fmt "$M_cfg_saved" "$1=$2"
+    [ "${STRAW_NO_APPLY:-0}" = 1 ] && return 0
+    say "$M_cfg_applying"
+    if chezmoi apply; then say "$M_cfg_restart"; else say "$M_cfg_noapply" >&2; return 1; fi
+}
+
+cfg_menu() {
+    command -v fzf >/dev/null 2>&1 || { say "$M_need_fzf" >&2; return 1; }
+    [ -f "$CFG" ] || { say "$M_cfg_nofile" >&2; return 1; }
+    local k v sel lines
+    while :; do
+        lines="back"$'\t'"$(ic ⬅️)$M_back"$'\n'
+        for k in $CFG_KEYS; do
+            lines+="$k"$'\t'"$(cfg_label "$k"): $(cfg_show "$k" "$(cfg_get "$k")")"$'\n'
+        done
+        sel="$(printf '%s' "$lines" | pick "$M_cfg_header")"
+        case "$sel" in ""|back) return 0 ;; esac
+        if [ -n "$(cfg_opts "$sel")" ]; then
+            lines=""
+            while IFS= read -r v; do
+                lines+="$v"$'\t'"$(cfg_show "$sel" "$v")"$'\n'
+            done < <(cfg_opts "$sel")
+            v="$(printf '%s' "$lines" | pick "$(cfg_label "$sel")")"
+        else
+            read -r -p "$(fmt "$M_cfg_ask" "$(cfg_label "$sel")") " v || return 0
+        fi
+        [ -n "$v" ] && { cfg_change "$sel" "$v"; pause; }
+    done
+}
+
+cmd_config() {
+    case "${1:-}" in
+        "")   if [ -t 0 ] && [ -t 1 ]; then cfg_menu; else cfg_list; fi ;;
+        list) cfg_list ;;
+        get)  cfg_has_key "${2:-}" || { fmt "$M_cfg_unknown" "${2:-}" >&2; return 2; }; cfg_get "$2" ;;
+        set)  [ "$#" -ge 3 ] || { say "$M_cfg_usage" >&2; return 2; }; cfg_change "$2" "$3" ;;
+        *)    say "$M_cfg_usage" >&2; return 2 ;;
+    esac
+}
+
 cmd_version() {
     local v
     v="$(git -C "$(chezmoi source-path 2>/dev/null)" describe --tags 2>/dev/null)"
@@ -228,6 +339,7 @@ case "${1:-}" in
     install)              shift; cmd_install "$@" ;;
     tools)                shift; cmd_tools "$@" ;;
     doctor)               shift; cmd_doctor "$@" ;;
+    config)               shift; cmd_config "$@" ;;
     update)               chezmoi update ;;
     version|-v|--version) cmd_version ;;
     help|-h|--help)       cmd_help ;;
