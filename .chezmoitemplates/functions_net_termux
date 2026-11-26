@@ -30,4 +30,5 @@ function @ip-resolver() {
     done
 }
 
+# google: testa a conexão (3 pings no Google)
 google() { ping -c 3 www.google.com.br; }

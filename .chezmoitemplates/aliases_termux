@@ -23,6 +23,7 @@ alias vi='nvim'
 alias n='nano'
 alias mkdir='mkdir -p'
 alias reloa='source ~/.bashrc'
+alias reload='source ~/.bashrc'
 
 # =====================================================
 # 3. NAVEGAÇÃO E DIRETÓRIOS

@@ -51,7 +51,9 @@ echo "apk $*" >> "$CALLS"
 if [ "$1" = info ]; then grep -qx "$3" "$INSTALLED"; exit $?; fi
 exit "${STUB_FAIL:-0}"
 S
-    printf '#!/bin/bash\n[ "$1" = -s ] && grep -qx "$2" "$INSTALLED"\n' > "$T/bin/dpkg"
+    # dpkg-query -W -f='${Status}' pkg: imprime o estado se o pacote está em "installed"
+    printf '#!/bin/bash\nif grep -qx "${@: -1}" "$INSTALLED"; then printf "install ok installed"; else exit 1; fi\n' > "$T/bin/dpkg-query"
+    printf '#!/bin/bash\nexit 1\n' > "$T/bin/dpkg"
     chmod +x "$T"/bin/*
     # tira ~/.local/bin do PATH para não achar um straw-ui real
     PATH="$T/bin:$(printf '%s' "$PATH" | tr ':' '\n' | grep -v '/\.local/bin$' | paste -sd:)"

@@ -2,14 +2,22 @@
 # =====================================================
 # 11. MODELOS LOCAIS (llama.cpp) — lazy load
 # =====================================================
-# LD_LIBRARY_PATH só vale para o comando (sem export no shell e sem entrada vazia,
-# que faria o carregador procurar bibliotecas na pasta atual)
-llm() {
-    LD_LIBRARY_PATH="$HOME/llama-bin${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" ~/llama-bin/llama-cli "$@"
+# Usa o llama.cpp do Termux (pacote llama-cpp, no PATH) e, se não houver, os binários
+# compilados à mão em ~/llama-bin. LD_LIBRARY_PATH só vale para o comando (sem export e
+# sem entrada vazia, que faria o carregador procurar bibliotecas na pasta atual).
+_llama() {
+    local bin="$1"; shift
+    if command -v "$bin" >/dev/null 2>&1; then
+        "$bin" "$@"
+    elif [ -x "$HOME/llama-bin/$bin" ]; then
+        LD_LIBRARY_PATH="$HOME/llama-bin${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" "$HOME/llama-bin/$bin" "$@"
+    else
+        printf '{{ template "t" (list . "need_pkg") }}\n' llama-cpp llama-cpp >&2
+        return 1
+    fi
 }
-llm-server() {
-    LD_LIBRARY_PATH="$HOME/llama-bin${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" ~/llama-bin/llama-server "$@"
-}
+llm() { _llama llama-cli "$@"; }
+llm-server() { _llama llama-server "$@"; }
 qwen() { llm -m ~/models/qwen.gguf "$@"; }
 coder() { llm -m ~/models/coder.gguf "$@"; }
 r1() { llm -m ~/models/r1.gguf "$@"; }

@@ -1,0 +1,4 @@
+# Textos da aparência que você pode trocar sem mexer nos templates.
+# Depois de editar: chezmoi init -S ~/strawdotez && chezmoi apply -S ~/strawdotez
+ui:
+  banner_title: "Obscure Society"

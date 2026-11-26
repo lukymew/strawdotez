@@ -119,6 +119,7 @@ private_dot_termux/         Termux properties, colors and font
 - **Add an alias:** edit `.chezmoitemplates/aliases_termux`.
 - **Add a function:** use the matching file in `.chezmoitemplates/functions_*_termux`.
 - **Add a message:** put it in `.chezmoidata/i18n.yaml` under both `pt` and `en`.
+- **Change the banner title:** edit `banner_title` in `.chezmoidata/ui.yaml`, then run `chezmoi init` and `chezmoi apply`.
 - **Change colors or font:** edit the files in `private_dot_termux/`.
 
 ## Credits and inspirations

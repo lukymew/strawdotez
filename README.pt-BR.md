@@ -117,6 +117,7 @@ private_dot_termux/         propriedades, cores e fonte do Termux
 - **Adicionar um pacote:** coloque o nome em `.chezmoidata/packages.yaml` e rode `chezmoi apply`.
 - **Adicionar um alias:** edite `.chezmoitemplates/aliases_termux`.
 - **Adicionar uma função:** use o arquivo do assunto em `.chezmoitemplates/functions_*_termux`.
+- **Trocar o título do cabeçalho:** edite `banner_title` em `.chezmoidata/ui.yaml` e rode `chezmoi init` e `chezmoi apply`.
 - **Trocar as cores ou a fonte:** edite os arquivos em `private_dot_termux/`.
 
 ## Créditos e inspirações

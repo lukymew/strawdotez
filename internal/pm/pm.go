@@ -12,7 +12,8 @@ import (
 func Installed(env, pkg string) bool {
 	switch env {
 	case "termux", "apt":
-		return exec.Command("dpkg", "-s", pkg).Run() == nil
+		out, err := exec.Command("dpkg-query", "-W", "-f=${Status}", pkg).Output()
+		return err == nil && string(out) == "install ok installed"
 	case "apk":
 		out, err := exec.Command("apk", "info", "-e", pkg).Output()
 		return err == nil && strings.TrimSpace(string(out)) != ""

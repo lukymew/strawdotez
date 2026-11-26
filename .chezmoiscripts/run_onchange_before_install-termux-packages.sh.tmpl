@@ -2,10 +2,13 @@
 # strawdotez: instala os pacotes do Termux (lista em .chezmoidata/packages.yaml)
 pkgs=({{ join " " .packages.termux }})
 
+# só conta como instalado o pacote no estado "install ok installed" (dpkg -s também aceita removidos com configuração)
+instalado() { [ "$(dpkg-query -W -f='${Status}' "$1" 2>/dev/null)" = "install ok installed" ]; }
+
 printf '{{ template "t" (list . "pkg_checking") }}\n' "${#pkgs[@]}"
 faltando=()
 for p in "${pkgs[@]}"; do
-    dpkg -s "$p" >/dev/null 2>&1 || faltando+=("$p")
+    instalado "$p" || faltando+=("$p")
 done
 
 falhou=()
@@ -13,7 +16,7 @@ if [ "${#faltando[@]}" -gt 0 ]; then
     printf '{{ template "t" (list . "pkg_installing") }}\n' "${#faltando[@]}"
     if ! pkg install -y "${faltando[@]}"; then
         for p in "${faltando[@]}"; do
-            dpkg -s "$p" >/dev/null 2>&1 && continue
+            instalado "$p" && continue
             pkg install -y "$p" || falhou+=("$p")
         done
     fi

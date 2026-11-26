@@ -82,7 +82,7 @@ function rsfile() {
         if [ -e "$1" ]; then
             local FNAME DST
             FNAME="$(basename "$1")"
-            DST="$(dirname "$1")/${FNAME/${sstr}/${rstr}}"
+            DST="$(dirname "$1")/${FNAME/"$sstr"/$rstr}"
             [ ! -e "$DST" ] && mv -T "$1" "$DST" || echo "{{ template "t" (list . "e_rename") }}" >&2
         else
             echo "{{ template "t" (list . "e_invalid") }}" >&2
@@ -261,7 +261,7 @@ function clone() {
     done
     local destination="$default_destination/clone-$counter"
 
-    if ! git clone -q "$1" "$destination"; then
+    if ! git clone -q -- "$1" "$destination"; then
         echo "{{ template "t" (list . "e_clone") }}"
         return 1
     fi

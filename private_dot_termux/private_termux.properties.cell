@@ -14,7 +14,7 @@
 allow-external-apps = false
 
 ### Default working directory that will be used when launching the app.
-# default-working-directory = /data/data/com.termux/files/home/WaRzOnE/
+# default-working-directory = /data/data/com.termux/files/home/projects/
 
 ### Uncomment to disable toasts shown on terminal session change.
 disable-terminal-session-change-toast = true

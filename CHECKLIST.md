@@ -34,6 +34,9 @@ Antes de dar `git push`, confira o que a mudança toca.
 - [ ] Rodar `bash scripts/ci-check.sh` e `shellcheck -S warning dot_local/bin/executable_straw`
 - [ ] README (en e pt-BR): tabela de comandos
 
+## Clonou o repositório para desenvolver
+- [ ] `bash scripts/setup-dev.sh` (ativa o hook de pre-commit)
+
 ## Mexeu em Go (`cmd/`, `internal/`)
 - [ ] `gofmt -l .` vazio, `go vet ./...` e `go test ./...` passando
 - [ ] Recompilar no celular: `go build -o ~/.local/bin/straw-ui ./cmd/straw-ui`

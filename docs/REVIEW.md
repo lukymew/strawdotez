@@ -25,13 +25,13 @@ Gravidade: **alta** (corrigir já), **média** (corrigir na próxima versão), *
 | 5 | média (corrigido) | `ui` (Go) | Se o programa tiver um pânico, o terminal fica em modo raw e na tela alternativa (sem eco). Mudança de tamanho da tela só é notada na próxima tecla. | `defer` que restaura o terminal e o cursor; tratar `SIGWINCH`. |
 | 6 | média (corrigido) | `install.sh` | O `chezmoi init` sempre pega o `main`: se o `main` quebrar, quem instala naquele momento é afetado. O binário `straw-ui` vem da última release, o resto vem do `main`, então as versões podem divergir. | Opção de fixar uma versão (tag) e documentar; ou instalar sempre a última tag. |
 | 7 | média (corrigido) | `functions_net_termux`, `aliases_termux` | `@ip-locator` usa `curl ipinfo.io/...` e `whatismyip` usa `curl ifconfig.me`, ambos em HTTP puro por padrão; `tb` envia texto sem criptografia para um serviço público. | `https://` e `curl -fsS`; documentar o `tb` (já está no `SECURITY.md`). |
-| 8 | baixa | `functions_utils_termux` (`clone`) | `git clone -q "$1"` aceita um argumento que começa com `-` como opção. | `git clone -q -- "$1" "$destination"`. |
-| 9 | baixa | `straw`, `ui`, script de pacotes | `dpkg -s` pode contar como instalado um pacote removido que manteve a configuração (estado `config-files`). Não consegui reproduzir aqui (nenhum pacote nesse estado), então está **a verificar**. | Se confirmar: `dpkg-query -W -f='${Status}' pkg` e procurar `install ok installed`. |
+| 8 | baixa (corrigido) | `functions_utils_termux` (`clone`) | `git clone -q "$1"` aceita um argumento que começa com `-` como opção. | `git clone -q -- "$1" "$destination"`. |
+| 9 | baixa (corrigido) | `straw`, `ui`, script de pacotes | `dpkg -s` pode contar como instalado um pacote removido que manteve a configuração (estado `config-files`). Não consegui reproduzir aqui (nenhum pacote nesse estado), então está **a verificar**. | Se confirmar: `dpkg-query -W -f='${Status}' pkg` e procurar `install ok installed`. |
 | 10 | baixa | `.github/workflows/*` | Actions fixadas por tag (`@v4`, `@v5`, `@v2`), não por hash de commit. O binário publicado não tem assinatura nem atestado de origem. | Fixar por hash; considerar `actions/attest-build-provenance` na release. |
-| 11 | baixa | `functions_utils_termux` (`rsfile`) | A substring de busca em `${FNAME/${sstr}/${rstr}}` é tratada como padrão (`*`, `?`); nomes com esses caracteres se comportam de forma surpreendente. | Citar a variável: `${FNAME/"$sstr"/$rstr}`. |
-| 12 | baixa | vários | Coisas pessoais ou de nome estranho no repositório público: banner "Obscure Society", pasta `WaRzOnE` num comentário do `termux.properties`, `reloa` (provável erro de digitação), função `google` que apenas faz `ping`, funções genéricas `ask`, `clone`, `tiny`. | Tornar o banner configurável; renomear ou documentar. |
-| 13 | baixa | `functions_ai_termux` e módulo `ai` | As funções esperam binários em `~/llama-bin`, mas o módulo `ai` do `straw` instala o pacote `llama-cpp` do Termux. Os dois caminhos coexistem sem explicação. | Escolher um e documentar. |
-| 14 | baixa | `.githooks/pre-commit` | O hook só vale depois de `git config core.hooksPath .githooks`, feito à mão em cada clone. | Documentar no `CONTRIBUTING.md` (planejado) ou ativar pelo `install.sh` no clone de desenvolvimento. |
+| 11 | baixa (corrigido) | `functions_utils_termux` (`rsfile`) | A substring de busca em `${FNAME/${sstr}/${rstr}}` é tratada como padrão (`*`, `?`); nomes com esses caracteres se comportam de forma surpreendente. | Citar a variável: `${FNAME/"$sstr"/$rstr}`. |
+| 12 | baixa (corrigido) | vários | Coisas pessoais ou de nome estranho no repositório público: banner "Obscure Society", pasta `WaRzOnE` num comentário do `termux.properties`, `reloa` (provável erro de digitação), função `google` que apenas faz `ping`, funções genéricas `ask`, `clone`, `tiny`. | Tornar o banner configurável; renomear ou documentar. |
+| 13 | baixa (corrigido) | `functions_ai_termux` e módulo `ai` | As funções esperam binários em `~/llama-bin`, mas o módulo `ai` do `straw` instala o pacote `llama-cpp` do Termux. Os dois caminhos coexistem sem explicação. | Escolher um e documentar. |
+| 14 | baixa (corrigido) | `.githooks/pre-commit` | O hook só vale depois de `git config core.hooksPath .githooks`, feito à mão em cada clone. | Documentar no `CONTRIBUTING.md` (planejado) ou ativar pelo `install.sh` no clone de desenvolvimento. |
 
 ## Pontos fortes (manter)
 
@@ -60,6 +60,15 @@ Gravidade: **alta** (corrigir já), **média** (corrigir na próxima versão), *
 
 - Achado 5: a interface (`straw tools`) restaura o terminal e o cursor mesmo se houver um pânico (testado num terminal virtual com um pânico forçado) e redesenha quando a tela muda de tamanho.
 - Achado 6: `install.sh --version vX.Y.Z` (ou `STRAW_VERSION`) instala uma versão fixa e baixa o `straw-ui` da mesma release. Só aceita o formato `vN.N.N`. Uma instalação fixada fica em HEAD solto, então `straw update` não a move.
+
+- Achado 8: `git clone -q -- "$1"`.
+- Achado 9: a checagem de pacote instalado agora exige o estado `install ok installed` (`dpkg-query`) no `straw`, no script de pacotes e no Go.
+- Achado 11: `rsfile` trata a busca como texto (`"$sstr"`); coberto por teste.
+- Achado 12: o título do cabeçalho vem de `.chezmoidata/ui.yaml`; o comentário com a pasta pessoal saiu do `termux.properties`; `reload` foi adicionado ao lado do `reloa`; a função `google` ganhou comentário.
+- Achado 13: `llm` e `llm-server` usam o `llama-cpp` do Termux (PATH) e, se não houver, os binários em `~/llama-bin`; sem nenhum dos dois, avisam qual pacote instalar.
+- Achado 14: `scripts/setup-dev.sh` ativa o hook e confere as ferramentas.
+- Pendente: achado 10 (fixar as Actions por hash; precisa consultar o GitHub, o que o sandbox não alcança).
+- Testes novos: `tests/functions.bats` (15 testes das funções e atalhos). O teste do `clone` é só uma checagem de texto, porque o git recusa a URL-opção de qualquer jeito e não dá para distinguir o comportamento.
 
 ## Ordem de correção sugerida
 

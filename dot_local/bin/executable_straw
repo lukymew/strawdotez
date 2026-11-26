@@ -42,7 +42,7 @@ if [ "$KEY" != termux ] && [ "$(id -u)" != 0 ] && command -v sudo >/dev/null 2>&
 pm_has() {
     case "$KEY" in
         apk) apk info -e "$1" >/dev/null 2>&1 ;;
-        *)   dpkg -s "$1" >/dev/null 2>&1 ;;
+        *)   [ "$(dpkg-query -W -f='${Status}' "$1" 2>/dev/null)" = "install ok installed" ] ;;
     esac
 }
 pm_install() {
