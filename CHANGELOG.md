@@ -5,6 +5,12 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [1.4.4] - 2026-11-26
+
+### Added
+- Four new Nerd Fonts (Cascadia Code, Source Code Pro, Iosevka Term, Ubuntu Mono) and four new color themes (Gruvbox Light, Material, Zenburn, Ubuntu), all pinned by sha256.
+- `straw` and `straw version` now tell you when a newer release is available (checked at most once a day, silent on failure; disable with `STRAW_NO_UPDATE_CHECK=1`).
+
 ## [1.4.3] - 2026-11-26
 
 ### Changed

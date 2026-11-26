@@ -20,3 +20,19 @@ fonts:
     name: Meslo LG M Nerd Font
     url: https://raw.githubusercontent.com/ryanoasis/nerd-fonts/v3.4.0/patched-fonts/Meslo/M/Regular/MesloLGMNerdFontMono-Regular.ttf
     sha256: a440f036bcb21a13b9c0b6852d2e53a5df4752d5be4de318046fab4c52d7ce55
+  - id: cascadia
+    name: Cascadia Code Nerd Font
+    url: https://raw.githubusercontent.com/ryanoasis/nerd-fonts/v3.4.0/patched-fonts/CascadiaCode/CaskaydiaCoveNerdFontMono-Regular.ttf
+    sha256: 32aa528c1d9be2240ceac90aa05f4e554679cabeb11b93684eb24ec4930bd0ea
+  - id: sourcecode
+    name: Source Code Pro Nerd Font
+    url: https://raw.githubusercontent.com/ryanoasis/nerd-fonts/v3.4.0/patched-fonts/SourceCodePro/SauceCodeProNerdFontMono-Regular.ttf
+    sha256: 6d687bfc41b42de0984ff58c43bf98115472027337a2e0980e8b1ecabe466099
+  - id: iosevka
+    name: Iosevka Term Nerd Font
+    url: https://raw.githubusercontent.com/ryanoasis/nerd-fonts/v3.4.0/patched-fonts/IosevkaTerm/IosevkaTermNerdFontMono-Regular.ttf
+    sha256: 7ecc07f7af0d9d3829a6d6a1beeeafeda0074332d94ce8ba49c7f675b63b770e
+  - id: ubuntumono
+    name: Ubuntu Mono Nerd Font
+    url: https://raw.githubusercontent.com/ryanoasis/nerd-fonts/v3.4.0/patched-fonts/UbuntuMono/Regular/UbuntuMonoNerdFontMono-Regular.ttf
+    sha256: f01237df39c57100093de60da74f8520f8829590961a34006c8f6df12542ef8d

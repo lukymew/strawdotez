@@ -384,6 +384,36 @@ update_ui() {
     return 1
 }
 
+# ---- aviso de versão nova: no máximo 1 consulta por dia, falha em silêncio
+installed_tag() {
+    local src
+    src="$(chezmoi source-path 2>/dev/null)" || return 1
+    git -C "$src" describe --tags --abbrev=0 2>/dev/null
+}
+
+latest_tag() {
+    if [ -n "${STRAW_LATEST_TAG:-}" ]; then printf '%s\n' "$STRAW_LATEST_TAG"; return 0; fi
+    curl -fsSL -m 3 -o /dev/null -w '%{url_effective}' "https://github.com/$UI_REPO/releases/latest" 2>/dev/null | sed -n 's|.*/tag/||p'
+}
+
+update_notice() {
+    [ "${STRAW_NO_UPDATE_CHECK:-0}" = 1 ] && return 0
+    [ -t 1 ] || return 0
+    local dir="${XDG_CACHE_HOME:-$HOME/.cache}/strawdotez" f have want
+    f="$dir/latest"
+    mkdir -p "$dir" 2>/dev/null || return 0
+    if [ -z "$(find "$f" -mmin -1440 2>/dev/null)" ]; then
+        latest_tag > "$f.new" 2>/dev/null || : > "$f.new"
+        mv -f "$f.new" "$f" 2>/dev/null || return 0
+    fi
+    want="$(head -n1 "$f" 2>/dev/null)"
+    have="$(installed_tag)"
+    [ -n "$want" ] && [ -n "$have" ] && [ "$want" != "$have" ] || return 0
+    [ "$(printf '%s\n%s\n' "$have" "$want" | sort -V | tail -n1)" = "$want" ] || return 0
+    local m="${M_update_available//@NEW@/$want}"
+    say "${m//@OLD@/$have}"
+}
+
 cmd_update() {
     chezmoi update || return $?
     update_ui
@@ -393,6 +423,7 @@ cmd_version() {
     local v
     v="$(git -C "$(chezmoi source-path 2>/dev/null)" describe --tags 2>/dev/null)"
     say "strawdotez ${v:-?}"
+    update_notice
 }
 
 case "${1:-}" in
@@ -404,6 +435,6 @@ case "${1:-}" in
     update)               cmd_update; exit $? ;;
     version|-v|--version) cmd_version ;;
     help|-h|--help)       cmd_help ;;
-    "")                   if [ -t 0 ] && [ -t 1 ] && command -v fzf >/dev/null 2>&1; then cmd_menu; else cmd_help; fi ;;
+    "")                   if [ -t 0 ] && [ -t 1 ] && command -v fzf >/dev/null 2>&1; then update_notice; cmd_menu; else cmd_help; fi ;;
     *)                    fmt "$M_unknown" "$1" >&2; cmd_help >&2; exit 2 ;;
 esac

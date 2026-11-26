@@ -109,3 +109,38 @@ setup() {
     [ "$status" -eq 3 ]
     [ ! -e "$HOME/.local/bin/straw-ui" ]
 }
+
+# ---- aviso de versão nova
+
+notice_setup() {
+    command -v script >/dev/null 2>&1 || skip "script (util-linux) não instalado"
+    export XDG_CACHE_HOME="$T/cache" STRAW_LATEST_TAG="$1"
+    git init -q "$T/src" && git -C "$T/src" -c user.email=a@b.c -c user.name=x commit -q --allow-empty -m x && git -C "$T/src" tag "$2"
+    printf '#!/bin/sh\necho %s/src\n' "$T" > "$T/bin/chezmoi"; chmod +x "$T/bin/chezmoi"
+    export PATH="$T/bin:$PATH"
+}
+
+@test "aviso: versão nova aparece em 'straw version'" {
+    notice_setup v1.9.0 v1.4.3
+    run script -qec "bash $STRAW version" /dev/null
+    [[ "$output" == *"v1.9.0"* ]]
+    [[ "$output" == *"straw update"* ]]
+}
+
+@test "aviso: nada quando já está na última" {
+    notice_setup v1.4.3 v1.4.3
+    run script -qec "bash $STRAW version" /dev/null
+    [[ "$output" != *"straw update"* ]]
+}
+
+@test "aviso: STRAW_NO_UPDATE_CHECK desliga" {
+    notice_setup v1.9.0 v1.4.3
+    STRAW_NO_UPDATE_CHECK=1 run script -qec "bash $STRAW version" /dev/null
+    [[ "$output" != *"v1.9.0"* ]]
+}
+
+@test "aviso: sem terminal não imprime" {
+    notice_setup v1.9.0 v1.4.3
+    run bash "$STRAW" version
+    [[ "$output" != *"straw update"* ]]
+}

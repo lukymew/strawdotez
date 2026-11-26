@@ -43,7 +43,7 @@ straw:
       en: "Dev: web (PHP and SQLite)"
       termux: [php, sqlite]
       apt: [php-cli, sqlite3]
-      apk: [php83, sqlite]
+      apk: [php, sqlite]
     network:
       icon: "📡"
       group: net

@@ -28,3 +28,19 @@ themes:
     name: Tomorrow Night
     url: https://raw.githubusercontent.com/termux/termux-styling/v0.32.1/app/src/main/assets/colors/tomorrow-night.properties
     sha256: 82767e9388dfe09980aeb3b435d7e53b66df8e2318979a8ac5f6b7b38fb32716
+  - id: gruvbox-light
+    name: Gruvbox Light
+    url: https://raw.githubusercontent.com/termux/termux-styling/v0.32.1/app/src/main/assets/colors/gruvbox-light.properties
+    sha256: ac37bf43b928c835141d0507c425ab06efab3fe8b7b8ebcb80b905baceb846be
+  - id: material
+    name: Material
+    url: https://raw.githubusercontent.com/termux/termux-styling/v0.32.1/app/src/main/assets/colors/material.properties
+    sha256: a66113c3e7e649eb603190ac229dcc012abbe9fb1f3f966809f8fb8aad6fc29a
+  - id: zenburn
+    name: Zenburn
+    url: https://raw.githubusercontent.com/termux/termux-styling/v0.32.1/app/src/main/assets/colors/zenburn.properties
+    sha256: 6517a28ef8967e2820240db0d46569d60ffb77cff776860e122165baec533504
+  - id: ubuntu
+    name: Ubuntu
+    url: https://raw.githubusercontent.com/termux/termux-styling/v0.32.1/app/src/main/assets/colors/ubuntu.properties
+    sha256: b1607ab17d87750117f073ecaa1e43c8721bb68f17d73352d6096f90eaec6286
