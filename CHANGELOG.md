@@ -5,6 +5,11 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-11-26
+
+### Added
+- Debian and Ubuntu support (native or via proot-distro): the installer detects the environment (`target`), installs chezmoi with the official installer, and applies a lean bash setup (`.bashrc`, `straw`, aliases, fzf and zoxide). Termux-only parts (`.termux`, zsh plugins, fonts, themes) are skipped. Alpine is still refused.
+
 ## [1.4.4] - 2026-11-26
 
 ### Added
