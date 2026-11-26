@@ -339,6 +339,56 @@ cmd_config() {
     esac
 }
 
+# ---- update: atualiza os arquivos (chezmoi) e o binário straw-ui da última release
+UI_REPO="${STRAW_REPO:-lukymew/strawdotez}"
+
+# versão fixada = clone do chezmoi em HEAD solto (instalado com --version)
+update_pinned() {
+    [ "${STRAW_PINNED:-}" = 1 ] && return 0
+    [ "${STRAW_PINNED:-}" = 0 ] && return 1
+    local src
+    src="$(chezmoi source-path 2>/dev/null)" || return 1
+    git -C "$src" rev-parse --git-dir >/dev/null 2>&1 || return 1
+    ! git -C "$src" symbolic-ref -q HEAD >/dev/null 2>&1
+}
+
+update_ui() {
+    local arch base dest tmp want have got
+    case "$(uname -m)" in
+        aarch64|arm64) arch=arm64 ;;
+        x86_64|amd64)  arch=amd64 ;;
+        *) return 0 ;;
+    esac
+    if update_pinned; then say "$M_update_ui_pinned"; return 0; fi
+    base="${STRAW_UI_URL:-https://github.com/$UI_REPO/releases/latest/download}"
+    dest="$HOME/.local/bin/straw-ui"
+    tmp="$(mktemp -d "${TMPDIR:-$HOME}/straw-ui.XXXXXX")" || return 1
+    if curl -fsSL "$base/SHA256SUMS" -o "$tmp/sums"; then
+        want="$(awk -v f="straw-ui-linux-$arch" '$2 == f { print $1 }' "$tmp/sums")"
+        have=""
+        [ -f "$dest" ] && have="$(sha256sum "$dest" | cut -d' ' -f1)"
+        if [ -n "$want" ] && [ "$want" = "$have" ]; then
+            say "$M_update_ui_current"; rm -rf "$tmp"; return 0
+        fi
+        if [ -n "$want" ] && curl -fsSL "$base/straw-ui-linux-$arch" -o "$tmp/bin"; then
+            got="$(sha256sum "$tmp/bin" | cut -d' ' -f1)"
+            if [ "$got" = "$want" ]; then
+                mkdir -p "$HOME/.local/bin"
+                install -m 755 "$tmp/bin" "$dest"
+                say "$M_update_ui_ok"; rm -rf "$tmp"; return 0
+            fi
+        fi
+    fi
+    rm -rf "$tmp"
+    say "$M_update_ui_fail" >&2
+    return 1
+}
+
+cmd_update() {
+    chezmoi update || return $?
+    update_ui
+}
+
 cmd_version() {
     local v
     v="$(git -C "$(chezmoi source-path 2>/dev/null)" describe --tags 2>/dev/null)"
@@ -351,7 +401,7 @@ case "${1:-}" in
     tools)                shift; cmd_tools "$@" ;;
     doctor)               shift; cmd_doctor "$@" ;;
     config)               shift; cmd_config "$@" ;;
-    update)               chezmoi update ;;
+    update)               cmd_update; exit $? ;;
     version|-v|--version) cmd_version ;;
     help|-h|--help)       cmd_help ;;
     "")                   if [ -t 0 ] && [ -t 1 ] && command -v fzf >/dev/null 2>&1; then cmd_menu; else cmd_help; fi ;;

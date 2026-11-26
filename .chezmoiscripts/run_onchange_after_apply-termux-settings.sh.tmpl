@@ -9,13 +9,23 @@ set -euo pipefail
 
 profile="$HOME/.termux/termux.properties.{{ .device }}"
 active="$HOME/.termux/termux.properties"
+applied="$HOME/.local/share/strawdotez/properties.applied"
 if [ -f "$profile" ]; then
-    # guarda as edições manuais antes de sobrescrever
-    if [ -f "$active" ] && ! cmp -s "$profile" "$active"; then
-        cp "$active" "$active.bak"
-        echo "{{ template "t" (list . "props_backup") }}"
+    # Guarda o arquivo ativo só se ele for edição manual: o que nós mesmos gravamos antes
+    # (o último aplicado ou qualquer um dos perfis) não conta.
+    if [ -f "$active" ]; then
+        ours=0
+        for p in "$applied" "$HOME/.termux/termux.properties.cell" "$HOME/.termux/termux.properties.tablet"; do
+            if [ -f "$p" ] && cmp -s "$p" "$active"; then ours=1; fi
+        done
+        if [ "$ours" = 0 ]; then
+            cp "$active" "$active.bak"
+            echo "{{ template "t" (list . "props_backup") }}"
+        fi
     fi
     cp "$profile" "$active"
+    mkdir -p "$(dirname "$applied")"
+    cp "$profile" "$applied"
 fi
 
 {{- $theme := index . "theme" | default "default" }}

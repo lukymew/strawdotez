@@ -5,6 +5,11 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [1.4.2] - 2026-11-25
+
+### Changed
+- `straw update` now also updates the `straw-ui` binary from the latest release (checked by sha256). A pinned install (`--version`) keeps its binary.
+
 ## [1.4.1] - 2026-11-25
 
 ### Fixed
