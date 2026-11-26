@@ -122,6 +122,8 @@ private_dot_termux/         Termux properties, colors and font
 - **Change the banner title:** edit `banner_title` in `.chezmoidata/ui.yaml`, then run `chezmoi init` and `chezmoi apply`.
 - **Change colors or font:** edit the files in `private_dot_termux/`.
 
+See [Troubleshooting](docs/TROUBLESHOOTING.md) and [Contributing](CONTRIBUTING.md).
+
 ## Credits and inspirations
 
 This project would not exist without other people's work:
