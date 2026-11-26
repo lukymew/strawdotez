@@ -47,6 +47,8 @@ curl -fsSL https://raw.githubusercontent.com/lukymew/strawdotez/main/install.sh 
 
 Coloque `-s -- --defaults` depois de `bash` para pular as perguntas e usar os padrões.
 
+Para instalar uma versão específica em vez do `main`, acrescente `--version v1.2.0` (`... | bash -s -- --version v1.2.0`). Uma instalação fixada não muda com o `straw update`; rode o instalador de novo para trocar de versão.
+
 Quer ler o instalador antes de rodar? Veja o [SECURITY.md](SECURITY.md#conferir-o-instalador-antes-de-rodar-opcional).
 
 Ele faz algumas perguntas (Enter aceita o padrão de cada uma):

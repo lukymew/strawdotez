@@ -30,32 +30,12 @@ func Run(d *data.Data, all []tools.Entry, th Theme, h Hooks) int {
 	}
 	w, rows := Size(fd)
 	m := New(all, inst(), w, rows)
-	buf := make([]byte, 64)
 	for {
-		old, err := MakeRaw(fd)
+		act, err := screen(fd, m, d, th)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "straw-ui:", err)
 			return 1
 		}
-		fmt.Print("\x1b[?1049h\x1b[?25l") // tela alternativa e cursor escondido
-		act := ActNone
-		for act == ActNone {
-			m.W, m.H = Size(fd)
-			m.clamp(len(m.Visible()))
-			fmt.Print("\x1b[H\x1b[2J" + strings.ReplaceAll(View(m, d, th), "\n", "\r\n"))
-			n, err := os.Stdin.Read(buf)
-			if err != nil || n == 0 {
-				act = ActQuit
-				break
-			}
-			for _, k := range ParseKeys(buf[:n]) {
-				if act = m.Update(k); act != ActNone {
-					break
-				}
-			}
-		}
-		fmt.Print("\x1b[?25h\x1b[?1049l")
-		Restore(fd, old)
 		if act == ActQuit {
 			return 0
 		}
@@ -70,6 +50,48 @@ func Run(d *data.Data, all []tools.Entry, th Theme, h Hooks) int {
 		var b [1]byte
 		syscall.Read(fd, b[:])
 		fmt.Println()
+		w, rows = Size(fd)
 		m = New(all, inst(), w, rows)
+	}
+}
+
+// screen mostra a interface até o usuário sair ou pedir a instalação.
+// O defer garante que o terminal volta ao normal mesmo se houver um pânico.
+func screen(fd int, m *Model, d *data.Data, th Theme) (act Action, err error) {
+	old, err := MakeRaw(fd)
+	if err != nil {
+		return ActQuit, err
+	}
+	fmt.Print("\x1b[?1049h\x1b[?25l") // tela alternativa e cursor escondido
+	defer func() {
+		fmt.Print("\x1b[?25h\x1b[?1049l")
+		Restore(fd, old)
+	}()
+
+	buf := make([]byte, 64)
+	draw := true
+	for {
+		if w, h := Size(fd); w != m.W || h != m.H {
+			m.W, m.H = w, h
+			m.clamp(len(m.Visible()))
+			draw = true
+		}
+		if draw {
+			fmt.Print("\x1b[H\x1b[2J" + strings.ReplaceAll(View(m, d, th), "\n", "\r\n"))
+			draw = false
+		}
+		n, rerr := syscall.Read(fd, buf)
+		if rerr == syscall.EINTR || (rerr == nil && n == 0) {
+			continue // tempo limite sem tecla: volta a checar o tamanho
+		}
+		if rerr != nil {
+			return ActQuit, nil
+		}
+		for _, k := range ParseKeys(buf[:n]) {
+			if a := m.Update(k); a != ActNone {
+				return a, nil
+			}
+		}
+		draw = true
 	}
 }

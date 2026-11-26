@@ -2,6 +2,7 @@
 # strawdotez: instalador de uma linha / one-line installer (Termux)
 #   curl -fsSL https://raw.githubusercontent.com/lukymew/strawdotez/main/install.sh | bash
 #   ... | bash -s -- --defaults     (sem perguntas / no questions)
+#   ... | bash -s -- --version v1.2.0   (fixa uma versão / pin a version)
 set -eu
 
 REPO="${STRAW_REPO:-lukymew/strawdotez}"
@@ -22,7 +23,11 @@ get_ui() {
         x86_64|amd64)  arch=amd64 ;;
         *) return 1 ;;
     esac
-    base="${STRAW_UI_URL:-https://github.com/$REPO/releases/latest/download}"
+    if [ -n "$ver" ]; then
+        base="${STRAW_UI_URL:-https://github.com/$REPO/releases/download/$ver}"
+    else
+        base="${STRAW_UI_URL:-https://github.com/$REPO/releases/latest/download}"
+    fi
     dest="$HOME/.local/bin/straw-ui"
     tmp="$(mktemp -d "${TMPDIR:-$HOME}/straw-ui.XXXXXX")" || return 1
     if curl -fsSL "$base/straw-ui-linux-$arch" -o "$tmp/bin" && curl -fsSL "$base/SHA256SUMS" -o "$tmp/sums"; then
@@ -45,12 +50,22 @@ case "${PREFIX:-}" in
 esac
 
 defaults=0
-for a in "$@"; do
-    case "$a" in
+ver="${STRAW_VERSION:-}"
+while [ "$#" -gt 0 ]; do
+    case "$1" in
         -d|--defaults) defaults=1 ;;
-        -h|--help) m "uso: install.sh [--defaults]" "usage: install.sh [--defaults]"; exit 0 ;;
+        -v|--version)  shift; ver="${1:-}" ;;
+        -h|--help) m "uso: install.sh [--defaults] [--version vX.Y.Z]" "usage: install.sh [--defaults] [--version vX.Y.Z]"; exit 0 ;;
     esac
+    shift
 done
+if [ -n "$ver" ]; then
+    if ! [[ "$ver" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+        m "strawdotez: versão inválida '$ver' (use algo como v1.2.0)." "strawdotez: invalid version '$ver' (use something like v1.2.0)."
+        exit 1
+    fi
+    m "strawdotez: instalando a versão $ver (fixada: 'straw update' não atualiza; rode o instalador de novo para trocar)." "strawdotez: installing version $ver (pinned: 'straw update' will not move it; run the installer again to change)."
+fi
 
 if ! command -v chezmoi >/dev/null 2>&1 || ! command -v git >/dev/null 2>&1; then
     m "strawdotez: instalando chezmoi e git..." "strawdotez: installing chezmoi and git..."
@@ -58,6 +73,7 @@ if ! command -v chezmoi >/dev/null 2>&1 || ! command -v git >/dev/null 2>&1; the
 fi
 
 args=(init --apply)
+[ -n "$ver" ] && args+=(--branch "$ver")
 if [ "$defaults" = 1 ] || ! { : </dev/tty; } 2>/dev/null; then
     # sem terminal ou pedido --defaults: usa os padrões, mantendo o idioma do sistema
     args+=(--promptDefaults --promptChoice "Idioma / Language (pt or en)=$L")

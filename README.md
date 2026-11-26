@@ -47,6 +47,8 @@ curl -fsSL https://raw.githubusercontent.com/lukymew/strawdotez/main/install.sh 
 
 Add `-s -- --defaults` after `bash` to skip the questions and use the defaults.
 
+To install a specific release instead of `main`, add `--version v1.2.0` (`... | bash -s -- --version v1.2.0`). A pinned install does not move with `straw update`; run the installer again to change version.
+
 Want to read the installer before running it? See [SECURITY.md](SECURITY.md#checking-the-installer-before-running-it-optional).
 
 It asks a few questions (Enter accepts each default):

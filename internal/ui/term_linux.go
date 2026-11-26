@@ -19,8 +19,9 @@ func MakeRaw(fd int) (*syscall.Termios, error) {
 	raw.Lflag &^= syscall.ECHO | syscall.ECHONL | syscall.ICANON | syscall.ISIG | syscall.IEXTEN
 	raw.Cflag &^= syscall.CSIZE | syscall.PARENB
 	raw.Cflag |= syscall.CS8
-	raw.Cc[syscall.VMIN] = 1
-	raw.Cc[syscall.VTIME] = 0
+	// lê com tempo limite de 0,2 s: sem tecla, o laço pode notar mudança de tamanho
+	raw.Cc[syscall.VMIN] = 0
+	raw.Cc[syscall.VTIME] = 2
 	if _, _, e := syscall.Syscall(syscall.SYS_IOCTL, uintptr(fd), syscall.TCSETS, uintptr(unsafe.Pointer(&raw))); e != 0 {
 		return nil, e
 	}
