@@ -5,6 +5,7 @@
 
 [ -z "$PS1" ] && return   # só em shell interativo
 
+{ [ -n "${TMPDIR:-}" ] && [ -d "$TMPDIR" ] && [ -w "$TMPDIR" ]; } || export TMPDIR=/tmp
 shopt -s checkwinsize
 HISTSIZE=4000
 HISTFILESIZE=5000

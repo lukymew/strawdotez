@@ -17,7 +17,7 @@
 {{- $lang := promptChoiceOnce . "lang" "Idioma / Language (pt or en)" (list "pt" "en") "en" -}}
 {{- $t := dict
     "pt" (dict
-        "intro" "\n=== strawdotez: configuração do Termux ===\nEnter aceita o padrão de cada pergunta.\n\n"
+        "intro" "\n=== strawdotez: configuração ===\nEnter aceita o padrão de cada pergunta.\n\n"
         "name" "Seu nome para o git (opcional: Enter pula)"
         "email" "Seu e-mail para o git (opcional: Enter pula)"
         "device" "Perfil do Termux (cell para celular ou tablet para tablet)"
@@ -25,7 +25,7 @@
         "banner" "Mostrar o logo e o cabeçalho ao abrir o terminal? (Y/n)"
         "hush" "Desligar a mensagem de boas-vindas do Termux? (Y/n)")
     "en" (dict
-        "intro" "\n=== strawdotez: Termux setup ===\nPress Enter to accept each default.\n\n"
+        "intro" "\n=== strawdotez: setup ===\nPress Enter to accept each default.\n\n"
         "name" "Your name for git (optional: Enter skips)"
         "email" "Your email for git (optional: Enter skips)"
         "device" "Termux profile (cell for phone or tablet for tablet)"

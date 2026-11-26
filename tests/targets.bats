@@ -77,3 +77,10 @@ init_cfg() {  # init_cfg <alvo>  -> grava $T/c.toml
     STRAW_TARGET=freebsd run timeout 10 bash "$REPO/install.sh" </dev/null
     [ "$status" -eq 1 ]
 }
+
+@test "debian: o .bashrc garante um TMPDIR que existe (proot)" {
+    init_cfg debian
+    chezmoi execute-template --source "$REPO" --config "$T/c.toml" < "$REPO/dot_bashrc.tmpl" > "$T/bashrc"
+    run env -i HOME="$T/home" PATH="$PATH" TMPDIR=/nao/existe bash -c 'PS1=x; . "$1"; echo "$TMPDIR"' _ "$T/bashrc"
+    [[ "$output" == *"/tmp" ]]
+}

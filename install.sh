@@ -89,6 +89,8 @@ if [ "$TARGET" = termux ]; then
         pkg install -y chezmoi git
     fi
 else
+    # no proot o TMPDIR herdado pode apontar para uma pasta que não existe; o chezmoi grava os scripts lá
+    { [ -n "${TMPDIR:-}" ] && [ -d "$TMPDIR" ] && [ -w "$TMPDIR" ]; } || export TMPDIR=/tmp
     sudo=""
     [ "$(id -u)" != 0 ] && command -v sudo >/dev/null 2>&1 && sudo=sudo
     if ! command -v git >/dev/null 2>&1; then
