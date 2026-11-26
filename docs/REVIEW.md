@@ -27,7 +27,7 @@ Gravidade: **alta** (corrigir já), **média** (corrigir na próxima versão), *
 | 7 | média (corrigido) | `functions_net_termux`, `aliases_termux` | `@ip-locator` usa `curl ipinfo.io/...` e `whatismyip` usa `curl ifconfig.me`, ambos em HTTP puro por padrão; `tb` envia texto sem criptografia para um serviço público. | `https://` e `curl -fsS`; documentar o `tb` (já está no `SECURITY.md`). |
 | 8 | baixa (corrigido) | `functions_utils_termux` (`clone`) | `git clone -q "$1"` aceita um argumento que começa com `-` como opção. | `git clone -q -- "$1" "$destination"`. |
 | 9 | baixa (corrigido) | `straw`, `ui`, script de pacotes | `dpkg -s` pode contar como instalado um pacote removido que manteve a configuração (estado `config-files`). Não consegui reproduzir aqui (nenhum pacote nesse estado), então está **a verificar**. | Se confirmar: `dpkg-query -W -f='${Status}' pkg` e procurar `install ok installed`. |
-| 10 | baixa | `.github/workflows/*` | Actions fixadas por tag (`@v4`, `@v5`, `@v2`), não por hash de commit. O binário publicado não tem assinatura nem atestado de origem. | Fixar por hash; considerar `actions/attest-build-provenance` na release. |
+| 10 | baixa (parcial) | `.github/workflows/*` | Actions fixadas por tag (`@v4`, `@v5`, `@v2`), não por hash de commit. O binário publicado não tem assinatura nem atestado de origem. | Fixar por hash; considerar `actions/attest-build-provenance` na release. |
 | 11 | baixa (corrigido) | `functions_utils_termux` (`rsfile`) | A substring de busca em `${FNAME/${sstr}/${rstr}}` é tratada como padrão (`*`, `?`); nomes com esses caracteres se comportam de forma surpreendente. | Citar a variável: `${FNAME/"$sstr"/$rstr}`. |
 | 12 | baixa (corrigido) | vários | Coisas pessoais ou de nome estranho no repositório público: banner "Obscure Society", pasta `WaRzOnE` num comentário do `termux.properties`, `reloa` (provável erro de digitação), função `google` que apenas faz `ping`, funções genéricas `ask`, `clone`, `tiny`. | Tornar o banner configurável; renomear ou documentar. |
 | 13 | baixa (corrigido) | `functions_ai_termux` e módulo `ai` | As funções esperam binários em `~/llama-bin`, mas o módulo `ai` do `straw` instala o pacote `llama-cpp` do Termux. Os dois caminhos coexistem sem explicação. | Escolher um e documentar. |
@@ -67,7 +67,7 @@ Gravidade: **alta** (corrigir já), **média** (corrigir na próxima versão), *
 - Achado 12: o título do cabeçalho vem de `.chezmoidata/ui.yaml`; o comentário com a pasta pessoal saiu do `termux.properties`; `reload` foi adicionado ao lado do `reloa`; a função `google` ganhou comentário.
 - Achado 13: `llm` e `llm-server` usam o `llama-cpp` do Termux (PATH) e, se não houver, os binários em `~/llama-bin`; sem nenhum dos dois, avisam qual pacote instalar.
 - Achado 14: `scripts/setup-dev.sh` ativa o hook e confere as ferramentas.
-- Pendente: achado 10 (fixar as Actions por hash; precisa consultar o GitHub, o que o sandbox não alcança).
+- Achado 10: as três Actions (`checkout`, `setup-go`, `gitleaks-action`) estão fixadas por hash de commit (lidos pelo dono com `gh api`). Falta decidir sobre assinatura ou atestado de origem do binário (`actions/attest-build-provenance`).
 - Testes novos: `tests/functions.bats` (15 testes das funções e atalhos). O teste do `clone` é só uma checagem de texto, porque o git recusa a URL-opção de qualquer jeito e não dá para distinguir o comportamento.
 
 ## Ordem de correção sugerida
