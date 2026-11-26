@@ -202,7 +202,7 @@ function extract() {
 # uso: genpasswd [tamanho]
 function genpasswd() {
     local PWDLEN=${1:-32}
-    tr -dc 'A-Za-z0-9_' </dev/urandom | head -c "$PWDLEN"
+    tr -dc 'A-Za-z0-9_' </dev/urandom 2>/dev/null | head -c "$PWDLEN"
     echo
 }
 
@@ -211,7 +211,7 @@ function genpasswd() {
 # uso: genpin [tamanho]
 function genpin() {
     local PINLEN=${1:-4}
-    tr -dc '0-9' </dev/urandom | head -c "$PINLEN"
+    tr -dc '0-9' </dev/urandom 2>/dev/null | head -c "$PINLEN"
     echo
 }
 

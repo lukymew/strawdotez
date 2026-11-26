@@ -83,6 +83,7 @@ Se o repo estiver privado, acrescente `GH_CONFIG_DIR=$HOME/.config/gh GIT_CONFIG
 - O `~/.gitconfig` é gerenciado: não use `git config --global` para a identidade. Ela vem do `.gitconfig-local`, gerado pelas perguntas.
 - `compinit` é carregado no primeiro Tab (peça `zsh_opts_termux`): não mova para a abertura.
 - Textos das perguntas em `.chezmoi.toml.tmpl` não podem ter vírgula nem `=`: o texto vira a chave das opções `--promptString`, `--promptBool` e `--promptChoice` (usadas em automação e CI).
+- Pipelines como `tr ... </dev/urandom | head -c N` imprimem "Broken pipe" quando o SIGPIPE está ignorado (acontece no CI e dentro do bats). Redirecione o stderr do `tr` (`2>/dev/null`).
 - O `.chezmoiignore` precisa listar `README.md`, `LICENSE` e `CLAUDE.md`, senão o chezmoi tenta copiá-los para `~/`.
 
 - Pacotes de rede no Termux: `mtr` e `tcpdump` estão no `root-repo` (precisam de `pkg install root-repo`); `hydra`, `sqlmap`, `john` e `nikto` não foram achados nos repositórios do Termux (main, root, x11 e tur) pelo caminho do pacote. `openssl-tool` é subpacote do `openssl`. Confirme sempre com `straw doctor`.
