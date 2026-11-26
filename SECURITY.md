@@ -14,7 +14,7 @@ English first, português abaixo.
 - `allow-external-apps` in `termux.properties` is **off** (`false`). Turning it on lets other apps run commands in Termux, but only apps you granted the `RUN_COMMAND` permission. You only need it for automation (Tasker and similar): set it to `true` in `~/.termux/termux.properties` and run `termux-reload-settings`.
 - Dangerous aliases were removed (`rmrf`, `iptablesflush`). `rm`, `cp` and `mv` ask for confirmation (`-i`).
 - Aliases worth knowing: `gita` runs `git add .` (stages everything; the pre-commit hook is your safety net), `shareterm` starts an SSH server, `listen` opens a port and `tb` sends text to a public paste service (termbin). Use them knowingly.
-- `straw` and the installer only install packages from your configured package manager and download `straw-ui` from this repository's releases, checking its sha256.
+- `straw` and the installer only install packages from your configured package manager and download `straw-ui` from this repository's releases, checking its sha256. Fonts you choose with `straw config` are downloaded from a fixed nerd-fonts tag and also checked by sha256.
 
 ### Checking the installer before running it (optional)
 The one-line installer runs a script from the internet. To read and verify it first:
