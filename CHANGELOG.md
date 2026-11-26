@@ -5,8 +5,36 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
-### Security
-- `SECURITY.md`: secrets policy, installer check, how to report. Removed aliases `rmrf` and `iptablesflush`. Release publishes `install.sh` and its sha256. More secret patterns in `.gitignore`.
+## [1.3.0] - 2026-11-25
+
+### Added
+- `straw tools`: interactive tool browser written in Go with the standard library only (live search, mark several, install, resizes with the screen, restores the terminal on failure). With a search term it just lists the matches.
+- `install.sh --version vX.Y.Z` (or `STRAW_VERSION`) installs a pinned release and downloads `straw-ui` from the same release.
+- `SECURITY.md` (English and Portuguese): secrets policy, what the setup changes on the device, how to check the installer and how to report a vulnerability. The release also publishes `install.sh` and its sha256.
+- `docs/REVIEW.md`: code review with 21 findings and what was fixed.
+- `tests/functions.bats` (15 tests for the shell functions) and 13 tests for `straw`, all run in CI.
+- `scripts/setup-dev.sh` (turns on the pre-commit hook) and `.chezmoidata/ui.yaml` (`banner_title` for the header).
+- `check-i18n.py` now checks that `%s`/`%d` match between pt and en and bans `$` and backticks in `straw_*` messages; `ci-check.sh` validates `straw.json` and cleans up after itself.
+
+### Changed
+- `allow-external-apps` is now off by default in `termux.properties`.
+- zsh plugins are pinned to a version with a sha256 checksum instead of following the main branch.
+- GitHub Actions are pinned by commit hash.
+- `LANG` follows the language chosen at install (`pt_BR.UTF-8` or `en_US.UTF-8`).
+- `HISTCONTROL=ignoreboth` in bash (commands starting with a space are not saved), like zsh.
+- `setopt CORRECT` removed from zsh.
+- `llm` and `llm-server` use the Termux `llama-cpp` package when present, or the binaries in `~/llama-bin`, and no longer export `LD_LIBRARY_PATH`.
+- `battery`, `wifi`, `ports`, `listen` and `tb` tell you which package to install when it is missing; `timer` works without `termux-notification`.
+- Before overwriting `termux.properties`, your edits are saved to `termux.properties.bak`.
+- A package only counts as installed when dpkg says `install ok installed`.
+
+### Fixed
+- `genpasswd` and `genpin` no longer print "Broken pipe" when SIGPIPE is ignored (it broke the tests in CI).
+- `clone` uses `--` before the URL; `rsfile` treats the search text literally.
+- `@ip-locator` and `whatismyip` use HTTPS.
+
+### Removed
+- Dangerous aliases `rmrf` and `iptablesflush`, and `cve` (`searchsploit` does not exist in Termux).
 
 ## [1.2.0] - 2026-11-25
 
