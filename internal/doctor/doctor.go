@@ -12,6 +12,7 @@ import (
 	"sync"
 
 	"github.com/lukymew/strawdotez/internal/data"
+	"github.com/lukymew/strawdotez/internal/proc"
 )
 
 // Status de um resultado.
@@ -40,18 +41,18 @@ type System interface {
 // Real é o System de verdade.
 type Real struct{}
 
-func (Real) LookPath(n string) bool { _, err := exec.LookPath(n); return err == nil }
+func (Real) LookPath(n string) bool { _, err := proc.LookPath(n); return err == nil }
 func (Real) Getenv(k string) string { return os.Getenv(k) }
 
 func (Real) PkgExists(env, pkg string) bool {
 	var cmd *exec.Cmd
 	switch env {
 	case "termux":
-		cmd = exec.Command("pkg", "show", pkg)
+		cmd = proc.Command("pkg", "show", pkg)
 	case "apt":
-		cmd = exec.Command("apt-cache", "show", pkg)
+		cmd = proc.Command("apt-cache", "show", pkg)
 	case "apk":
-		cmd = exec.Command("apk", "info", "-e", pkg)
+		cmd = proc.Command("apk", "info", "-e", pkg)
 		out, err := cmd.Output()
 		return err == nil && strings.TrimSpace(string(out)) != ""
 	default:

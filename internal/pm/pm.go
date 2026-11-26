@@ -4,18 +4,19 @@ package pm
 import (
 	"fmt"
 	"os"
-	"os/exec"
 	"strings"
+
+	"github.com/lukymew/strawdotez/internal/proc"
 )
 
 // Installed diz se o pacote já está instalado (termux e apt usam dpkg, apk usa apk).
 func Installed(env, pkg string) bool {
 	switch env {
 	case "termux", "apt":
-		out, err := exec.Command("dpkg-query", "-W", "-f=${Status}", pkg).Output()
+		out, err := proc.Command("dpkg-query", "-W", "-f=${Status}", pkg).Output()
 		return err == nil && string(out) == "install ok installed"
 	case "apk":
-		out, err := exec.Command("apk", "info", "-e", pkg).Output()
+		out, err := proc.Command("apk", "info", "-e", pkg).Output()
 		return err == nil && strings.TrimSpace(string(out)) != ""
 	}
 	return false
@@ -36,11 +37,11 @@ func Install(env string, pkgs []string) error {
 		return fmt.Errorf("ambiente não suportado")
 	}
 	if env != "termux" && os.Geteuid() != 0 {
-		if _, err := exec.LookPath("sudo"); err == nil {
+		if _, err := proc.LookPath("sudo"); err == nil {
 			args = append([]string{"sudo"}, args...)
 		}
 	}
-	c := exec.Command(args[0], args[1:]...)
+	c := proc.Command(args[0], args[1:]...)
 	c.Stdin, c.Stdout, c.Stderr = os.Stdin, os.Stdout, os.Stderr
 	return c.Run()
 }
