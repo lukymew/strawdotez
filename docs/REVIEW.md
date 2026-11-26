@@ -39,13 +39,13 @@ Lidos depois da primeira revisão: `zsh_opts_termux`, `zsh_compat_termux`, `zsh_
 
 | # | Gravidade | Onde | Problema | Situação |
 |---|---|---|---|---|
-| 15 | média | `.chezmoiexternal.toml` | Os plugins do zsh são clonados do ramo principal (`git-repo`) e rodam em toda sessão do zsh: se o repositório deles for comprometido, o código chega ao seu terminal em até 7 dias. | **Pendente**: fixar uma versão com `archive` e `checksum` (o sandbox não alcança os arquivos do GitHub para calcular o sha256; o dono calcula no celular). |
+| 15 | média (corrigido) | `.chezmoiexternal.toml` | Os plugins do zsh são clonados do ramo principal (`git-repo`) e rodam em toda sessão do zsh: se o repositório deles for comprometido, o código chega ao seu terminal em até 7 dias. | Corrigido: `archive` fixado em `v0.7.1` e `0.8.0` com sha256 (calculados no celular). Testei o mecanismo aqui com um arquivo local: extrai certo e recusa checksum errado. |
 | 16 | média | `check-i18n.py` | Só comparava os nomes das chaves. Uma mensagem com `%s` em pt e sem em en passava, e um `$` ou crase numa chave `straw_*` quebraria o `messages.sh`. | Corrigido: confere os `%s`/`%d` e proíbe `$` e crase nas chaves `straw_*` (testado com uma mudança forçada). |
 | 17 | baixa | `ci-check.sh` | Deixava pastas temporárias para trás e não validava o `straw.json`. | Corrigido: limpa ao sair e valida o JSON. |
 | 18 | baixa | `bashrc_termux` | `HISTCONTROL=ignoredups` salva comandos que começam com espaço; o zsh não salva (`HIST_IGNORE_SPACE`). Um segredo digitado com espaço na frente ficava no histórico do bash. | Corrigido: `ignoreboth`. |
 | 19 | baixa | `zsh_plugins_termux` | O comentário dizia "instalados via pkg", mas vêm do GitHub. | Corrigido. |
 | 20 | baixa | `zsh_compat_termux` | O `command_not_found_handler` do zsh é mais pobre que o do bash (sem as dicas por comando). | Aberto, preferência. |
-| 21 | baixa | `zsh_opts_termux` | `setopt CORRECT` pergunta "corrigir para...?" a cada comando digitado errado, o que atrapalha no teclado do celular. | Aberto, preferência: considerar `unsetopt CORRECT`. |
+| 21 | baixa (corrigido) | `zsh_opts_termux` | `setopt CORRECT` pergunta "corrigir para...?" a cada comando digitado errado, o que atrapalha no teclado do celular. | Corrigido: `setopt CORRECT` removido. |
 
 ## Pontos fortes (manter)
 

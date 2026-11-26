@@ -1,6 +1,5 @@
 # Opções e comportamento — versão completa pro dia a dia
 setopt AUTO_CD
-setopt CORRECT
 setopt HIST_IGNORE_DUPS
 setopt HIST_IGNORE_SPACE
 setopt SHARE_HISTORY

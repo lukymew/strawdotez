@@ -1,9 +1,16 @@
+# Plugins do zsh, fixados em uma versão (tag) com checksum.
+# Para atualizar: troque a tag na url, calcule o sha256 com
+#   curl -fsSL <url> | sha256sum
+# e rode chezmoi apply.
+
 [".local/share/zsh/zsh-autosuggestions"]
-    type = "git-repo"
-    url = "https://github.com/zsh-users/zsh-autosuggestions.git"
-    refreshPeriod = "168h"
+    type = "archive"
+    url = "https://github.com/zsh-users/zsh-autosuggestions/archive/refs/tags/v0.7.1.tar.gz"
+    stripComponents = 1
+    checksum.sha256 = "0df7affff21cd87ed298e6a3970ed08a1dd66a6efa676454ee5b091ad503badf"
 
 [".local/share/zsh/zsh-syntax-highlighting"]
-    type = "git-repo"
-    url = "https://github.com/zsh-users/zsh-syntax-highlighting.git"
-    refreshPeriod = "168h"
+    type = "archive"
+    url = "https://github.com/zsh-users/zsh-syntax-highlighting/archive/refs/tags/0.8.0.tar.gz"
+    stripComponents = 1
+    checksum.sha256 = "5981c19ebaab027e356fe1ee5284f7a021b89d4405cc53dc84b476c3aee9cc32"
