@@ -46,5 +46,11 @@ Before overwriting it, the setup saves your version to `~/.termux/termux.propert
 ## The menu opens at the wrong size
 The `fzf` menu uses half of the screen at the bottom. Change it in `FZF_DEFAULT_OPTS` (file `env_common`) if you prefer another size.
 
+## `pkg` fails with 429 or `CANNOT LINK EXECUTABLE`
+The Termux mirror is out of sync or rate-limited. Run `termux-change-repo`, pick the main repository and a single mirror (for example `packages.termux.dev`), then `pkg update && pkg upgrade`.
+
+## `straw-ui` dies with `bad system call`
+Older versions (before v1.4.1) crash on Android devices that block the `faccessat2` call. Install again to get the fixed binary: `curl -fsSL https://raw.githubusercontent.com/lukymew/strawdotez/main/install.sh | bash`.
+
 ## Still stuck?
 Open an issue with the output of `straw doctor` and `straw version`. Never paste tokens, keys or e-mails. See [SECURITY.md](../SECURITY.md).

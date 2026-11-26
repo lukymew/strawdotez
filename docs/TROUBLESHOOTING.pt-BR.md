@@ -46,5 +46,11 @@ Antes de sobrescrever, o setup salva a sua versão em `~/.termux/termux.properti
 ## O menu abre num tamanho ruim
 O menu do `fzf` usa metade da tela, embaixo. Mude em `FZF_DEFAULT_OPTS` (arquivo `env_common`) se preferir outro tamanho.
 
+## `pkg` falha com 429 ou `CANNOT LINK EXECUTABLE`
+O espelho do Termux está desatualizado ou limitou os pedidos. Rode `termux-change-repo`, escolha o repositório principal e um espelho só (por exemplo `packages.termux.dev`), depois `pkg update && pkg upgrade`.
+
+## `straw-ui` morre com `bad system call`
+Versões anteriores à v1.4.1 travam em aparelhos Android que bloqueiam a chamada `faccessat2`. Instale de novo para receber o binário corrigido: `curl -fsSL https://raw.githubusercontent.com/lukymew/strawdotez/main/install.sh | bash`.
+
 ## Ainda travado?
 Abra uma issue com a saída de `straw doctor` e `straw version`. Nunca cole tokens, chaves ou e-mails. Veja o [SECURITY.md](../SECURITY.md).
