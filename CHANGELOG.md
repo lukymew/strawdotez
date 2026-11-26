@@ -11,6 +11,9 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - `straw config`: menu and commands (`list`, `get`, `set`) to change language, default shell, font, device profile, banner, welcome message, name and e-mail, then apply.
 - Default shell choice (bash or zsh) in the installer and in `straw config`.
 - Font choice: JetBrains Mono, Fira Code, Hack and Meslo (Nerd Fonts), pinned by tag and sha256.
+- Color themes (Dracula, Solarized Dark and Light, Gruvbox Dark, Nord, Tomorrow Night) in `straw config`, pinned by tag and sha256.
+- Optional Starship prompt: `straw config set prompt starship` installs it and turns it on for bash and zsh.
+- A short description for each tool in `straw tools` (list and interactive screen); the search also looks in it.
 - Release binaries now carry a build provenance attestation: `gh attestation verify straw-ui-linux-arm64 --repo lukymew/strawdotez`.
 - Tests for the `straw-ui` download in `install.sh` (good checksum, bad checksum, missing files) and for `command_not_found`.
 - `docs/TROUBLESHOOTING.md` (English and Portuguese), `CONTRIBUTING.md` and issue and PR templates.

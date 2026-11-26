@@ -118,7 +118,7 @@ private_dot_termux/         propriedades, cores e fonte do Termux
 - **Adicionar um alias:** edite `.chezmoitemplates/aliases_termux`.
 - **Adicionar uma função:** use o arquivo do assunto em `.chezmoitemplates/functions_*_termux`.
 - **Trocar o título do cabeçalho:** edite `banner_title` em `.chezmoidata/ui.yaml` e rode `chezmoi init` e `chezmoi apply`.
-- **Trocar shell, fonte, idioma e mais:** rode `straw config` (menu) ou `straw config set font jetbrains`.
+- **Trocar shell, fonte, tema de cores, prompt, idioma e mais:** rode `straw config` (menu) ou `straw config set theme dracula`.
 - **Trocar as cores ou a fonte:** edite os arquivos em `private_dot_termux/`.
 
 Veja [Solução de problemas](docs/TROUBLESHOOTING.pt-BR.md) e [Contribuindo](CONTRIBUTING.md).
