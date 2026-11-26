@@ -5,6 +5,8 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-11-25
+
 ### Added
 - `straw config`: menu and commands (`list`, `get`, `set`) to change language, default shell, font, device profile, banner, welcome message, name and e-mail, then apply.
 - Default shell choice (bash or zsh) in the installer and in `straw config`.
