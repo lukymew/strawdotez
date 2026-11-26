@@ -1,5 +1,5 @@
 ### PERFIL: TABLET
-### Ativado via função termux-modo-tablet (ver .bashrc)
+### Ativado via função termux-modo-tablet (ver .bashrc) ou: straw config set device tablet
 ### Para voltar ao celular, rode: termux-modo-celular
 ###
 ### After making changes and saving you need to run `termux-reload-settings`
@@ -11,6 +11,8 @@
 # =====================================================
 
 ### Allow external applications to execute arbitrary commands within Termux.
+### This potentially could be a security issue, so option is disabled by
+### default. Uncomment to enable.
 # Desligado por padrão: ligar deixa apps com a permissão RUN_COMMAND rodarem comandos aqui (veja SECURITY.md).
 # Usa Tasker ou automação? Troque por true e rode termux-reload-settings.
 allow-external-apps = false
@@ -28,9 +30,12 @@ hide-soft-keyboard-on-startup = false
 soft-keyboard-toggle-behaviour = enable/disable
 
 ### Tela grande mostra mais linhas de uma vez — buffer maior
+### (máximo 50000; valores muito altos podem pesar no desempenho)
 terminal-transcript-rows = 10000
 
-### Extra-keys row tem espaço de sobra na tela grande, libera volume normal
+### Tablet: libera o volume normal. Com "volume" os atalhos Volume+Q/K/L deixam
+### de funcionar (use os botões da extra-keys). Para usar o volume como tecla
+### extra, comente a linha abaixo.
 volume-keys = volume
 
 # =====================================================
@@ -40,6 +45,7 @@ volume-keys = volume
 ### Tablet aproveita bem o modo imersivo
 fullscreen = true
 
+### Contorna problemas de layout no modo tela cheia
 use-fullscreen-workaround = true
 
 # =====================================================
@@ -49,6 +55,7 @@ use-fullscreen-workaround = true
 ### Cursor blink rate. Values 0, 100 - 2000.
 terminal-cursor-blink-rate = 500
 
+### Cursor style: block, bar, underline.
 ### Estilo "bar" combina melhor com uso prolongado em tela grande
 terminal-cursor-style = bar
 
@@ -60,14 +67,48 @@ terminal-cursor-style = bar
 ### Choose between default, arrows-only, arrows-all, all and none
 extra-keys-style = all
 
+### 💡 Em tela grande sobra espaço: "all" mostra os símbolos de todas as teclas.
+### Se preferir a barra mais discreta, use "arrows-only".
+# extra-keys-style = arrows-only
+
+### Force capitalize all text in extra keys row button labels.
 extra-keys-text-all-caps = true
 
-### Mais teclas visíveis de uma vez, já que sobra espaço horizontal
+### Default extra-key configuration
+# extra-keys = [[ESC, TAB, CTRL, ALT, {key: '-', popup: '|'}, DOWN, UP]]
+
+### Layout do tablet: três linhas com tudo à mão. Toque normal digita a tecla;
+### deslizar para cima numa tecla com popup dispara a segunda função:
+###   ESC     → abre a gaveta (DRAWER)
+###   -       → |  (pipe)
+###   KEYBOARD → CTRL+d (sair do shell)
+### SHIFT precisa do Termux 0.118 ou mais novo.
 extra-keys = [ \
-    [{key: ESC, popup: DRAWER},'1','2','3','4','5','6','7','8','9','0'], \
-    ['TAB','CTRL','ALT','FN','HOME','UP','END','PGUP','INS','BKSP','DEL'], \
-    ['|','/','-','_','LEFT','DOWN','RIGHT','PGDN','PASTE','KEYBOARD'] \
+    [{key: ESC, popup: DRAWER},'1','2','3','4','5','6','7','8','9','0','BKSP','DEL'], \
+    ['TAB','CTRL','ALT','SHIFT','FN','HOME','UP','END','PGUP','INS','PASTE',{key: KEYBOARD, popup: {macro: "CTRL d", display: exit}}], \
+    [{key: '-', popup: '|'},'/','_','~','LEFT','DOWN','RIGHT','PGDN','ENTER'] \
 ]
+
+### Alternativa para quem usa vim: salvar e sair com um toque (ou deslizando).
+### Cada macro manda as teclas em sequência (ESC :w ENTER = salvar).
+# extra-keys = [ \
+#     [{key: ESC, popup: {macro: "ESC :q ENTER", display: ":q"}},{macro: "ESC :w ENTER", display: ":w"},{macro: "ESC :wq ENTER", display: ":wq"},'/','-','HOME','UP','END','PGUP','BKSP','DEL'], \
+#     ['TAB','CTRL','ALT','SHIFT','LEFT','DOWN','RIGHT','PGDN','PASTE',{key: KEYBOARD, popup: {macro: "CTRL d", display: exit}},'ENTER'] \
+# ]
+
+### Alternativa com popups voltados para uso com tmux (prefixo CTRL f)
+# extra-keys = [[ \
+#   {key: ESC, popup: {macro: "CTRL f d", display: "tmux exit"}}, \
+#   {key: CTRL, popup: {macro: "CTRL f BKSP", display: "tmux ←"}}, \
+#   {key: ALT, popup: {macro: "CTRL f TAB", display: "tmux →"}}, \
+#   {key: TAB, popup: {macro: "ALT a", display: A-a}}, \
+#   {key: LEFT, popup: HOME}, \
+#   {key: DOWN, popup: PGDN}, \
+#   {key: UP, popup: PGUP}, \
+#   {key: RIGHT, popup: END}, \
+#   {macro: "ALT j", display: A-j, popup: {macro: "ALT g", display: A-g}}, \
+#   {key: KEYBOARD, popup: {macro: "CTRL d", display: exit}} \
+# ]]
 
 # =====================================================
 # 5. CORES / TEMA (Colors/themes)
@@ -80,29 +121,43 @@ use-black-ui = true
 # 6. ATALHOS DE TECLADO FÍSICO (HW keyboard shortcuts)
 # =====================================================
 
-### Tablet: teclado bluetooth físico é mais comum, atalhos fazem sentido
+### Tablet: teclado bluetooth físico é mais comum, atalhos fazem sentido.
+### Com os atalhos ligados o Termux também responde a (CTRL+ALT+...):
+###   C nova sessão, R renomear, V colar, +/- tamanho da fonte, 1-9 ir para a sessão.
 disable-hardware-keyboard-shortcuts = false
 
 ### Open a new terminal with ctrl + t
 shortcut.create-session = ctrl + t
 
-### Go one session down/up
+### Go one session down with (for example) ctrl + 2
 shortcut.next-session = ctrl + 2
+
+### Go one session up with (for example) ctrl + 1
 shortcut.previous-session = ctrl + 1
 
-### Rename a session
+### Rename a session with (for example) ctrl + n
 shortcut.rename-session = ctrl + n
 
 # =====================================================
 # 7. TECLA BELL (Bell key)
 # =====================================================
 
+### Vibrate device (default).
+# bell-character = vibrate
+
+### Beep with a sound.
 ### Tablet fica mais em mesa/suporte — som é aceitável e perceptível
 bell-character = beep
+
+### Ignore bell character.
+# bell-character = ignore
 
 # =====================================================
 # 8. TECLA VOLTAR (Back key)
 # =====================================================
+
+### Send the Escape key.
+# back-key=escape
 
 ### Hide keyboard or leave app (default).
 back-key=back
@@ -114,7 +169,8 @@ back-key=back
 ### Letters might not appear until enter is pressed on Samsung devices
 # enforce-char-based-input = true
 
-### Evita bug do ctrl+space com teclado bluetooth (útil em vim/emacs)
+### ctrl+space (for marking text in emacs) does not work on some devices.
+### Evita o bug do ctrl+space com teclado bluetooth (útil em vim/emacs)
 ctrl-space-workaround = true
 
 # =====================================================

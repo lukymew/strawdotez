@@ -9,13 +9,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Changed
 - `straw update` now also updates the `straw-ui` binary from the latest release (checked by sha256). A pinned install (`--version`) keeps its binary.
-
-## [1.4.1] - 2026-11-25
-
-### Fixed
-- `straw-ui` no longer crashes with "bad system call" on Android devices that block the `faccessat2` syscall (`straw doctor` and `straw tools` now find programs without it).
-- Changing the device profile no longer shows a false "saved to termux.properties.bak" notice; the backup is only made when you edited the file yourself.
-- Changing the theme or font with `straw config` no longer makes chezmoi ask whether to overwrite the file.
+- Tablet `termux.properties` profile reworked: now includes everything from the phone profile, plus a 3-row extra-keys layout (SHIFT, FN, INS, PASTE, popups for `|` and `exit`), vim and tmux macro alternatives, and hardware-keyboard shortcut notes. New `tests/properties.bats` validates both profiles.
 
 ## [1.4.1] - 2026-11-25
 
