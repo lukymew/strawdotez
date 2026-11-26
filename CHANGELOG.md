@@ -6,10 +6,10 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
-- `docs/TROUBLESHOOTING.md` (en e pt-BR), `CONTRIBUTING.md` e templates de issue e PR.
+- `docs/TROUBLESHOOTING.md` (English and Portuguese), `CONTRIBUTING.md` and issue and PR templates.
 
 ### Fixed
-- Pacote `php` do Alpine agora é `php83`.
+- The Alpine `php` package is now `php83` (there is no plain `php`).
 
 ## [1.3.0] - 2026-11-25
 
