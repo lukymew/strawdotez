@@ -25,6 +25,7 @@ packages:
     - gh
     - zoxide
   debian:
+    - zsh
     - git
     - curl
     - tmux

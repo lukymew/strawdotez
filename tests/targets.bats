@@ -29,15 +29,14 @@ init_cfg() {  # init_cfg <alvo>  -> grava $T/c.toml
     [[ "$output" == *"Alpine"* ]]
 }
 
-@test "debian: não gerencia .termux, .zshrc nem .hushlogin; gerencia .bashrc e o straw" {
+@test "debian: ignora .termux e .hushlogin, mas não o .zshrc nem o .bashrc" {
     init_cfg debian
-    run chezmoi managed --source "$REPO" --config "$T/c.toml" --destination "$T/home" --path-style absolute
+    run chezmoi execute-template --source "$REPO" --config "$T/c.toml" < "$REPO/.chezmoiignore"
     [ "$status" -eq 0 ]
-    [[ "$output" != *"/.termux"* ]]
-    [[ "$output" != *"/.zshrc"* ]]
-    [[ "$output" != *"/.hushlogin"* ]]
-    [[ "$output" == *"/.bashrc"* ]]
-    [[ "$output" == *"/.local/bin/straw"* ]]
+    [[ "$output" == *$'\n.termux\n'* ]]
+    [[ "$output" == *$'\n.hushlogin'* ]]
+    [[ "$output" != *".zshrc"* ]]
+    [[ "$output" != *".bashrc"* ]]
 }
 
 @test "debian: o .bashrc gerado tem sintaxe válida e não cita o Termux" {
@@ -48,13 +47,14 @@ init_cfg() {  # init_cfg <alvo>  -> grava $T/c.toml
     grep -q '^straw()' "$T/bashrc"
 }
 
-@test "debian: só o script de pacotes gera conteúdo, e com sintaxe válida" {
+@test "debian: os scripts do Termux ficam vazios e os demais têm sintaxe válida" {
     init_cfg debian
     for f in "$REPO"/.chezmoiscripts/*.tmpl; do
         chezmoi execute-template --source "$REPO" --config "$T/c.toml" < "$f" > "$T/s.sh"
         bash -n "$T/s.sh"
         case "$f" in
             *install-termux-packages*) grep -q 'apt-get' "$T/s.sh" ;;
+            *set-default-shell*) grep -q 'chsh' "$T/s.sh" ;;
             *) [ "$(tr -d '[:space:]' < "$T/s.sh")" = "" ] ;;
         esac
     done
@@ -83,4 +83,35 @@ init_cfg() {  # init_cfg <alvo>  -> grava $T/c.toml
     chezmoi execute-template --source "$REPO" --config "$T/c.toml" < "$REPO/dot_bashrc.tmpl" > "$T/bashrc"
     run env -i HOME="$T/home" PATH="$PATH" TMPDIR=/nao/existe bash -c 'PS1=x; . "$1"; echo "$TMPDIR"' _ "$T/bashrc"
     [[ "$output" == *"/tmp" ]]
+}
+
+@test "debian: o .bashrc tem aliases, funções e o prompt colorido" {
+    init_cfg debian
+    chezmoi execute-template --source "$REPO" --config "$T/c.toml" < "$REPO/dot_bashrc.tmpl" > "$T/bashrc"
+    grep -q '^alias ll=' "$T/bashrc" || grep -q "alias gs=" "$T/bashrc"
+    grep -q 'PS1=' "$T/bashrc"
+    ! grep -q 'termux-reload-settings' "$T/bashrc"
+    ! grep -q 'uppkg' "$T/bashrc"
+}
+
+@test "debian: o .zshrc tem sintaxe válida e não usa o command_not_found do Termux" {
+    command -v zsh >/dev/null 2>&1 || skip "zsh não instalado"
+    init_cfg debian
+    chezmoi execute-template --source "$REPO" --config "$T/c.toml" < "$REPO/dot_zshrc.tmpl" > "$T/zshrc"
+    zsh -n "$T/zshrc"
+    ! grep -q 'command_not_found_handler' "$T/zshrc"
+    grep -q '^straw()' "$T/zshrc"
+}
+
+@test "debian: instala os plugins do zsh mas não fonte nem tema" {
+    init_cfg debian
+    run chezmoi execute-template --source "$REPO" --config "$T/c.toml" < "$REPO/.chezmoiexternal.toml.tmpl"
+    [[ "$output" == *"zsh-autosuggestions"* ]]
+    [[ "$output" != *"font.ttf"* ]]
+}
+
+@test "debian: o script do shell padrão usa o shebang do sistema" {
+    init_cfg debian
+    run chezmoi execute-template --source "$REPO" --config "$T/c.toml" < "$REPO/.chezmoiscripts/run_onchange_after_set-default-shell.sh.tmpl"
+    [ "${lines[0]}" = "#!/bin/bash" ]
 }

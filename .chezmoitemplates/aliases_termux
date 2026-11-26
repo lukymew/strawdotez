@@ -39,19 +39,22 @@ alias cdt='cd ~/Termux'
 alias cds='cd ~/Scripts'
 alias cdocs='cd ~/Documents'
 
+{{ if eq (index . "target" | default "termux") "termux" -}}
 alias lists='nano $PREFIX/etc/apt/sources.list'
 # Bash TermuxConfigs
 alias babashrc='nano $PREFIX/etc/bash.bashrc'
-alias bashrc='nano ~/.bashrc'
+{{ end }}alias bashrc='nano ~/.bashrc'
 
 # =====================================================
 # 4. SISTEMA / PACOTES
 # =====================================================
 alias update='apt update && apt upgrade'
+{{ if eq (index . "target" | default "termux") "termux" -}}
 alias uppkg='pkg update && pkg upgrade'
-alias uppzsh='source ~/.zshrc'
+{{ end }}alias uppzsh='source ~/.zshrc'
+{{ if eq (index . "target" | default "termux") "termux" -}}
 alias tt='clear; termux-reload-settings && source "$PREFIX/etc/bash.bashrc"'
-
+{{ end }}
 # =====================================================
 # 5. INFORMAÇÕES DO SISTEMA
 # =====================================================
@@ -67,10 +70,11 @@ _need() {
     return 1
 }
 
+{{ if eq (index . "target" | default "termux") "termux" -}}
 # Requerem o pacote termux-api (e o app Termux:API instalado)
 battery() { _need termux-battery-status termux-api && termux-battery-status "$@"; }
 wifi() { _need termux-wifi-connectioninfo termux-api && termux-wifi-connectioninfo "$@"; }
-
+{{ end }}
 # =====================================================
 # 6. REDE
 # =====================================================

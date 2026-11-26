@@ -1,6 +1,10 @@
 {{ template "env_common" . }}
 {{ template "aliases_common" . }}
 {{ template "zsh_compat_termux" . }}
+{{ if ne (index . "target" | default "termux") "termux" -}}
+straw() { bash "$HOME/.local/bin/straw" "$@"; }
+{ [ -n "${TMPDIR:-}" ] && [ -d "$TMPDIR" ] && [ -w "$TMPDIR" ]; } || export TMPDIR=/tmp
+{{ end -}}
 {{ template "shell_common_termux" . }}
 {{ template "shell_tools_termux" . }}
 {{ template "zsh_opts_termux" . }}

@@ -27,7 +27,5 @@ tests/
 {{- end }}
 {{- if ne $target "termux" }}
 .termux
-.zshrc
 .hushlogin
-.local/share/zsh
 {{- end }}

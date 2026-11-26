@@ -3,8 +3,10 @@ unsetopt EQUALS
 
 chpwd() { ls }
 
+{{ if eq (index . "target" | default "termux") "termux" -}}
 command_not_found_handler() {
     local cmd="$1" blue=$'\e[34m' red=$'\e[31m' green=$'\e[32m' yellow=$'\e[33m' rst=$'\e[0m'
 {{ template "cnf_body_termux" . }}
     return 127
 }
+{{ end }}

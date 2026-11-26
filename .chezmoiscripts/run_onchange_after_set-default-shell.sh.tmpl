@@ -1,10 +1,16 @@
-{{- if eq (index . "target" | default "termux") "termux" -}}
+{{ if eq (index . "target" | default "termux") "termux" -}}
 #!/data/data/com.termux/files/usr/bin/bash
+{{- else -}}
+#!/bin/bash
+{{- end }}
 set -euo pipefail
 
 {{- $shell := index . "shell" | default "bash" }}
 # shell padrão: {{ $shell }}
 want="{{ $shell }}"
+{{- if ne (index . "target" | default "termux") "termux" }}
+want="$(command -v {{ $shell }} || echo bash)"
+{{- end }}
 if ! command -v "$want" >/dev/null 2>&1; then
     echo "{{ template "t" (list . "shell_missing") }} ($want)" >&2
     exit 0
@@ -12,4 +18,3 @@ fi
 if command -v chsh >/dev/null 2>&1 && chsh -s "$want" >/dev/null 2>&1; then
     echo "{{ template "t" (list . "shell_set") }} ($want)"
 fi
-{{- end }}

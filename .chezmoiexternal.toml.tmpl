@@ -1,4 +1,3 @@
-{{- if eq (index . "target" | default "termux") "termux" -}}
 # Plugins do zsh, fixados em uma versão (tag) com checksum.
 # Para atualizar: troque a tag na url, calcule o sha256 com
 #   curl -fsSL <url> | sha256sum
@@ -16,6 +15,7 @@
     stripComponents = 1
     checksum.sha256 = "5981c19ebaab027e356fe1ee5284f7a021b89d4405cc53dc84b476c3aee9cc32"
 
+{{- if eq (index . "target" | default "termux") "termux" }}
 # Tema e fonte escolhidos (straw config). Fica em ~/.local/share/strawdotez/font.ttf e um script
 # a copia para ~/.termux/font.ttf. A fonte "default" vem do próprio repositório.
 {{- $font := index . "font" | default "default" }}
