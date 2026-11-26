@@ -75,3 +75,10 @@ function restore-bashrc() {
 # ===============================================
 # MINHAS CONFIGURAÇÕES PESSOAIS
 # ===============================================
+
+# --- Starship (opcional: straw config set prompt starship) ---
+{{ if eq (index . "prompt" | default "default") "starship" -}}
+if command -v starship >/dev/null 2>&1; then
+    eval "$(starship init bash)"
+fi
+{{ end -}}

@@ -70,3 +70,32 @@ func TestRender(t *testing.T) {
 		t.Error("sem resultados deve avisar")
 	}
 }
+
+func TestDescricaoPorPacote(t *testing.T) {
+	d := sample()
+	d.Tools = map[string]string{"jq": "filtra JSON"}
+	es := Build(d, "apt")
+	var jq, whois Entry
+	for _, e := range es {
+		switch e.Pkg {
+		case "jq":
+			jq = e
+		case "whois":
+			whois = e
+		}
+	}
+	if jq.Label() != "filtra JSON" {
+		t.Errorf("jq deve mostrar a própria descrição, veio %q", jq.Label())
+	}
+	if whois.Label() != "network" {
+		t.Errorf("sem descrição, mostra o módulo; veio %q", whois.Label())
+	}
+	if n := len(Filter(es, "filtra")); n != 1 {
+		t.Errorf("a busca deve achar pela descrição do pacote: %d", n)
+	}
+	var b bytes.Buffer
+	Render(&b, d, es, true, nil)
+	if !strings.Contains(b.String(), "jq") || !strings.Contains(b.String(), "filtra JSON") {
+		t.Errorf("Render sem a descrição:\n%s", b.String())
+	}
+}

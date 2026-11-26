@@ -16,8 +16,8 @@ bad() { printf '  ERRO %s\n' "$1"; fail=1; }
 echo "== mensagens pt/en"
 (cd "$REPO" && python3 scripts/check-i18n.py) && ok "i18n" || bad "i18n: faltam chaves"
 
-echo "== fontes"
-(cd "$REPO" && python3 scripts/check-fonts.py) && ok "fonts.yaml" || bad "fonts.yaml"
+echo "== fontes e temas"
+(cd "$REPO" && python3 scripts/check-fonts.py) && ok "fonts.yaml e themes.yaml" || bad "fonts.yaml ou themes.yaml"
 
 for lang in pt en; do
     echo "== idioma: $lang"
@@ -36,7 +36,7 @@ for lang in pt en; do
     bash -n "$H/.bashrc.out" 2>"$H/err" && ok "bash -n .bashrc" || { bad "bash -n .bashrc"; cat "$H/err"; }
     zsh -n "$H/.zshrc.out" 2>"$H/err" && ok "zsh -n .zshrc" || { bad "zsh -n .zshrc"; cat "$H/err"; }
     D=".local/share/strawdotez"
-    for f in messages.sh modules.tsv profiles.tsv straw.json; do
+    for f in messages.sh modules.tsv profiles.tsv straw.json fonts.tsv themes.tsv; do
         HOME="$H" "$CZ" -S "$REPO" cat "$H/$D/$f" >"$H/$f" 2>"$H/err" && [ -s "$H/$f" ] && ok "straw: $f" || { bad "straw: $f"; cat "$H/err"; }
     done
     python3 -m json.tool "$H/straw.json" >/dev/null 2>"$H/err" && ok "straw.json é JSON válido" || { bad "straw.json inválido"; cat "$H/err"; }

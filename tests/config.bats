@@ -9,7 +9,7 @@ setup_file() {
     command -v chezmoi >/dev/null 2>&1 || skip "chezmoi não instalado"
     D="$BATS_FILE_TMPDIR"; mkdir -p "$D/data"
     printf '[data]\nlang="en"\nname="x"\nemail="a@b.c"\ndevice="cell"\nbanner=false\nhushlogin=true\n' > "$D/c.toml"
-    for f in messages.sh fonts.tsv; do
+    for f in messages.sh fonts.tsv themes.tsv; do
         HOME="$D" PREFIX=/data/data/com.termux/files/usr \
             chezmoi execute-template --source "$REPO" --config "$D/c.toml" < "$REPO/dot_local/share/strawdotez/$f.tmpl" > "$D/data/$f"
     done
@@ -111,6 +111,37 @@ T
     run bash "$STRAW" config </dev/null
     [ "$status" -eq 0 ]
     [[ "$output" == *$'device\tcell'* ]]
+}
+
+@test "tema: só aceita os que existem em themes.tsv" {
+    run bash "$STRAW" config set theme dracula
+    [ "$status" -eq 0 ]
+    run bash "$STRAW" config set theme neon
+    [ "$status" -eq 2 ]
+    run bash "$STRAW" config get theme
+    [ "$output" = "dracula" ]
+}
+
+@test "prompt starship instala o pacote quando falta" {
+    # PATH só com o necessário (sem starship de verdade) e um pkg falso
+    mkdir -p "$BATS_TEST_TMPDIR/bin"
+    for c in bash awk sed grep cat cut head id tr; do
+        p="$(command -v "$c")" && ln -sf "$p" "$BATS_TEST_TMPDIR/bin/$c"
+    done
+    printf '#!/bin/sh\necho "$@" >> "$BATS_TEST_TMPDIR/pkg.log"\n' > "$BATS_TEST_TMPDIR/bin/pkg"
+    chmod +x "$BATS_TEST_TMPDIR/bin/pkg"
+    PATH="$BATS_TEST_TMPDIR/bin" run bash "$STRAW" config set prompt starship
+    [ "$status" -eq 0 ]
+    grep -q 'install -y starship' "$BATS_TEST_TMPDIR/pkg.log"
+    run bash "$STRAW" config get prompt
+    [ "$output" = "starship" ]
+}
+
+@test "prompt default não instala nada" {
+    run bash "$STRAW" config set prompt default
+    [ "$status" -eq 0 ]
+    run bash "$STRAW" config set prompt zsh
+    [ "$status" -eq 2 ]
 }
 
 @test "o help lista o comando config" {

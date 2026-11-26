@@ -6,3 +6,8 @@
 {{ template "zsh_opts_termux" . }}
 {{ template "zsh_prompt_termux" . }}
 {{ template "zsh_plugins_termux" . }}
+{{ if eq (index . "prompt" | default "default") "starship" -}}
+if command -v starship >/dev/null 2>&1; then
+    eval "$(starship init zsh)"
+fi
+{{ end -}}

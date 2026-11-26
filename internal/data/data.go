@@ -30,6 +30,7 @@ type Profile struct {
 type Data struct {
 	Lang     string            `json:"lang"`
 	Msg      map[string]string `json:"msg"`
+	Tools    map[string]string `json:"tools"`
 	Modules  []Module          `json:"modules"`
 	Profiles []Profile         `json:"profiles"`
 }

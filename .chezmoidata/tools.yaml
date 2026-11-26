@@ -1,0 +1,129 @@
+# Descrição curta de cada pacote (aparece no 'straw tools'). Pacote sem descrição mostra a do módulo.
+# Mantenha em até ~45 caracteres para caber na tela do celular.
+tools:
+  age:
+    pt: criptografia de arquivos simples e moderna
+    en: simple, modern file encryption
+  build-base:
+    pt: compiladores e ferramentas de build (Alpine)
+    en: compilers and build tools (Alpine)
+  build-essential:
+    pt: compiladores e ferramentas de build (Debian)
+    en: compilers and build tools (Debian)
+  cargo:
+    pt: gerenciador de pacotes do Rust
+    en: Rust package manager
+  clang:
+    pt: compilador C e C++ (LLVM)
+    en: C and C++ compiler (LLVM)
+  cmake:
+    pt: gera builds de projetos C e C++
+    en: build system generator for C and C++
+  ffmpeg:
+    pt: converte e edita áudio e vídeo
+    en: convert and edit audio and video
+  gdb:
+    pt: depurador de programas nativos
+    en: debugger for native programs
+  gnupg:
+    pt: assinatura e criptografia (GPG)
+    en: signing and encryption (GPG)
+  go:
+    pt: linguagem Go
+    en: the Go language
+  golang:
+    pt: linguagem Go
+    en: the Go language
+  golang-go:
+    pt: linguagem Go
+    en: the Go language
+  helix:
+    pt: editor modal moderno
+    en: modern modal editor
+  htop:
+    pt: monitor de processos interativo
+    en: interactive process viewer
+  hydra:
+    pt: teste de força bruta de logins
+    en: login brute-force tester
+  imagemagick:
+    pt: converte e edita imagens
+    en: convert and edit images
+  iperf3:
+    pt: mede a velocidade da rede
+    en: network speed measurement
+  john:
+    pt: quebra de senhas por hash
+    en: password cracker
+  jq:
+    pt: filtra e formata JSON
+    en: filter and format JSON
+  llama-cpp:
+    pt: roda modelos de IA localmente
+    en: run AI models locally
+  make:
+    pt: executa Makefiles
+    en: runs Makefiles
+  mtr:
+    pt: traceroute e ping contínuos
+    en: continuous traceroute and ping
+  mtr-tiny:
+    pt: traceroute e ping contínuos
+    en: continuous traceroute and ping
+  netcat-openbsd:
+    pt: conexões TCP e UDP na mão
+    en: raw TCP and UDP connections
+  nikto:
+    pt: scanner de falhas em servidores web
+    en: web server vulnerability scanner
+  nmap:
+    pt: escaneia portas e serviços
+    en: port and service scanner
+  openssl-tool:
+    pt: ferramentas de certificados e TLS
+    en: certificate and TLS tools
+  pass:
+    pt: gerenciador de senhas no terminal
+    en: terminal password manager
+  php:
+    pt: linguagem PHP
+    en: the PHP language
+  php-cli:
+    pt: linguagem PHP
+    en: the PHP language
+  rsync:
+    pt: copia e sincroniza arquivos
+    en: copy and sync files
+  rust:
+    pt: linguagem Rust
+    en: the Rust language
+  rustc:
+    pt: compilador do Rust
+    en: Rust compiler
+  sqlite:
+    pt: banco de dados em arquivo
+    en: file-based database
+  sqlite3:
+    pt: banco de dados em arquivo
+    en: file-based database
+  sqlmap:
+    pt: testa injeção de SQL
+    en: SQL injection testing
+  termux-api:
+    pt: acesso ao celular (bateria, wifi, etc.)
+    en: phone access (battery, wifi, etc.)
+  traceroute:
+    pt: mostra o caminho até um servidor
+    en: show the path to a server
+  tree:
+    pt: lista pastas em árvore
+    en: list folders as a tree
+  vim:
+    pt: editor de texto clássico
+    en: classic text editor
+  whois:
+    pt: consulta o dono de domínios e IPs
+    en: look up domain and IP owners
+  yt-dlp:
+    pt: baixa vídeos e áudios da web
+    en: download videos and audio from the web

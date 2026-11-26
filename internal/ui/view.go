@@ -122,7 +122,7 @@ func View(m *Model, d *data.Data, th Theme) string {
 		case m.Marked[e.Pkg]:
 			mark = th.c("1;33", "● ")
 		}
-		text := fit(fmt.Sprintf("%-14s %s", e.Pkg, e.Module), w-5)
+		text := fit(fmt.Sprintf("%-14s %s", e.Pkg, e.Label()), w-5)
 		line := " " + mark + text
 		if i == m.Cursor {
 			line = th.c("7", " "+stripMark(m, e.Pkg)+text+" ")

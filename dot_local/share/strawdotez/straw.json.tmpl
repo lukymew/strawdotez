@@ -3,6 +3,10 @@
 {{- range $k, $_ := (index .i18n "en") -}}
 {{- if hasPrefix "straw_" $k -}}{{- $_ := set $msg (trimPrefix "straw_" $k) (includeTemplate "t" (list $ $k)) -}}{{- end -}}
 {{- end -}}
+{{- $tools := dict -}}
+{{- range $id, $t := .tools -}}
+{{- $tools = set $tools $id (index $t $.lang | default $t.en) -}}
+{{- end -}}
 {{- $mods := list -}}
 {{- range $id, $m := .straw.modules -}}
 {{- $pk := dict "termux" (index $m "termux" | default (list)) "apt" (index $m "apt" | default (list)) "apk" (index $m "apk" | default (list)) -}}
@@ -12,4 +16,4 @@
 {{- range $id, $p := .straw.profiles -}}
 {{- $profs = append $profs (dict "id" $id "desc" (index $p $.lang | default $p.en) "modules" $p.modules "only" (index $p "only" | default (list))) -}}
 {{- end -}}
-{{ dict "lang" .lang "msg" $msg "modules" $mods "profiles" $profs | toPrettyJson }}
+{{ dict "lang" .lang "msg" $msg "tools" $tools "modules" $mods "profiles" $profs | toPrettyJson }}

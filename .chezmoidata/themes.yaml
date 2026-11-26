@@ -1,0 +1,30 @@
+# Temas de cor do Termux. "default" é o Argonaut, que vem no repositório.
+# Os demais vêm do termux-styling (tag fixa) e são conferidos pelo sha256.
+# Para atualizar: troque a tag na url, rode  curl -fsSL <url> | sha256sum  e cole o resultado.
+themes:
+  - id: default
+    name: Argonaut (padrão)
+  - id: dracula
+    name: Dracula
+    url: https://raw.githubusercontent.com/termux/termux-styling/v0.32.1/app/src/main/assets/colors/dracula.properties
+    sha256: 910dbb4a00cdbd2aad5d8d2cec8360d314b91e1daae42e7137a731769c8d3322
+  - id: solarized-dark
+    name: Solarized Dark
+    url: https://raw.githubusercontent.com/termux/termux-styling/v0.32.1/app/src/main/assets/colors/solarized-dark.properties
+    sha256: 8bc84784f02d1d1cf9ba46f0428b040595688ad8f5040cf56ed02b40eeeb2586
+  - id: solarized-light
+    name: Solarized Light
+    url: https://raw.githubusercontent.com/termux/termux-styling/v0.32.1/app/src/main/assets/colors/solarized-light.properties
+    sha256: 1c00d1d9dd0bcd9241cfdc1a9d697d25cc4552e12766e72554842cc6633706dc
+  - id: gruvbox-dark
+    name: Gruvbox Dark
+    url: https://raw.githubusercontent.com/termux/termux-styling/v0.32.1/app/src/main/assets/colors/gruvbox-dark.properties
+    sha256: 187b17d9ca3f724bc59f2bb03b32b586630d84dce684eedf641adefc5ba00aec
+  - id: nord
+    name: Nord
+    url: https://raw.githubusercontent.com/termux/termux-styling/v0.32.1/app/src/main/assets/colors/nord.properties
+    sha256: aa405df13322159b9dd70bcaceafddcf0f791769e171cfbf1cd0ad46073da48e
+  - id: tomorrow-night
+    name: Tomorrow Night
+    url: https://raw.githubusercontent.com/termux/termux-styling/v0.32.1/app/src/main/assets/colors/tomorrow-night.properties
+    sha256: 82767e9388dfe09980aeb3b435d7e53b66df8e2318979a8ac5f6b7b38fb32716

@@ -18,6 +18,16 @@ if [ -f "$profile" ]; then
     cp "$profile" "$active"
 fi
 
+{{- $theme := index . "theme" | default "default" }}
+# tema escolhido: {{ $theme }}{{ range .themes }}{{ if and (eq .id $theme) (hasKey . "sha256") }} {{ .sha256 }}{{ end }}{{ end }}
+{{ if ne $theme "default" -}}
+themesrc="$HOME/.local/share/strawdotez/colors.properties"
+if [ -f "$themesrc" ]; then
+    mkdir -p "$HOME/.termux"
+    cp "$themesrc" "$HOME/.termux/colors.properties"
+fi
+
+{{ end -}}
 {{ if ne $font "default" -}}
 fontsrc="$HOME/.local/share/strawdotez/font.ttf"
 if [ -f "$fontsrc" ]; then

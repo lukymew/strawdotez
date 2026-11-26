@@ -26,6 +26,8 @@
 {{- $device := promptChoiceOnce . "device" (index $m "device" | default (index $t "en" "device")) (list "cell" "tablet") "cell" -}}
 {{- $shell := promptChoiceOnce . "shell" (index $m "shell" | default (index $t "en" "shell")) (list "bash" "zsh") "bash" -}}
 {{- $font := index . "font" | default "default" -}}
+{{- $theme := index . "theme" | default "default" -}}
+{{- $prompt := index . "prompt" | default "default" -}}
 {{- $banner := promptBoolOnce . "banner" (index $m "banner" | default (index $t "en" "banner")) true -}}
 {{- $hush := promptBoolOnce . "hushlogin" (index $m "hush" | default (index $t "en" "hush")) true -}}
 
@@ -36,5 +38,7 @@
     device = {{ $device | quote }}
     shell = {{ $shell | quote }}
     font = {{ $font | quote }}
+    theme = {{ $theme | quote }}
+    prompt = {{ $prompt | quote }}
     banner = {{ $banner }}
     hushlogin = {{ $hush }}

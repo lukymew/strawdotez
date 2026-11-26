@@ -220,7 +220,7 @@ cmd_tools() {
 
 # ---- config: lê e grava as opções do chezmoi ([data] em chezmoi.toml) e aplica
 CFG="${STRAW_CONFIG:-$HOME/.config/chezmoi/chezmoi.toml}"
-CFG_KEYS="lang shell font device banner hushlogin name email"
+CFG_KEYS="lang shell font theme prompt device banner hushlogin name email"
 
 cfg_has_key() { case " $CFG_KEYS " in *" $1 "*) return 0 ;; esac; return 1; }
 
@@ -230,8 +230,10 @@ cfg_opts() {
         lang)             printf 'pt\nen\n' ;;
         shell)            printf 'bash\nzsh\n' ;;
         device)           printf 'cell\ntablet\n' ;;
+        prompt)           printf 'default\nstarship\n' ;;
         banner|hushlogin) printf 'true\nfalse\n' ;;
         font)             cut -f1 "$DATA/fonts.tsv" 2>/dev/null ;;
+        theme)            cut -f1 "$DATA/themes.tsv" 2>/dev/null ;;
     esac
 }
 
@@ -240,14 +242,14 @@ cfg_get() {
     v="$(sed -n "/^\[data\]/,\$ { s/^[[:space:]]*$1[[:space:]]*=[[:space:]]*//p; }" "$CFG" 2>/dev/null | head -n 1)"
     v="${v#\"}"; v="${v%\"}"
     if [ -z "$v" ]; then
-        case "$1" in shell) v=bash ;; font) v=default ;; esac
+        case "$1" in shell) v=bash ;; font|theme|prompt) v=default ;; esac
     fi
     printf '%s\n' "$v"
 }
 
 # grava uma opção no [data]; valida a chave e o valor
 cfg_set() {
-    local k="$1" v="$2" lit tmp opts
+    local k="$1" v="$2" lit out opts
     cfg_has_key "$k" || { fmt "$M_cfg_unknown" "$k" >&2; return 2; }
     [ -f "$CFG" ] || { say "$M_cfg_nofile" >&2; return 1; }
     opts="$(cfg_opts "$k")"
@@ -260,13 +262,12 @@ cfg_set() {
         banner|hushlogin) lit="$v" ;;
         *)                lit="\"$v\"" ;;
     esac
-    tmp="$CFG.tmp.$$"
     if grep -Eq "^[[:space:]]*${k}[[:space:]]*=" "$CFG"; then
-        awk -v k="$k" -v v="$lit" '$0 ~ "^[ \t]*" k "[ \t]*=" { print "    " k " = " v; next } { print }' "$CFG" > "$tmp"
+        out="$(awk -v k="$k" -v v="$lit" '$0 ~ "^[ \t]*" k "[ \t]*=" { print "    " k " = " v; next } { print }' "$CFG")"
     else
-        awk -v k="$k" -v v="$lit" '{ print } /^\[data\]/ && !d { print "    " k " = " v; d=1 }' "$CFG" > "$tmp"
+        out="$(awk -v k="$k" -v v="$lit" '{ print } /^\[data\]/ && !d { print "    " k " = " v; d=1 }' "$CFG")"
     fi
-    cat "$tmp" > "$CFG"; rm -f "$tmp"
+    printf '%s\n' "$out" > "$CFG"
 }
 
 cfg_label() { local n="M_cfg_$1"; printf '%s' "${!n}"; }
@@ -274,7 +275,7 @@ cfg_label() { local n="M_cfg_$1"; printf '%s' "${!n}"; }
 cfg_show() { # chave valor -> texto legível
     case "$1" in
         banner|hushlogin) if [ "$2" = true ]; then printf '%s' "$M_cfg_on"; else printf '%s' "$M_cfg_off"; fi ;;
-        font)             awk -F'\t' -v id="$2" '$1 == id { print $2; f=1 } END { if (!f) print id }' "$DATA/fonts.tsv" 2>/dev/null ;;
+        font|theme)       awk -F'\t' -v id="$2" '$1 == id { print $2; f=1 } END { if (!f) print id }' "$DATA/$1s.tsv" 2>/dev/null ;;
         *)                printf '%s' "$2" ;;
     esac
 }
@@ -289,6 +290,10 @@ cfg_list() {
 cfg_change() { # chave valor: grava e aplica
     cfg_set "$1" "$2" || return $?
     fmt "$M_cfg_saved" "$1=$2"
+    if [ "$1" = prompt ] && [ "$2" = starship ] && ! command -v starship >/dev/null 2>&1; then
+        fmt "$M_installing" starship
+        pm_install starship || say "$M_failed starship" >&2
+    fi
     [ "${STRAW_NO_APPLY:-0}" = 1 ] && return 0
     say "$M_cfg_applying"
     if chezmoi apply; then say "$M_cfg_restart"; else say "$M_cfg_noapply" >&2; return 1; fi

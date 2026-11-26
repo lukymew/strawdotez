@@ -21,3 +21,6 @@ tests/
 {{- if ne (index . "font" | default "default") "default" }}
 .termux/font.ttf
 {{- end }}
+{{- if ne (index . "theme" | default "default") "default" }}
+.termux/colors.properties
+{{- end }}

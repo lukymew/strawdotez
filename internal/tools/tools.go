@@ -13,6 +13,8 @@ import (
 // Entry é um pacote com o módulo de onde veio.
 type Entry struct {
 	Pkg, Module, Icon, Group, Desc string
+	// Tool é a descrição do próprio pacote (vazia se não houver).
+	Tool string
 }
 
 var groupOrder = []string{"cli", "dev", "net"}
@@ -31,11 +33,19 @@ func Build(d *data.Data, env string) []Entry {
 					continue
 				}
 				seen[p] = true
-				out = append(out, Entry{p, m.ID, m.Icon, m.Group, m.Desc})
+				out = append(out, Entry{Pkg: p, Module: m.ID, Icon: m.Icon, Group: m.Group, Desc: m.Desc, Tool: d.Tools[p]})
 			}
 		}
 	}
 	return out
+}
+
+// Label é o texto ao lado do pacote: a descrição dele ou, sem ela, o módulo.
+func (e Entry) Label() string {
+	if e.Tool != "" {
+		return e.Tool
+	}
+	return e.Module
 }
 
 // Filter mantém as entradas que contêm todas as palavras da busca
@@ -47,7 +57,7 @@ func Filter(es []Entry, query string) []Entry {
 	}
 	var out []Entry
 	for _, e := range es {
-		hay := strings.ToLower(e.Pkg + " " + e.Module + " " + e.Group + " " + e.Desc)
+		hay := strings.ToLower(e.Pkg + " " + e.Module + " " + e.Group + " " + e.Desc + " " + e.Tool)
 		ok := true
 		for _, w := range words {
 			if !strings.Contains(hay, w) {
@@ -84,7 +94,7 @@ func Render(w io.Writer, d *data.Data, es []Entry, plain bool, installed func(st
 			if installed != nil && installed(e.Pkg) {
 				mark = "✔ "
 			}
-			fmt.Fprintf(w, "  %s%-16s %s\n", mark, e.Pkg, e.Module)
+			fmt.Fprintf(w, "  %s%-16s %s\n", mark, e.Pkg, e.Label())
 		}
 	}
 	if len(es) == 0 {
