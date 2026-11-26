@@ -144,6 +144,17 @@ T
     [ "$status" -eq 2 ]
 }
 
+@test "trocar o tema apaga o colors.properties antes do apply (evita a pergunta do chezmoi)" {
+    unset STRAW_NO_APPLY
+    mkdir -p "$HOME/.termux" "$BATS_TEST_TMPDIR/bin"
+    echo velho > "$HOME/.termux/colors.properties"
+    printf '#!/bin/sh\nif [ -e "$HOME/.termux/colors.properties" ]; then echo ainda-existe > "$HOME/visto"; else echo apagado > "$HOME/visto"; fi\n' > "$BATS_TEST_TMPDIR/bin/chezmoi"
+    chmod +x "$BATS_TEST_TMPDIR/bin/chezmoi"
+    PATH="$BATS_TEST_TMPDIR/bin:$PATH" run bash "$STRAW" config set theme default
+    [ "$status" -eq 0 ]
+    [ "$(cat "$HOME/visto")" = "apagado" ]
+}
+
 @test "o help lista o comando config" {
     run bash "$STRAW" help
     [[ "$output" == *"straw config"* ]]

@@ -296,6 +296,12 @@ cfg_change() { # chave valor: grava e aplica
     fi
     [ "${STRAW_NO_APPLY:-0}" = 1 ] && return 0
     say "$M_cfg_applying"
+    # tema e fonte são copiados por um script; o chezmoi estranha o arquivo e pergunta se pode
+    # sobrescrever. Sem o arquivo, ele só grava o que for preciso (sem perguntas).
+    case "$1" in
+        theme) rm -f "$HOME/.termux/colors.properties" ;;
+        font)  rm -f "$HOME/.termux/font.ttf" ;;
+    esac
     if chezmoi apply; then say "$M_cfg_restart"; else say "$M_cfg_noapply" >&2; return 1; fi
 }
 
