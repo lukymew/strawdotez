@@ -5,6 +5,11 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [1.4.3] - 2026-11-26
+
+### Changed
+- Tablet `termux.properties` profile now mirrors the phone profile (2 rows, 10 keys each) with extra keys (HOME, SHFT, `/` and `-` popups), `extra-keys-style = all`, and no soft keyboard on startup.
+
 ## [1.4.2] - 2026-11-25
 
 ### Changed
